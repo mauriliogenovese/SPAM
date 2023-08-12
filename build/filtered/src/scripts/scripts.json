@@ -1,0 +1,16 @@
+[
+  {
+    "name": "func_lib",
+  },
+
+  {
+    "name": "profile_initialization",
+  },
+
+  {
+    "name": "gmcp_loop",
+    "eventHandlerList": [
+      "gmcp.Char"
+    ]
+  }
+]

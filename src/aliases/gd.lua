@@ -1,0 +1,1 @@
+send("gd " .. persistent_variables[character_name]["gd_start"] .. matches[3] .. persistent_variables[character_name]["gd_end"] .. "&d")
