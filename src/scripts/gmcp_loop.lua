@@ -40,6 +40,7 @@ function gmcp_loop()
     end
     --return needed to refresh classes
     gmcp.Char.Classi.classi = nil
+    --mod_generic_mapper()
     return
   end
   --party observer

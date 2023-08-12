@@ -589,3 +589,85 @@ function show_glory_timer()
   printPairs(array)
   print("")
 end
+
+function removeLastNumericDigits(inputString)
+    if type(inputString) ~= "string" then
+        return nil
+    end
+
+    local lastChar = string.sub(inputString, -1) -- Get the last character
+    local secondLastChar = string.sub(inputString, -2, -2) -- Get the second to last character
+
+    if tonumber(lastChar) and tonumber(secondLastChar) then
+        local modifiedString = string.sub(inputString, 1, -3) -- Remove the last two characters
+        return modifiedString
+    else
+        return inputString
+    end
+end
+
+function mod_generic_mapper()
+
+  if oldsanitize ~= nil then
+    return
+  end
+  --generic mapper mod for DDE
+  map.configs.lang_dirs = {
+    d = "b",
+    down = "basso",
+    e = "e",
+    east = "est",
+    eastdown = "estbasso",
+    eastup = "estalto",
+    ed = "ed",
+    eu = "eu",
+    l = "g",
+    look = "guarda",
+    n = "n",
+    nd = "nd",
+    ne = "ne",
+    north = "nord",
+    northdown = "nordbasso",
+    northeast = "nordest",
+    northup = "nordalto",
+    northwest = "nordovest",
+    nu = "na",
+    nw = "no",
+    out = "out",
+    s = "s",
+    sd = "sb",
+    se = "se",
+    south = "sud",
+    southdown = "sudbasso",
+    southeast = "sudest",
+    southup = "sudalto",
+    southwest = "sudovest",
+    su = "sa",
+    sw = "so",
+    u = "a",
+    up = "alto",
+    w = "o",
+    wd = "ob",
+    west = "ovest",
+    westdown = "ovestbasso",
+    westup = "ovestalto",
+    wu = "oa"
+  }
+  map.configs.lang_dirs["in"] = "in"
+  map.configs.translate = {}
+  for k, v in pairs(map.configs.lang_dirs) do
+      map.configs.translate[v] = k
+  end
+  local oldsanitize = map.sanitizeRoomName
+  map.sanitizeRoomName = function(roomtitle)
+    display(roomtitle)
+    roomtitle = string.gsub(roomtitle, ".----N----. ", "")
+    display(roomtitle)
+    roomtitle = removeLastNumericDigits(roomtitle)
+    display(roomtitle)
+    return oldsanitize(roomtitle)
+  end
+  map.save.prompt_pattern[map.character] = "^PF:(.+)>$"
+  find_prompt = false
+end
+

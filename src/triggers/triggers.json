@@ -170,7 +170,7 @@
 
   {
     "name": "clipboard",
-    "fireLenght" : 15,
+    "fireLength" : "25",
     "patterns": [
       {
         "pattern" : "^L'oggetto '(.+)$",
