@@ -81,7 +81,7 @@ function spam_eventHandler(event, ...)
       remote_version = {}
       table.load(file, remote_version)
       if compare_with_current_version(remote_version[1]) then
-        tempTimer(1, [[cecho("\n<red>E' disponibile una nuova versione di SPAM. Per scaricarla usa il comando: <white>spam update\n")]] )
+        tempTimer(2, [[cecho("\n<red>E' disponibile una nuova versione di SPAM. Per scaricarla usa il comando: <white>spam update\n")]] )
       end
     end
     spam_downloading = false
