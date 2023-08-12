@@ -1,5 +1,0 @@
-mpackage = [[SPAM]]
-author = [[Seymour]]
-title = [[Seymour PAckage for Mudlet]]
-version = [[1.6]]
-created = [[2023-08-12T12:19:49+0200]]
