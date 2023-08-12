@@ -29,6 +29,11 @@ end
 if save_var == true then
   save_persistent_var("config")
 end
+--update check
+registerAnonymousEventHandler("sysDownloadDone", "spam_eventHandler")
+registerAnonymousEventHandler("sysDownloadError", "spam_eventHandler")
+spam_downloading = true
+downloadFile(getMudletHomeDir() .. "/@PKGNAME@/version", "https://raw.githubusercontent.com/mauriliogenovese/SPAM/main/version")
 ding_file = getMudletHomeDir() .. "/@PKGNAME@/ding.wav"
 character_name = ""
 cond = {}

@@ -1,6 +1,6 @@
 {
   "package": "SPAM",
-  "version": "1.9",
+  "version": "1.0.0",
   "author": "Seymour",
   "title": "Seymour PAckage for Mudlet",
   "outputFile": true
