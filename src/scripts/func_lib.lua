@@ -51,17 +51,13 @@ end
 
 function parse_version(string)
   local major, minor, patch = string.match(string, "(%d+)%.(%d+)%.(%d+)")
-  display(major)
-  diaplay(minor)
-  display(patch)
   return major, minor, patch
 end
 
 function compare_with_current_version(newversion)
-  if v1 == v2 then
+  if newversion == "@VERSION@" then
     return false
   end
-
   v1_major, v1_minor, v1_patch = parse_version(newversion)
   v2_major, v2_minor, v2_patch = parse_version("@VERSION@")
   if v1_major>v2_major then
@@ -79,30 +75,18 @@ function compare_with_current_version(newversion)
 end
 
 function spam_eventHandler(event, ...)
-  display(1)
   if event == "sysDownloadDone" and spam_downloading then
     local file = arg[1]
     if string.ends(file,"/version") then
       remote_version = {}
       table.load(file, remote_version)
       if compare_with_current_version(remote_version[1]) then
-        display("nuova versione trovata")
-      else
-        display("versione aggiornata")
+        tempTimer(1, [[cecho("\n<red>E' disponibile una nuova versione di SPAM. Per scaricarla usa il comando: <white>spam update\n")]] )
       end
     end
     spam_downloading = false
   elseif event == "sysDownloadError" and spam_downloading then
-    local file = arg[1]
-    if string.ends(file,"/versions.lua") and mudlet.translations.interfacelanguage == "zh_CN" then
-      -- update to the current download path for chinese user
-      if map.configs.download_path == "https://raw.githubusercontent.com/Mudlet/Mudlet/development/src/mudlet-lua/lua/generic-mapper" then
-        map.configs.download_path = "https://gitee.com/mudlet/Mudlet/raw/development/src/mudlet-lua/lua/generic-mapper"
-        map.checkVersion()
-      end
-
-    end
-
+    spam_downloading = false
   end
 end
 
