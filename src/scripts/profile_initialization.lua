@@ -1,5 +1,5 @@
 initialize_persistent_var("config")
-package_name = "SPAM"
+package_name = "@PKGNAME@"
 --first profile login
 local save_var = false
 if persistent_variables["config"]["sounds"] == nil then
@@ -29,7 +29,7 @@ end
 if save_var == true then
   save_persistent_var("config")
 end
-ding_file = getMudletHomeDir() .. "/" .. package_name .. "/ding.wav"
+ding_file = getMudletHomeDir() .. "/@PKGNAME@/ding.wav"
 character_name = ""
 cond = {}
 cond["e' in condizioni superbe"] = 1

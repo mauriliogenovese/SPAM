@@ -9,6 +9,11 @@ function toggle_ddegroup()
   end
 end
 
+function spam_update()
+  uninstallPackage("@PKGNAME@")
+  installPackage("https://raw.githubusercontent.com/mauriliogenovese/SPAM/main/build/SPAM.mpackage")
+end
+
 function file_exists(name)
   local f = io.open(name, "r")
   if f ~= nil then
@@ -434,6 +439,9 @@ Per controllare le ulteriori opzioni di DDEGroup usa il comando: <white>observe<
 Alcune funzioni di SPAM potrebbero riprodurre dei suoni.
 Per controllare la riproduzione dei suoni usa il comando: <white>spam suoni on/off]]
         )
+      elseif string.starts("update", split[1]) then
+        cecho("<red>Aggiornamento di @PKGNAME@ in corso!")
+        spam_update()
       elseif string.starts("appunti", split[1]) then
         cecho(
           [[
