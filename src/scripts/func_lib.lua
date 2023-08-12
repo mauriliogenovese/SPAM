@@ -481,7 +481,7 @@ Alcune funzioni di SPAM potrebbero riprodurre dei suoni.
 Per controllare la riproduzione dei suoni usa il comando: <white>spam suoni on/off]]
         )
       elseif string.starts("update", split[1]) then
-        cecho("<red>Aggiornamento di @PKGNAME@ in corso!")
+        cecho("<red>\nAggiornamento di @PKGNAME@ in corso!\n")
         spam_update()
       elseif string.starts("appunti", split[1]) then
         cecho(
