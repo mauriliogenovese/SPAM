@@ -1,5 +1,6 @@
 initialize_persistent_var("config")
 package_name = "@PKGNAME@"
+--tempTimer(0.5,mod_generic_mapper)
 --first profile login
 local save_var = false
 if persistent_variables["config"]["sounds"] == nil then

@@ -660,14 +660,54 @@ function mod_generic_mapper()
   end
   local oldsanitize = map.sanitizeRoomName
   map.sanitizeRoomName = function(roomtitle)
-    display(roomtitle)
     roomtitle = string.gsub(roomtitle, ".----N----. ", "")
-    display(roomtitle)
     roomtitle = removeLastNumericDigits(roomtitle)
-    display(roomtitle)
     return oldsanitize(roomtitle)
   end
   map.save.prompt_pattern[map.character] = "^PF:(.+)>$"
   find_prompt = false
+  map.configs.custom_name_search = true
+end
+
+function mudlet.custom_name_search(lines)
+  local room_name
+  local line_count = #lines + 1
+  local cur_line, last_line
+  local prompt_pattern = map.save.prompt_pattern[map.character]
+  if not prompt_pattern then return end
+  while not room_name do
+    line_count = line_count - 1
+    if not lines[line_count] then break end
+    cur_line = lines[line_count]
+    for k,v in ipairs(map.save.ignore_patterns) do
+        cur_line = string.trim(string.gsub(cur_line,v,""))
+    end
+    if
+      string.find(cur_line,prompt_pattern) or
+      string.find(cur_line,"^Per l'affitto dei tuoi oggetti depositati in banca sono state prelevate(.+).$") or
+      string.find(cur_line,"^Riconnessione.$")
+    then
+      cur_line = string.trim(string.gsub(cur_line,prompt_pattern,""))
+      cur_line = string.trim(string.gsub(cur_line,"^Per l'affitto dei tuoi oggetti depositati in banca sono state prelevate(.+).$",""))
+      cur_line = string.trim(string.gsub(cur_line,"^Riconnessione.$",""))
+      if cur_line ~= "" then
+        room_name = cur_line
+      else
+        room_name = last_line
+      end
+    elseif line_count == 1 then
+      cur_line = string.trim(cur_line)
+      if cur_line ~= "" then
+        room_name = cur_line
+      else
+        room_name = last_line
+      end
+    elseif not string.match(cur_line,"^%s*$") then
+      last_line = cur_line
+    end
+  end
+  lines = {}
+  room_name = room_name:sub(1,100)
+  return room_name
 end
 

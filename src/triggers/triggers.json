@@ -174,11 +174,11 @@
     "patterns": [
       {
         "pattern" : "^L'oggetto '(.+)$",
-        "type" : "regex",
+        "type" : "regex"
       },
       {
         "pattern" : "^(.+)appartiene alla razza(.+)$",
-        "type" : "regex",
+        "type" : "regex"
       }
     ],
     "children": [
@@ -188,6 +188,49 @@
           {
             "pattern" : "^.*$",
             "type" : "regex"
+          }
+        ]
+      }
+    ]
+  },
+
+  {
+    "name": "DDE mapper Trigger Group",
+    "isFolder": "yes",
+    "isActive" : "no",
+    "children": [
+      {
+        "name" : "DDE_Exits_Trigger",
+        "patterns": [
+          {
+            "pattern" : "(?i)^\\s*\\[\\s*Uscite:\\s*(.*)\\]",
+            "type" : "regex"
+          }
+        ]
+      },
+      {
+        "name" : "DDE_Failed_Move_Trigger",
+        "patterns": [
+          {
+            "pattern" : "Questa stanza e' privata.",
+            "type" : "substring"
+          },
+          {
+            "pattern" : "Non puoi andare da quella parte.",
+            "type" : "substring"
+          },
+          {
+            "pattern" : "^(.*) e' chius(.*).$",
+            "type" : "regex"
+          }
+        ]
+      },
+      {
+        "name" : "DDE_Vision_Fail_Trigger",
+        "patterns": [
+          {
+            "pattern" : "E' tutto buio ...",
+            "type" : "substring"
           }
         ]
       }
