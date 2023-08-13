@@ -39,6 +39,8 @@ if persistent_variables["config"]["mapper"] then
 else
     disableTrigger("DDE_mapper_Trigger_Group")
 end
+--temporary fix for game bug
+persistent_variables["config"]["hide_immune_shield"] = false
 --update check
 registerAnonymousEventHandler("sysDownloadDone", "spam_eventHandler")
 registerAnonymousEventHandler("sysDownloadError", "spam_eventHandler")
