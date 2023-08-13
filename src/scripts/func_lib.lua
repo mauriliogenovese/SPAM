@@ -252,15 +252,35 @@ function makePairs(hashTable, array, _k)
   end
 end
 
--- Print the pairs from the array.
+function disp_time(time)
+  negative = false
 
+  if time < 0 then
+    negative = true
+    time = time * -1
+  end
+  local days = math.floor(time/86400)
+  local hours = math.floor(math.mod(time, 86400)/3600)
+  local minutes = math.floor(math.mod(time,3600)/60)
+  local seconds = math.floor(math.mod(time,60))
+  time_string = string.format("%02d:%02d",hours,minutes)
+  if negative then
+    time_string = "-"..time_string
+  end
+  return time_string
+  --return string.format("%d:%02d:%02d:%02d",days,hours,minutes,seconds)
+end
+
+-- Print the pairs from the array.
 function printPairs(array, _i)
   local i = _i or 1
   local pair = array[i]
   if pair then
     local k, v = unpack(pair)
-    print(k .. ': ' .. os.date("%H:%M", v + 60 * 60))
-    return printPairs(array, i + 1)
+    if v > 0 then
+      cecho("\n    <white>".. k .. ': <grey>' .. os.date("%H:%M", v + 60 * 60) .. " (" .. disp_time(os.difftime(os.time(),v + 24*60*60)) .. ")")
+      return printPairs(array, i + 1)
+    end
   end
 end
 
@@ -587,20 +607,29 @@ function show_glory_timer()
   if persistent_variables["config"]["glory_timer"] == false then
     return
   end
-  oneDayAgo = os.time(os.date("!*t")) - 24 * 60 * 60
-  print("\nMOB GLORIA NELLE ULTIME 24 ORE:")
+  local oneDayAgo = os.time(os.date("!*t")) - 24 * 60 * 60
+  local printed_title = false
   for key, value in pairs(persistent_variables[character_name]["glory_timer"]) do
     if value > oneDayAgo then
       --print(key .. ": " .. os.date("%H:%M", value + 60 * 60))
     else
-      persistent_variables[character_name]["glory_timer"][key] = nil
+      if not printed_title then
+        cecho("\n<yellow>MOB GLORIA PASSATI:")
+        printed_title = true
+      end
+      persistent_variables[character_name]["glory_timer"][key] = -1
+      cecho("\n    <white>".. key)
     end
   end
+  if printed_title then
+    echo("\n")
+  end
+  cecho("\n<yellow>MOB GLORIA NELLE ULTIME 24 ORE:")
   local array = {}
   makePairs(persistent_variables[character_name]["glory_timer"], array)
   table.sort(array, greater)
   printPairs(array)
-  print("")
+  print("\n")
 end
 
 function removeLastNumericDigits(inputString)

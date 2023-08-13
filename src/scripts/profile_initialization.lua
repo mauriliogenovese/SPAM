@@ -34,7 +34,7 @@ if save_var == true then
   save_persistent_var("config")
 end
 if persistent_variables["config"]["mapper"] then
-    enableTrigger("DDE_ mapper_ Trigger_Group")
+    enableTrigger("DDE_mapper_Trigger_Group")
     tempTimer(0.5,mod_generic_mapper)
 else
     disableTrigger("DDE_mapper_Trigger_Group")
