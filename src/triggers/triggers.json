@@ -195,7 +195,7 @@
   },
 
   {
-    "name": "DDE mapper Trigger Group",
+    "name": "DDE_mapper_Trigger_Group",
     "isFolder": "yes",
     "isActive" : "no",
     "children": [

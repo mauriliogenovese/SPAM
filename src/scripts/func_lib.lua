@@ -432,6 +432,7 @@ function show_config()
   checho("\n   Suoni: " .. bool2str(persistent_variables["config"]["sounds"]))
   checho("\n   Gloria: " .. bool2str(persistent_variables["config"]["glory_timer"]))
   checho("\n   Appunti: " .. bool2str(persistent_variables["config"]["clipboard"]))
+  checho("\n   Mapper: " .. bool2str(persistent_variables["config"]["mapper"]))
   checho(
     "\n   nascondi_scudoni: " .. bool2str(persistent_variables["config"]["hide_immune_shield"])
   )
@@ -490,6 +491,13 @@ Per controllare la riproduzione dei suoni usa il comando: <white>spam suoni on/o
 SPAM intercetta i valuta mostri e le identificazioni e li copia negli appunti.
 Per controllare l'inserimento negli appunti usa il comando: <white>spam appunti on/off]]
         )
+        elseif string.starts("mapper", split[1]) then
+        cecho(
+          [[
+
+SPAM apporta alcune modifiche al mapper di Mudlet per renderlo compatibile con DDE.
+Per controllare il mapper usa il comando: <white>spam mapper on/off]]
+        )
       elseif string.starts("nascondi_px_persi", split[1]) then
         cecho(
           [[
@@ -542,6 +550,11 @@ Per scoprire i TAG colore disponibili in Dei delle Ere usa il comando: <white>ai
       elseif string.starts("appunti", split[1]) then
         persistent_variables["config"]["clipboard"] = str2bool(split[2])
         checho("\nAppunti: " .. bool2str(persistent_variables["config"]["clipboard"]))
+        save_persistent_var("config")
+      elseif string.starts("mapper", split[1]) then
+        persistent_variables["config"]["mapper"] = str2bool(split[2])
+        checho("\nMapper: " .. bool2str(persistent_variables["config"]["mapper"]))
+        cecho("\n<red>ATTENZIONE: <grey>La modifica sarà attiva dal prossimo riavvio del client!")
         save_persistent_var("config")
       elseif string.starts("nascondi_px_persi", split[1]) then
         persistent_variables["config"]["hide_lost_experience"] = str2bool(split[2])

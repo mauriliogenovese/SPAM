@@ -1,6 +1,5 @@
 initialize_persistent_var("config")
 package_name = "@PKGNAME@"
---tempTimer(0.5,mod_generic_mapper)
 --first profile login
 local save_var = false
 if persistent_variables["config"]["sounds"] == nil then
@@ -27,8 +26,18 @@ if persistent_variables["config"]["clipboard"] == nil then
   persistent_variables["config"]["clipboard"] = true
   save_var = true
 end
+if persistent_variables["config"]["mapper"] == nil then
+  persistent_variables["config"]["mapper"] = false
+  save_var = true
+end
 if save_var == true then
   save_persistent_var("config")
+end
+if persistent_variables["config"]["mapper"] then
+    enableTrigger("DDE_ mapper_ Trigger_Group")
+    tempTimer(0.5,mod_generic_mapper)
+else
+    disableTrigger("DDE_mapper_Trigger_Group")
 end
 --update check
 registerAnonymousEventHandler("sysDownloadDone", "spam_eventHandler")
