@@ -11,7 +11,11 @@ end
 
 function spam_update()
     uninstallPackage("@PKGNAME@")
-    installPackage("https://raw.githubusercontent.com/mauriliogenovese/SPAM/main/build/SPAM.mpackage")
+    local git_url = "https://raw.githubusercontent.com/mauriliogenovese/SPAM/main/build/SPAM.mpackage"
+    if persistent_variables["config"]["dev"] == true then
+        git_url = "https://raw.githubusercontent.com/mauriliogenovese/SPAM/dev/build/SPAM.mpackage"
+    end
+    installPackage(git_url)
 end
 
 function file_exists(name)
@@ -459,6 +463,9 @@ function show_config()
     checho(
             "\n   Nascondi_px_persi: " .. bool2str(persistent_variables["config"]["hide_lost_experience"])
     )
+    if persistent_variables["config"]["dev"] == true then
+        checho("\n   Dev: " .. bool2str(persistent_variables["config"]["dev"]))
+    end
     checho("\n\nLa configurazione del personaggio <" .. character_name .. "> è:")
     checho("\n   gdcolor_prefisso al gd: " .. persistent_variables[character_name]["gd_start"])
     checho("\n   gdcolor_suffisso al gd: " .. persistent_variables[character_name]["gd_end"])
@@ -603,6 +610,9 @@ Per scoprire i TAG colore disponibili in Dei delle Ere usa il comando: <white>ai
             elseif split[1] == "gdcolor_suffisso" then
                 set_char_permanent_var("gd_end", removeFirstWord(string))
                 checho("\ngdcolor_suffisso al gd: " .. persistent_variables[character_name]["gd_end"])
+            elseif split[1] == "dev" then
+                persistent_variables["config"]["dev"] = str2bool(split[2])
+                checho("\ndev: " .. bool2str(persistent_variables["config"]["dev"]))
             else
                 cecho("\nScelta non valida")
             end

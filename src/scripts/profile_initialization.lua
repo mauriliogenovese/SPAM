@@ -34,6 +34,10 @@ if persistent_variables["config"]["auto_send"] == nil then
   persistent_variables["config"]["auto_send"] = false
   save_var = true
 end
+if persistent_variables["config"]["dev"] == nil then
+  persistent_variables["config"]["dev"] = false
+  save_var = true
+end
 if save_var == true then
   save_persistent_var("config")
 end
@@ -49,7 +53,11 @@ persistent_variables["config"]["hide_immune_shield"] = false
 registerAnonymousEventHandler("sysDownloadDone", "spam_eventHandler")
 registerAnonymousEventHandler("sysDownloadError", "spam_eventHandler")
 spam_downloading = true
-downloadFile(getMudletHomeDir() .. "/@PKGNAME@/version", "https://raw.githubusercontent.com/mauriliogenovese/SPAM/main/version")
+local version_file = "https://raw.githubusercontent.com/mauriliogenovese/SPAM/main/version"
+if persistent_variables["config"]["dev"] == true then
+    version_file = "https://raw.githubusercontent.com/mauriliogenovese/SPAM/dev/version"
+end
+downloadFile(getMudletHomeDir() .. "/@PKGNAME@/version", version_file)
 ding_file = getMudletHomeDir() .. "/@PKGNAME@/ding.wav"
 character_name = ""
 cond = {}
