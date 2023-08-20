@@ -30,6 +30,10 @@ if persistent_variables["config"]["mapper"] == nil then
   persistent_variables["config"]["mapper"] = false
   save_var = true
 end
+if persistent_variables["config"]["auto_send"] == nil then
+  persistent_variables["config"]["auto_send"] = false
+  save_var = true
+end
 if save_var == true then
   save_persistent_var("config")
 end
