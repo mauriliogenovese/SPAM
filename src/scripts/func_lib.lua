@@ -904,6 +904,10 @@ function parse_ident(ident_text)
 end
 
 function send_ident_to_db(data)
+    -- send to db only if function is enabled
+    if persistent_variables["config"]["auto_send"] == false then
+        return
+    end
     -- This will create a JSON message body. Many modern REST APIs expect a JSON body.
     -- data must be a table
     local url = "https://maker.ifttt.com/trigger/DDE_IDENT/json/with/key/detdl1yCyfRQmLZnf3jFvg"
