@@ -9,6 +9,18 @@ function toggle_ddegroup()
     end
 end
 
+function check_cast(cast_name)
+    if gmcp.Char.Magie.incantesimi ~= nil then
+        cast_name = string.lower(cast_name)
+        for i, v in ipairs(gmcp.Char.Magie.incantesimi) do
+            if string.lower(v.nome) == cast_name then
+                return true
+            end
+        end
+    end
+    return false
+end
+
 function spam_update()
     uninstallPackage("@PKGNAME@")
     local git_url = "https://raw.githubusercontent.com/mauriliogenovese/SPAM/main/build/SPAM.mpackage"
@@ -830,6 +842,15 @@ function is_prop_row(row)
     return false
 end
 
+function escape(input_string)
+    if type(input_string) == "string" then
+        local escaped_string = input_string:gsub([[\]], [[\\]]):gsub([[']], [[\']]):gsub([["]], [[\"]])
+        return escaped_string
+    else
+        return input_string
+    end
+end
+
 function parse_ident(ident_text)
     --get name and item type
     local ident = explode(ident_text:gsub("\r", ""):gsub("\n\n", "\n"), "\n")
@@ -887,9 +908,6 @@ function parse_ident(ident_text)
         affects_prefix = affects_prefix .. ident[1] .. "\n"
         table.remove(ident, 1)
     end
-    if debug then
-        display(affects_prefix)
-    end
     --implode special property lines
     while #ident > 1 and is_prop_row(ident[2]) do
         ident[1] = ident[1] .. " " .. ident[2]
@@ -901,6 +919,11 @@ function parse_ident(ident_text)
     parsed["affects"] = affects_prefix .. implode(ident, "\n")
     parsed["character_name"] = character_name
     return parsed
+end
+
+function ident_to_query(parsed)
+    local data = { ["sql"] = "INSERT INTO DDE.tblidentificazioni_new (nome, peso, affitto, livello, ac, proprieta, affects, diffusione, informazioni, tipo, area, valore, danno_min, danno_max, danno_media,tipo_danno) VALUES('" .. escape(parsed["nome"]) .. "', " .. escape(parsed["peso"]) .. ", " .. escape(parsed["affitto"]) .. ",  " .. escape(parsed["livello"]) .. ", " .. escape(parsed["ac"]) .. ", '" .. escape(parsed["proprieta"]) .. "', '" .. escape(parsed["affects"]) .. "', '" .. escape(parsed["diffusione"]) .. "',  '" .. escape(character_name) .. "', 'da verificare', '', " .. escape(parsed["valore"]) .. ", " .. escape(parsed["danno_min"]) .. ", " .. escape(parsed["danno_max"]) .. ", " .. escape(parsed["danno_media"]) .. ",'" .. escape(parsed["tipo_danno"]) .. "');" }
+    return data
 end
 
 function send_ident_to_db(data)
