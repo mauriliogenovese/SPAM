@@ -467,7 +467,7 @@ function show_config()
     checho("\n   Suoni: " .. bool2str(persistent_variables["config"]["sounds"]))
     checho("\n   Gloria: " .. bool2str(persistent_variables["config"]["glory_timer"]))
     checho("\n   Appunti: " .. bool2str(persistent_variables["config"]["clipboard"]))
-    checho("\n   Auto_invio_database: " .. bool2str(persistent_variables["config"]["auto_send"]))
+    checho("\n   NariaDB: " .. bool2str(persistent_variables["config"]["auto_send"]))
     checho("\n   Mapper: " .. bool2str(persistent_variables["config"]["mapper"]))
     checho(
             "\n   Nascondi_scudoni: " .. bool2str(persistent_variables["config"]["hide_immune_shield"])
@@ -528,12 +528,12 @@ Per controllare la riproduzione dei suoni usa il comando: <white>spam suoni on/o
 SPAM intercetta i valuta mostri e le identificazioni e li copia negli appunti.
 Per controllare l'inserimento negli appunti usa il comando: <white>spam appunti on/off]]
                 )
-            elseif string.starts("auto_invio_database", split[1]) then
+            elseif string.starts("nariadb", split[1]) then
                 cecho(
                         [[
 
 SPAM può inviare automaticamente le ientificazioni viste al database oggetti gestito da Nikeb.
-Per controllare l'invio automatico delle identificazioni usa il comando: <white>spam auto_invio_database on/off]]
+Per controllare l'invio automatico delle identificazioni usa il comando: <white>spam NariaDB on/off]]
                 )
             elseif string.starts("mapper", split[1]) then
                 cecho(
@@ -595,9 +595,9 @@ Per scoprire i TAG colore disponibili in Dei delle Ere usa il comando: <white>ai
                 persistent_variables["config"]["clipboard"] = str2bool(split[2])
                 checho("\nAppunti: " .. bool2str(persistent_variables["config"]["clipboard"]))
                 save_persistent_var("config")
-            elseif string.starts("auto_invio_database", split[1]) then
+            elseif string.starts("nariadb", split[1]) then
                 persistent_variables["config"]["auto_send"] = str2bool(split[2])
-                checho("\nAuto_invio_database: " .. bool2str(persistent_variables["config"]["auto_send"]))
+                checho("\nNariaDB: " .. bool2str(persistent_variables["config"]["auto_send"]))
                 save_persistent_var("config")
             elseif string.starts("mapper", split[1]) then
                 persistent_variables["config"]["mapper"] = str2bool(split[2])
@@ -762,10 +762,12 @@ function mudlet.custom_name_search(lines)
         if
         string.find(cur_line, prompt_pattern) or
                 string.find(cur_line, "^Per l'affitto dei tuoi oggetti depositati in banca sono state prelevate(.+).$") or
+                string.find(cur_line, "^Debbono trascorrere ancora (.+).$") or
                 string.find(cur_line, "^Riconnessione.$")
         then
             cur_line = string.trim(string.gsub(cur_line, prompt_pattern, ""))
             cur_line = string.trim(string.gsub(cur_line, "^Per l'affitto dei tuoi oggetti depositati in banca sono state prelevate(.+).$", ""))
+            cur_line = string.trim(string.gsub(cur_line, "^Debbono trascorrere ancora (.+).$", ""))
             cur_line = string.trim(string.gsub(cur_line, "^Riconnessione.$", ""))
             if cur_line ~= "" then
                 room_name = cur_line
@@ -844,7 +846,7 @@ end
 
 function escape(input_string)
     if type(input_string) == "string" then
-        local escaped_string = input_string:gsub([[\]], [[\\]]):gsub([[']], [[\']]):gsub([["]], [[\"]])
+        local escaped_string = input_string:gsub([[\]], [[\\]]):gsub([[']], [[\']]):gsub([["]], [[\"]]):gsub("[[;]]","[[\;]]")
         return escaped_string
     else
         return input_string
@@ -922,7 +924,7 @@ function parse_ident(ident_text)
 end
 
 function ident_to_query(parsed)
-    local data = { ["sql"] = "INSERT INTO DDE.tblidentificazioni_new (nome, peso, affitto, livello, ac, proprieta, affects, diffusione, informazioni, tipo, area, valore, danno_min, danno_max, danno_media,tipo_danno) VALUES('" .. escape(parsed["nome"]) .. "', " .. escape(parsed["peso"]) .. ", " .. escape(parsed["affitto"]) .. ",  " .. escape(parsed["livello"]) .. ", " .. escape(parsed["ac"]) .. ", '" .. escape(parsed["proprieta"]) .. "', '" .. escape(parsed["affects"]) .. "', '" .. escape(parsed["diffusione"]) .. "',  '" .. escape(character_name) .. "', 'da verificare', '', " .. escape(parsed["valore"]) .. ", " .. escape(parsed["danno_min"]) .. ", " .. escape(parsed["danno_max"]) .. ", " .. escape(parsed["danno_media"]) .. ",'" .. escape(parsed["tipo_danno"]) .. "');" }
+    local data = { ["sql"] = "INSERT INTO tblident_temp (nome, peso, affitto, livello, ac, proprieta, affects, diffusione, informazioni, tipo, area, valore, danno_min, danno_max, danno_media,tipo_danno) VALUES('" .. escape(parsed["nome"]) .. "', " .. escape(parsed["peso"]) .. ", " .. escape(parsed["affitto"]) .. ",  " .. escape(parsed["livello"]) .. ", " .. escape(parsed["ac"]) .. ", '" .. escape(parsed["proprieta"]) .. "', '" .. escape(parsed["affects"]) .. "', '" .. escape(parsed["diffusione"]) .. "',  '" .. escape(character_name) .. "', 'da verificare', '', " .. escape(parsed["valore"]) .. ", " .. escape(parsed["danno_min"]) .. ", " .. escape(parsed["danno_max"]) .. ", " .. escape(parsed["danno_media"]) .. ",'" .. escape(parsed["tipo_danno"]) .. "');" }
     return data
 end
 
@@ -940,7 +942,8 @@ function send_ident_to_db(data)
             'sysPostHttpDone',
             function(event, rurl, response)
                 if rurl == url then
-                    display(response)
+                    --display(response)
+                    cecho("\n\n<yellow>Identificazione inviata con successo al NariaDB\n\n")
                 else
                     return true
                 end
@@ -954,7 +957,8 @@ function send_ident_to_db(data)
             'sysPostHttpError',
             function(event, response, rurl)
                 if rurl == url then
-                    display(response)
+                    --display(response)
+                    cecho("\n\n<red>ERRORE: invio identificazione al NariaDB\n\n")
                 else
                     return true
                 end
