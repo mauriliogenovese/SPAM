@@ -20,13 +20,13 @@ local split = explode(matches[3])
 if #split == 1 then
   if string.starts("list", string.lower(split[1])) then
     echo("\nLista observe:")
-    display(persistent_variables[character_name]["observe_list"])
+    display(SPAM.persistent_variables[SPAM.character_name]["observe_list"])
     return
   end
   if string.starts("clear", string.lower(split[1])) then
-    persistent_variables[character_name]["observe_list"] = nil
-    persistent_variables[character_name]["observe_list"] = {}
-    save_persistent_var(character_name)
+    SPAM.persistent_variables[SPAM.character_name]["observe_list"] = nil
+    SPAM.persistent_variables[SPAM.character_name]["observe_list"] = {}
+    save_persistent_var(SPAM.character_name)
     echo("\nLista observe svuotata")
     send("\n")
     return
@@ -41,37 +41,37 @@ if #split > 1 then
       send("\n")
       return
     end
-    if persistent_variables[character_name]["optional_buff"][allyName] == nil then
-      persistent_variables[character_name]["optional_buff"][allyName] = {}
+    if SPAM.persistent_variables[SPAM.character_name]["optional_buff"][allyName] == nil then
+      SPAM.persistent_variables[SPAM.character_name]["optional_buff"][allyName] = {}
     end
     local buff = removeFirstTwoWords(matches[3])
-    if persistent_variables[character_name]["optional_buff"][allyName][buff] == true then
+    if SPAM.persistent_variables[SPAM.character_name]["optional_buff"][allyName][buff] == true then
       echo("\nRimuovo " .. buff .. " per " .. allyName .. "\n")
-      persistent_variables[character_name]["optional_buff"][allyName][buff] = nil
+      SPAM.persistent_variables[SPAM.character_name]["optional_buff"][allyName][buff] = nil
     else
       echo("\nOsservo " .. buff .. " per " .. allyName .. "\n")
-      persistent_variables[character_name]["optional_buff"][allyName][buff] = true
+      SPAM.persistent_variables[SPAM.character_name]["optional_buff"][allyName][buff] = true
     end
     send("\n")
-    save_persistent_var(character_name)
+    save_persistent_var(SPAM.character_name)
     return
   elseif string.starts("customrefresh", string.lower(split[1])) then
-    if persistent_variables[character_name]["custom_refresh"] == nil then
-      persistent_variables[character_name]["custom_refresh"] = {}
+    if SPAM.persistent_variables[SPAM.character_name]["custom_refresh"] == nil then
+      SPAM.persistent_variables[SPAM.character_name]["custom_refresh"] = {}
     end
     local exp = explode(removeFirstWord(matches[3]), "-")
     if #exp == 2 then
       exp[1] = trim(exp[1])
-      if persistent_variables[character_name]["custom_refresh"][exp[1]] ~= nil then
+      if SPAM.persistent_variables[SPAM.character_name]["custom_refresh"][exp[1]] ~= nil then
         echo("\nRimuovo customrefresh " .. exp[1] .. "\n")
-        persistent_variables[character_name]["custom_refresh"][exp[1]] = nil
+        SPAM.persistent_variables[SPAM.character_name]["custom_refresh"][exp[1]] = nil
       else
         echo("\nOsservo customrefresh " .. exp[1] .. " with command" .. exp[2] .. "\n")
-        persistent_variables[character_name]["custom_refresh"][exp[1]] = explode(exp[2],",")
-        display(persistent_variables[character_name]["custom_refresh"])
+        SPAM.persistent_variables[SPAM.character_name]["custom_refresh"][exp[1]] = explode(exp[2],",")
+        display(SPAM.persistent_variables[SPAM.character_name]["custom_refresh"])
       end
       send("\n")
-      save_persistent_var(character_name)
+      save_persistent_var(SPAM.character_name)
       return
 
     end

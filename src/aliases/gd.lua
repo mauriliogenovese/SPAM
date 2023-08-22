@@ -1,1 +1,1 @@
-send("gd " .. persistent_variables[character_name]["gd_start"] .. matches[3] .. persistent_variables[character_name]["gd_end"] .. "&d")
+send("gd " .. SPAM.persistent_variables[SPAM.character_name]["gd_start"] .. matches[3] .. SPAM.persistent_variables[SPAM.character_name]["gd_end"] .. "&d")

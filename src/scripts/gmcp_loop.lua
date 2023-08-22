@@ -9,34 +9,34 @@ function gmcp_loop()
     return
   end
   --character loading
-  if character_name ~= gmcp.Char.Name.name then
-    character_name = gmcp.Char.Name.name
-    initialize_persistent_var(character_name)
-    observe_spell_list = nil
+  if SPAM.character_name ~= gmcp.Char.Name.name then
+    SPAM.character_name = gmcp.Char.Name.name
+    initialize_persistent_var(SPAM.character_name)
+    SPAM.observe_spell_list = nil
     --first character login
     local save_var = false
-    if persistent_variables[character_name]["observe_list"] == nil then
-      persistent_variables[character_name]["observe_list"] = {}
+    if SPAM.persistent_variables[SPAM.character_name]["observe_list"] == nil then
+      SPAM.persistent_variables[SPAM.character_name]["observe_list"] = {}
       save_var = true
     end
-    if persistent_variables[character_name]["optional_buff"] == nil then
-      persistent_variables[character_name]["optional_buff"] = {}
+    if SPAM.persistent_variables[SPAM.character_name]["optional_buff"] == nil then
+      SPAM.persistent_variables[SPAM.character_name]["optional_buff"] = {}
       save_var = true
     end
-    if persistent_variables[character_name]["gd_start"] == nil then
-      persistent_variables[character_name]["gd_start"] = ""
+    if SPAM.persistent_variables[SPAM.character_name]["gd_start"] == nil then
+      SPAM.persistent_variables[SPAM.character_name]["gd_start"] = ""
       save_var = true
     end
-    if persistent_variables[character_name]["gd_end"] == nil then
-      persistent_variables[character_name]["gd_end"] = ""
+    if SPAM.persistent_variables[SPAM.character_name]["gd_end"] == nil then
+      SPAM.persistent_variables[SPAM.character_name]["gd_end"] = ""
       save_var = true
     end
-    if persistent_variables[character_name]["glory_timer"] == nil then
-      persistent_variables[character_name]["glory_timer"] = {}
+    if SPAM.persistent_variables[SPAM.character_name]["glory_timer"] == nil then
+      SPAM.persistent_variables[SPAM.character_name]["glory_timer"] = {}
       save_var = true
     end
     if save_var == true then
-      save_persistent_var(character_name)
+      save_persistent_var(SPAM.character_name)
     end
     --return needed to refresh classes
     gmcp.Char.Classi.classi = nil
@@ -44,11 +44,11 @@ function gmcp_loop()
     return
   end
   --party observer
-  if persistent_variables["config"]["dde_group"] == true then
+  if SPAM.persistent_variables["config"]["dde_group"] == true then
     clearWindow("DdE Group")
+    local gruppo = {}
     if gmcp.Char.Gruppo == nil or gmcp.Char.Gruppo.gruppo == nil then
       --if not in group, create a similar structure to show player info
-      gruppo = {}
       gruppo[1] = {}
       gruppo[1].nome = gmcp.Char.Name.name
       gruppo[1].hp = math.floor(100 * gmcp.Char.Vitals.hp / gmcp.Char.Vitals.maxhp)
@@ -63,26 +63,26 @@ function gmcp_loop()
       gruppo = gmcp.Char.Gruppo.gruppo
     end
     --generate the observable spell list
-    if observe_spell_list == nil then
+    if SPAM.observe_spell_list == nil then
       gen_spell_list(gmcp.Char.Classi.classi)
     end
-    --generate the persistent_variables[character_name]["optional_buff"] entry for current character, if missing
-    if persistent_variables[character_name]["optional_buff"] == nil then
-      persistent_variables[character_name]["optional_buff"] = {}
+    --generate the SPAM.persistent_variables[SPAM.character_name]["optional_buff"] entry for current character, if missing
+    if SPAM.persistent_variables[SPAM.character_name]["optional_buff"] == nil then
+      SPAM.persistent_variables[SPAM.character_name]["optional_buff"] = {}
     end
-    --generate the persistent_variables[character_name]["custom_refresh"] entry for current character, if missing
-    if persistent_variables[character_name]["custom_refresh"] == nil then
-      persistent_variables[character_name]["custom_refresh"] = {}
+    --generate the SPAM.persistent_variables[SPAM.character_name]["custom_refresh"] entry for current character, if missing
+    if SPAM.persistent_variables[SPAM.character_name]["custom_refresh"] == nil then
+      SPAM.persistent_variables[SPAM.character_name]["custom_refresh"] = {}
     end
     --if not otherwise specifies, i'm always in base observe mode
-    if persistent_variables[character_name]["observe_list"][character_name] == nil then
-      persistent_variables[character_name]["observe_list"][character_name] = "base"
+    if SPAM.persistent_variables[SPAM.character_name]["observe_list"][SPAM.character_name] == nil then
+      SPAM.persistent_variables[SPAM.character_name]["observe_list"][SPAM.character_name] = "base"
     end
     --group loop
-    party_names = {}
+    local party_names = {}
     for i, v in ipairs(gruppo) do
       local this_name = beautifyName(v.nome)
-      name_x = 2
+      local name_x = 2
       while party_names[this_name] ~= nil do
         if name_x > 2 then
           this_name = string.gsub(this_name, (name_x - 1) .. ".", "")
@@ -91,7 +91,7 @@ function gmcp_loop()
         name_x = name_x + 1
       end
       party_names[this_name] = true
-      ddeGroupWidget:decho("\n")
+      SPAM.ddeGroupWidget:decho("\n")
       local ob_func_list = {}
       local ob_name_list = role_list()
       table.foreach(
@@ -105,83 +105,83 @@ function gmcp_loop()
           )
         end
       )
-      ddeGroupWidget:hechoPopup(this_name, ob_func_list, ob_name_list, true)
-      ddeGroupWidget:decho("(")
-      this_hp = tonumber(v.hp)
-      row = "#" .. getPFcolor(this_hp, 100) .. this_hp
+      SPAM.ddeGroupWidget:hechoPopup(this_name, ob_func_list, ob_name_list, true)
+      SPAM.ddeGroupWidget:decho("(")
+      local this_hp = tonumber(v.hp)
+      local row = "#" .. getPFcolor(this_hp, 100) .. this_hp
       --if player can cast heal spells, add them as link
-      if next(observe_spell_list.heal) ~= nil then
-        heal_func_list = {}
+      if next(SPAM.observe_spell_list.heal) ~= nil then
+        local heal_func_list = {}
         table.foreach(
-          observe_spell_list.heal,
+          SPAM.observe_spell_list.heal,
           function(k1, v1)
             table.insert(
               heal_func_list,
               function()
-                send(observe_spell_list.command .. " '" .. v1 .. "' " .. this_name)
+                send(SPAM.observe_spell_list.command .. " '" .. v1 .. "' " .. this_name)
               end
             )
           end
         )
-        ddeGroupWidget:hechoPopup(row, heal_func_list, observe_spell_list.heal, true)
+        SPAM.ddeGroupWidget:hechoPopup(row, heal_func_list, SPAM.observe_spell_list.heal, true)
       else
-        ddeGroupWidget:hecho(row)
+        SPAM.ddeGroupWidget:hecho(row)
       end
-      ddeGroupWidget:decho("<200,200,200>")
-      this_move = tonumber(v.move)
+      SPAM.ddeGroupWidget:decho("<200,200,200>")
+      local this_move = tonumber(v.move)
       if this_move <= 20 then
         row = ", <red>" .. this_move
-        if next(observe_spell_list.move) ~= nil then
-          move_func_list = {}
+        if next(SPAM.observe_spell_list.move) ~= nil then
+          local move_func_list = {}
           table.foreach(
-            observe_spell_list.move,
+            SPAM.observe_spell_list.move,
             function(k1, v1)
               table.insert(
                 move_func_list,
                 function()
-                  send(observe_spell_list.command .. " '" .. v1 .. "' " .. this_name)
+                  send(SPAM.observe_spell_list.command .. " '" .. v1 .. "' " .. this_name)
                 end
               )
             end
           )
-          ddeGroupWidget:cechoPopup(row, move_func_list, observe_spell_list.move, true)
+          SPAM.ddeGroupWidget:cechoPopup(row, move_func_list, SPAM.observe_spell_list.move, true)
         else
-          ddeGroupWidget:cecho(row)
+          SPAM.ddeGroupWidget:cecho(row)
         end
       end
-      ddeGroupWidget:decho(")")
+      SPAM.ddeGroupWidget:decho(")")
       --generate spell to check for the current group member
-      if persistent_variables[character_name]["observe_list"][this_name] ~= nil then
-        observe_spell = {}
-        merge_tables(observe_spell_list.buff.base, observe_spell)
-        if this_name == character_name then
-          merge_tables(observe_spell_list.self_buff.base, observe_spell)
-          merge_tables(getTableKeys(persistent_variables[character_name]["custom_refresh"]), observe_spell)
+      if SPAM.persistent_variables[SPAM.character_name]["observe_list"][this_name] ~= nil then
+        local observe_spell = {}
+        merge_tables(SPAM.observe_spell_list.buff.base, observe_spell)
+        if this_name == SPAM.character_name then
+          merge_tables(SPAM.observe_spell_list.self_buff.base, observe_spell)
+          merge_tables(getTableKeys(SPAM.persistent_variables[SPAM.character_name]["custom_refresh"]), observe_spell)
         end
-        if string.find(persistent_variables[character_name]["observe_list"][this_name], "tank") then
-          merge_tables(observe_spell_list.buff.tank, observe_spell)
-          if this_name == character_name then
-            merge_tables(observe_spell_list.self_buff.tank, observe_spell)
+        if string.find(SPAM.persistent_variables[SPAM.character_name]["observe_list"][this_name], "tank") then
+          merge_tables(SPAM.observe_spell_list.buff.tank, observe_spell)
+          if this_name == SPAM.character_name then
+            merge_tables(SPAM.observe_spell_list.self_buff.tank, observe_spell)
           end
         end
-        if string.find(persistent_variables[character_name]["observe_list"][this_name], "dps") then
-          merge_tables(observe_spell_list.buff.dps, observe_spell)
-          if this_name == character_name then
-            merge_tables(observe_spell_list.self_buff.dps, observe_spell)
+        if string.find(SPAM.persistent_variables[SPAM.character_name]["observe_list"][this_name], "dps") then
+          merge_tables(SPAM.observe_spell_list.buff.dps, observe_spell)
+          if this_name == SPAM.character_name then
+            merge_tables(SPAM.observe_spell_list.self_buff.dps, observe_spell)
           end
         end
-        if persistent_variables[character_name]["optional_buff"][this_name] ~= nil then
-          for key, val in pairs(persistent_variables[character_name]["optional_buff"][this_name]) do
+        if SPAM.persistent_variables[SPAM.character_name]["optional_buff"][this_name] ~= nil then
+          for key, val in pairs(SPAM.persistent_variables[SPAM.character_name]["optional_buff"][this_name]) do
             if val == true then
               table.insert(observe_spell, key)
             end
           end
         end
         deduplicate(observe_spell)
-        spells = nil
+        local spells = nil
         spells = v.incantesimi
         if spells ~= nil then
-          active = nil
+          local active = nil
           active = {}
           for n = 1, #spells do
             active[spells[n]] = true
@@ -215,17 +215,17 @@ function gmcp_loop()
           if active["protezione dal male"] then
             active["protezione dal bene"] = true
           end
-          active_observed = {}
+          local active_observed = {}
           for a, b in ipairs(observe_spell) do
             if not active[b] then
-              ddeGroupWidget:decho(" - ")
-              ddeGroupWidget:dechoLink(
+              SPAM.ddeGroupWidget:decho(" - ")
+              SPAM.ddeGroupWidget:dechoLink(
                 b,
                 function()
-                  if persistent_variables[character_name]["custom_refresh"][b] == nil then
-                    send(observe_spell_list.command .. " '" .. b .. "' " .. this_name)
+                  if SPAM.persistent_variables[SPAM.character_name]["custom_refresh"][b] == nil then
+                    send(SPAM.observe_spell_list.command .. " '" .. b .. "' " .. this_name)
                   else
-                    sendAll(unpack(persistent_variables[character_name]["custom_refresh"][b]))
+                    sendAll(unpack(SPAM.persistent_variables[SPAM.character_name]["custom_refresh"][b]))
                   end
                 end,
                 "Casta " .. b,
@@ -235,32 +235,31 @@ function gmcp_loop()
               active_observed[b] = true
             end
           end
-          if gmcp.Char.Magie.incantesimi ~= nil and this_name == character_name then
+          if gmcp.Char.Magie.incantesimi ~= nil and this_name == SPAM.character_name then
             for a, b in ipairs(gmcp.Char.Magie.incantesimi) do
               if active_observed[b.nome] == true and b.durata < 20 then
+                local color_tag = "<255,0,0>"
                 if b.durata > 10 then
                   color_tag = "<255,255,0>"
-                else
-                  color_tag = "<255,0,0>"
                 end
                 if b.nome == "volo" or b.nome == "branchie" or b.nome == "levitazione" then
-                  ddeGroupWidget:dechoLink(
+                  SPAM.ddeGroupWidget:dechoLink(
                     " - " .. color_tag .. b.nome .. "<200,200,200>",
                     function()
-                      send(observe_spell_list.command .. " '" .. b.nome .. "' " .. this_name)
+                      send(SPAM.observe_spell_list.command .. " '" .. b.nome .. "' " .. this_name)
                     end,
                     "Casta " .. b.nome,
                     true
                   )
                 else
-                  ddeGroupWidget:decho(" - " .. color_tag .. b.nome .. "<200,200,200>")
+                  SPAM.ddeGroupWidget:decho(" - " .. color_tag .. b.nome .. "<200,200,200>")
                 end
               end
             end
           end
         end
       end
-      ddeGroupWidget:decho("\n")
+      SPAM.ddeGroupWidget:decho("\n")
       observe_spell = nil
       active_observed = nil
     end

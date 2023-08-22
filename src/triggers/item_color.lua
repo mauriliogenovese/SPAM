@@ -1,7 +1,6 @@
-if cond[matches[4]]~= nil then
-  thiscolor=colors[cond[matches[4]]]
-else
-  thiscolor="FF33DA"
+local thiscolor="FF33DA"
+if SPAM.cond[matches[4]]~= nil then
+  thiscolor=SPAM.colors[SPAM.cond[matches[4]]]
 end
 
 selectString( matches[4], 1 )

@@ -1,1 +1,1 @@
-lastDead = matches[2]
+SPAM.lastDead = matches[2]

@@ -1,28 +1,30 @@
+SPAM = SPAM or {}
+
 function toggle_ddegroup()
-    if ddeGroupContainer == nil then
+    if SPAM.ddeGroupContainer == nil then
         return
     end
-    if persistent_variables["config"]["dde_group"] == false then
-        ddeGroupContainer:hide()
+    if SPAM.persistent_variables["config"]["dde_group"] == false then
+        SPAM.ddeGroupContainer:hide()
     else
-        ddeGroupContainer:show()
+        SPAM.ddeGroupContainer:show()
     end
 end
 
 function toggle_abbilchat()
-    if abbilchatContainer == nil then
+    if SPAM.abbilchatContainer == nil then
         return
     end
-    if persistent_variables["config"]["abbil_chat"] == false then
-        abbilchatContainer:hide()
+    if SPAM.persistent_variables["config"]["abbil_chat"] == false then
+        SPAM.abbilchatContainer:hide()
     else
-        abbilchatContainer:show()
+        SPAM.abbilchatContainer:show()
     end
 end
 
 function check_cast(cast_name)
     if gmcp.Char.Magie.incantesimi ~= nil then
-        cast_name = string.lower(cast_name)
+        local cast_name = string.lower(cast_name)
         for i, v in ipairs(gmcp.Char.Magie.incantesimi) do
             if string.lower(v.nome) == cast_name then
                 return true
@@ -35,7 +37,7 @@ end
 function spam_update()
     uninstallPackage("@PKGNAME@")
     local git_url = "https://raw.githubusercontent.com/mauriliogenovese/SPAM/main/build/SPAM.mpackage"
-    if persistent_variables["config"]["dev"] == true then
+    if SPAM.persistent_variables["config"]["dev"] == true then
         git_url = "https://raw.githubusercontent.com/mauriliogenovese/SPAM/dev/build/SPAM.mpackage"
     end
     installPackage(git_url)
@@ -102,7 +104,7 @@ function compare_with_current_version(newversion)
 end
 
 function spam_eventHandler(event, ...)
-    if event == "sysDownloadDone" and spam_downloading then
+    if event == "sysDownloadDone" and SPAM_downloading then
         local file = arg[1]
         if string.ends(file, "/version") then
             remote_version = {}
@@ -111,9 +113,9 @@ function spam_eventHandler(event, ...)
                 tempTimer(2, [[cecho("\n<red>E' disponibile una nuova versione di SPAM. Per scaricarla usa il comando: <white>spam update\n")]])
             end
         end
-        spam_downloading = false
-    elseif event == "sysDownloadError" and spam_downloading then
-        spam_downloading = false
+        SPAM_downloading = false
+    elseif event == "sysDownloadError" and SPAM_downloading then
+        SPAM_downloading = false
     end
 end
 
@@ -127,7 +129,7 @@ function merge_tables(old_table, new_table)
 end
 
 function getAllyName(name)
-    name = string.lower(name)
+    local name = string.lower(name)
     if gmcp.Char.Gruppo.gruppo == nil then
         if string.starts(string.lower(gmcp.Char.Name.name), name) then
             return gmcp.Char.Name.name
@@ -160,7 +162,7 @@ function beautifyName(name)
     elseif string.starts(string.lower(name), "un' ") then
         name = string.gsub(string.lower(name), "un' ", "")
     end
-    words = {}
+    local words = {}
     words[1], words[2] = name:match("(%w+)(%W+)")
     if words[1] == nil then
         words[1] = name
@@ -203,7 +205,7 @@ function get_os()
 end
 
 function copy_to_clipboard(string)
-    if persistent_variables["config"]["clipboard"] == false then
+    if SPAM.persistent_variables["config"]["clipboard"] == false then
         return
     end
     local os_name = get_os()
@@ -225,7 +227,7 @@ function copy_to_clipboard(string)
 end
 
 function play_sound(file)
-    if persistent_variables["config"]["sounds"] == false then
+    if SPAM.persistent_variables["config"]["sounds"] == false then
         return
     end
     if get_os() == "linux" then
@@ -244,15 +246,15 @@ function play_sound(file)
 end
 
 function initialize_persistent_var(varname)
-    if persistent_variables == nil then
-        persistent_variables = {}
+    if SPAM.persistent_variables == nil then
+        SPAM.persistent_variables = {}
     end
     local savelocation = getMudletHomeDir() .. "/" .. varname .. ".lua"
-    if persistent_variables[varname] == nil then
-        persistent_variables[varname] = {}
+    if SPAM.persistent_variables[varname] == nil then
+        SPAM.persistent_variables[varname] = {}
     end
     if file_exists(savelocation) then
-        table.load(savelocation, persistent_variables[varname])
+        table.load(savelocation, SPAM.persistent_variables[varname])
     else
         save_persistent_var(varname)
     end
@@ -260,7 +262,7 @@ end
 
 function save_persistent_var(varname)
     local savelocation = getMudletHomeDir() .. "/" .. varname .. ".lua"
-    table.save(savelocation, persistent_variables[varname])
+    table.save(savelocation, SPAM.persistent_variables[varname])
 end
 
 -- We need this function for sorting.
@@ -280,7 +282,7 @@ function makePairs(hashTable, array, _k)
 end
 
 function disp_time(time)
-    negative = false
+    local negative = false
 
     if time < 0 then
         negative = true
@@ -355,14 +357,14 @@ end
 --generate spell list to observe based on player classes
 
 function gen_spell_list(my_class_list)
-    observe_spell_list = new_class()
-    observe_spell_list.command = "form"
+    SPAM.observe_spell_list = new_class()
+    SPAM.observe_spell_list.command = "form"
     for i, v in ipairs(my_class_list) do
-        if class_list[v.classe] ~= nil then
-            merge_classes(observe_spell_list, class_list[v.classe])
+        if SPAM.class_list[v.classe] ~= nil then
+            merge_classes(SPAM.observe_spell_list, SPAM.class_list[v.classe])
         end
     end
-    deduplicate_class(observe_spell_list)
+    deduplicate_class(SPAM.observe_spell_list)
 end
 
 function removeFirstTwoWords(str)
@@ -440,21 +442,21 @@ function ob_role(name, test_role, checkname)
             echo("I ruoli ammessi sono: base, tank, dps, tankdps, remove\n")
             return false
         elseif role == "remove" then
-            persistent_variables[character_name]["observe_list"][allyName] = nil
+            SPAM.persistent_variables[SPAM.character_name]["observe_list"][allyName] = nil
             echo("\n" .. allyName .. " non più in osservazione\n")
         else
-            persistent_variables[character_name]["observe_list"][allyName] = role
+            SPAM.persistent_variables[SPAM.character_name]["observe_list"][allyName] = role
             echo("\n" .. allyName .. " in osservazione come " .. role .. "\n")
         end
         send("\n")
-        save_persistent_var(character_name)
+        save_persistent_var(SPAM.character_name)
         return true
     end
 end
 
 function set_char_permanent_var(varname, string)
-    persistent_variables[character_name][varname] = string
-    save_persistent_var(character_name)
+    SPAM.persistent_variables[SPAM.character_name][varname] = string
+    save_persistent_var(SPAM.character_name)
 end
 
 function bool2str(bool)
@@ -465,7 +467,7 @@ function bool2str(bool)
 end
 
 function str2bool(str)
-    str = string.lower(str)
+    local str = string.lower(str)
     if str == "on" or str == "true" or str == "1" or str == 1 then
         return true
     end
@@ -474,25 +476,25 @@ end
 
 function show_config()
     checho("\nLa configurazione del profilo attuale è:")
-    checho("\n   DdEGroup: " .. bool2str(persistent_variables["config"]["dde_group"]))
-    checho("\n   AbbilChat: " .. bool2str(persistent_variables["config"]["abbil_chat"]))
-    checho("\n   Suoni: " .. bool2str(persistent_variables["config"]["sounds"]))
-    checho("\n   Gloria: " .. bool2str(persistent_variables["config"]["glory_timer"]))
-    checho("\n   Appunti: " .. bool2str(persistent_variables["config"]["clipboard"]))
-    checho("\n   NariaDB: " .. bool2str(persistent_variables["config"]["auto_send"]))
-    checho("\n   Mapper: " .. bool2str(persistent_variables["config"]["mapper"]))
+    checho("\n   DdEGroup: " .. bool2str(SPAM.persistent_variables["config"]["dde_group"]))
+    checho("\n   AbbilChat: " .. bool2str(SPAM.persistent_variables["config"]["abbil_chat"]))
+    checho("\n   Suoni: " .. bool2str(SPAM.persistent_variables["config"]["sounds"]))
+    checho("\n   Gloria: " .. bool2str(SPAM.persistent_variables["config"]["glory_timer"]))
+    checho("\n   Appunti: " .. bool2str(SPAM.persistent_variables["config"]["clipboard"]))
+    checho("\n   NariaDB: " .. bool2str(SPAM.persistent_variables["config"]["auto_send"]))
+    checho("\n   Mapper: " .. bool2str(SPAM.persistent_variables["config"]["mapper"]))
     checho(
-            "\n   Nascondi_scudoni: " .. bool2str(persistent_variables["config"]["hide_immune_shield"])
+            "\n   Nascondi_scudoni: " .. bool2str(SPAM.persistent_variables["config"]["hide_immune_shield"])
     )
     checho(
-            "\n   Nascondi_px_persi: " .. bool2str(persistent_variables["config"]["hide_lost_experience"])
+            "\n   Nascondi_px_persi: " .. bool2str(SPAM.persistent_variables["config"]["hide_lost_experience"])
     )
-    if persistent_variables["config"]["dev"] == true then
-        checho("\n   Dev: " .. bool2str(persistent_variables["config"]["dev"]))
+    if SPAM.persistent_variables["config"]["dev"] == true then
+        checho("\n   Dev: " .. bool2str(SPAM.persistent_variables["config"]["dev"]))
     end
-    checho("\n\nLa configurazione del personaggio <" .. character_name .. "> è:")
-    checho("\n   gdcolor_prefisso al gd: " .. persistent_variables[character_name]["gd_start"])
-    checho("\n   gdcolor_suffisso al gd: " .. persistent_variables[character_name]["gd_end"])
+    checho("\n\nLa configurazione del personaggio <" .. SPAM.character_name .. "> è:")
+    checho("\n   gdcolor_prefisso al gd: " .. SPAM.persistent_variables[SPAM.character_name]["gd_start"])
+    checho("\n   gdcolor_suffisso al gd: " .. SPAM.persistent_variables[SPAM.character_name]["gd_end"])
 end
 
 function spam_main(string)
@@ -512,7 +514,7 @@ Ad esempio: <white>spam ddegroup <gray>oppure <white>spam gdcolor
           ]]
         )
     else
-        split = explode(string)
+        local split = explode(string)
         split[1] = string.lower(split[1])
         if #split == 1 then
             if string.starts("ddegroup", split[1]) then
@@ -602,53 +604,53 @@ Per scoprire i TAG colore disponibili in Dei delle Ere usa il comando: <white>ai
             end
         else
             if string.starts("ddegroup", split[1]) then
-                persistent_variables["config"]["dde_group"] = str2bool(split[2])
-                checho("\nDdEGroup: " .. bool2str(persistent_variables["config"]["dde_group"]))
+                SPAM.persistent_variables["config"]["dde_group"] = str2bool(split[2])
+                checho("\nDdEGroup: " .. bool2str(SPAM.persistent_variables["config"]["dde_group"]))
                 save_persistent_var("config")
                 toggle_ddegroup()
             elseif string.starts("abbilchat", split[1]) then
-                persistent_variables["config"]["abbil_chat"] = str2bool(split[2])
-                checho("\nAbbilChat: " .. bool2str(persistent_variables["config"]["abbil_chat"]))
+                SPAM.persistent_variables["config"]["abbil_chat"] = str2bool(split[2])
+                checho("\nAbbilChat: " .. bool2str(SPAM.persistent_variables["config"]["abbil_chat"]))
                 save_persistent_var("config")
                 toggle_abbilchat()
             elseif string.starts("suoni", split[1]) then
-                persistent_variables["config"]["sounds"] = str2bool(split[2])
-                checho("\nSuoni: " .. bool2str(persistent_variables["config"]["sounds"]))
+                SPAM.persistent_variables["config"]["sounds"] = str2bool(split[2])
+                checho("\nSuoni: " .. bool2str(SPAM.persistent_variables["config"]["sounds"]))
                 save_persistent_var("config")
             elseif string.starts("appunti", split[1]) then
-                persistent_variables["config"]["clipboard"] = str2bool(split[2])
-                checho("\nAppunti: " .. bool2str(persistent_variables["config"]["clipboard"]))
+                SPAM.persistent_variables["config"]["clipboard"] = str2bool(split[2])
+                checho("\nAppunti: " .. bool2str(SPAM.persistent_variables["config"]["clipboard"]))
                 save_persistent_var("config")
             elseif string.starts("nariadb", split[1]) then
-                persistent_variables["config"]["auto_send"] = str2bool(split[2])
-                checho("\nNariaDB: " .. bool2str(persistent_variables["config"]["auto_send"]))
+                SPAM.persistent_variables["config"]["auto_send"] = str2bool(split[2])
+                checho("\nNariaDB: " .. bool2str(SPAM.persistent_variables["config"]["auto_send"]))
                 save_persistent_var("config")
             elseif string.starts("mapper", split[1]) then
-                persistent_variables["config"]["mapper"] = str2bool(split[2])
-                checho("\nMapper: " .. bool2str(persistent_variables["config"]["mapper"]))
+                SPAM.persistent_variables["config"]["mapper"] = str2bool(split[2])
+                checho("\nMapper: " .. bool2str(SPAM.persistent_variables["config"]["mapper"]))
                 cecho("\n<red>ATTENZIONE: <grey>La modifica sarà attiva dal prossimo riavvio del client!")
                 save_persistent_var("config")
             elseif string.starts("nascondi_px_persi", split[1]) then
-                persistent_variables["config"]["hide_lost_experience"] = str2bool(split[2])
-                checho("\nnascondi_px_persi: " .. bool2str(persistent_variables["config"]["hide_lost_experience"]))
+                SPAM.persistent_variables["config"]["hide_lost_experience"] = str2bool(split[2])
+                checho("\nnascondi_px_persi: " .. bool2str(SPAM.persistent_variables["config"]["hide_lost_experience"]))
                 save_persistent_var("config")
             elseif string.starts("nascondi_scudoni", split[1]) then
-                persistent_variables["config"]["hide_immune_shield"] = str2bool(split[2])
-                checho("\nnascondi_scudoni: " .. bool2str(persistent_variables["config"]["hide_immune_shield"]))
+                SPAM.persistent_variables["config"]["hide_immune_shield"] = str2bool(split[2])
+                checho("\nnascondi_scudoni: " .. bool2str(SPAM.persistent_variables["config"]["hide_immune_shield"]))
                 save_persistent_var("config")
             elseif string.starts("gloria", split[1]) then
-                persistent_variables["config"]["glory_timer"] = str2bool(split[2])
-                checho("\nGloria: " .. bool2str(persistent_variables["config"]["glory_timer"]))
+                SPAM.persistent_variables["config"]["glory_timer"] = str2bool(split[2])
+                checho("\nGloria: " .. bool2str(SPAM.persistent_variables["config"]["glory_timer"]))
                 save_persistent_var("config")
             elseif split[1] == "gdcolor_prefisso" then
                 set_char_permanent_var("gd_start", removeFirstWord(string))
-                checho("\ngdcolor_prefisso al gd: " .. persistent_variables[character_name]["gd_start"])
+                checho("\ngdcolor_prefisso al gd: " .. SPAM.persistent_variables[SPAM.character_name]["gd_start"])
             elseif split[1] == "gdcolor_suffisso" then
                 set_char_permanent_var("gd_end", removeFirstWord(string))
-                checho("\ngdcolor_suffisso al gd: " .. persistent_variables[character_name]["gd_end"])
+                checho("\ngdcolor_suffisso al gd: " .. SPAM.persistent_variables[SPAM.character_name]["gd_end"])
             elseif split[1] == "dev" then
-                persistent_variables["config"]["dev"] = str2bool(split[2])
-                checho("\ndev: " .. bool2str(persistent_variables["config"]["dev"]))
+                SPAM.persistent_variables["config"]["dev"] = str2bool(split[2])
+                checho("\ndev: " .. bool2str(SPAM.persistent_variables["config"]["dev"]))
             else
                 cecho("\nScelta non valida")
             end
@@ -659,12 +661,12 @@ end
 
 function show_glory_timer()
     send("gloria")
-    if persistent_variables["config"]["glory_timer"] == false then
+    if SPAM.persistent_variables["config"]["glory_timer"] == false then
         return
     end
     local oneDayAgo = os.time() - 24 * 60 * 60
     local printed_title = false
-    for key, value in pairs(persistent_variables[character_name]["glory_timer"]) do
+    for key, value in pairs(SPAM.persistent_variables[SPAM.character_name]["glory_timer"]) do
         if value > oneDayAgo then
             --print(key .. ": " .. os.date("%H:%M", value + 60 * 60))
         else
@@ -672,7 +674,7 @@ function show_glory_timer()
                 cecho("\n<yellow>MOB GLORIA PASSATI:")
                 printed_title = true
             end
-            persistent_variables[character_name]["glory_timer"][key] = -1
+            SPAM.persistent_variables[SPAM.character_name]["glory_timer"][key] = -1
             cecho("\n    <white>" .. key)
         end
     end
@@ -681,7 +683,7 @@ function show_glory_timer()
     end
     cecho("\n<yellow>MOB GLORIA NELLE ULTIME 24 ORE:")
     local array = {}
-    makePairs(persistent_variables[character_name]["glory_timer"], array)
+    makePairs(SPAM.persistent_variables[SPAM.character_name]["glory_timer"], array)
     table.sort(array, greater)
     printPairs(array)
     print("\n")
@@ -705,7 +707,7 @@ end
 
 function mod_generic_mapper()
 
-    if oldsanitize ~= nil then
+    if SPAM.oldsanitize ~= nil then
         return
     end
     --generic mapper mod for DDE
@@ -755,11 +757,11 @@ function mod_generic_mapper()
     for k, v in pairs(map.configs.lang_dirs) do
         map.configs.translate[v] = k
     end
-    local oldsanitize = map.sanitizeRoomName
+    SPAM.oldsanitize = map.sanitizeRoomName
     map.sanitizeRoomName = function(roomtitle)
         roomtitle = string.gsub(roomtitle, ".----N----. ", "")
         roomtitle = removeLastNumericDigits(roomtitle)
-        return oldsanitize(roomtitle)
+        return SPAM.oldsanitize(roomtitle)
     end
     map.save.prompt_pattern[map.character] = "^PF:(.+)>$"
     find_prompt = false
@@ -888,7 +890,7 @@ function parse_ident(ident_text)
     --if item is weapon, get weapon type
     parsed["tipo_danno"] = ""
     if itm_type == "arma" then
-        dmg_type = get_last_word(ident[1])
+        parsed["tipo_danno"] = get_last_word(ident[1])
         table.remove(ident, 1)
     end
     --get the diffusion from last line
@@ -943,18 +945,18 @@ function parse_ident(ident_text)
     table.remove(ident, 1)
     --get affects
     parsed["affects"] = affects_prefix .. implode(ident, "\n")
-    parsed["character_name"] = character_name
+    parsed["SPAM.character_name"] = SPAM.character_name
     return parsed
 end
 
 function ident_to_query(parsed)
-    local data = { ["sql"] = "INSERT INTO tblident_temp (nome, peso, affitto, livello, ac, proprieta, affects, diffusione, informazioni, tipo, area, valore, danno_min, danno_max, danno_media,tipo_danno) VALUES('" .. escape(parsed["nome"]) .. "', " .. escape(parsed["peso"]) .. ", " .. escape(parsed["affitto"]) .. ",  " .. escape(parsed["livello"]) .. ", " .. escape(parsed["ac"]) .. ", '" .. escape(parsed["proprieta"]) .. "', '" .. escape(parsed["affects"]) .. "', '" .. escape(parsed["diffusione"]) .. "',  '" .. escape(character_name) .. "', 'da verificare', '', " .. escape(parsed["valore"]) .. ", " .. escape(parsed["danno_min"]) .. ", " .. escape(parsed["danno_max"]) .. ", " .. escape(parsed["danno_media"]) .. ",'" .. escape(parsed["tipo_danno"]) .. "');" }
+    local data = { ["sql"] = "INSERT INTO tblident_temp (nome, peso, affitto, livello, ac, proprieta, affects, diffusione, informazioni, tipo, area, valore, danno_min, danno_max, danno_media,tipo_danno) VALUES('" .. escape(parsed["nome"]) .. "', " .. escape(parsed["peso"]) .. ", " .. escape(parsed["affitto"]) .. ",  " .. escape(parsed["livello"]) .. ", " .. escape(parsed["ac"]) .. ", '" .. escape(parsed["proprieta"]) .. "', '" .. escape(parsed["affects"]) .. "', '" .. escape(parsed["diffusione"]) .. "',  '" .. escape(SPAM.character_name) .. "', 'da verificare', '', " .. escape(parsed["valore"]) .. ", " .. escape(parsed["danno_min"]) .. ", " .. escape(parsed["danno_max"]) .. ", " .. escape(parsed["danno_media"]) .. ",'" .. escape(parsed["tipo_danno"]) .. "');" }
     return data
 end
 
 function send_ident_to_db(data)
     -- send to db only if function is enabled
-    if persistent_variables["config"]["auto_send"] == false then
+    if SPAM.persistent_variables["config"]["auto_send"] == false then
         return
     end
     -- This will create a JSON message body. Many modern REST APIs expect a JSON body.

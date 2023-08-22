@@ -1,1 +1,1 @@
-string2clipboard = ""
+SPAM.string2clipboard = ""

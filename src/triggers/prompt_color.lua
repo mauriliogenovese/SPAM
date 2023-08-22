@@ -1,6 +1,6 @@
-max=tonumber(matches[3])
-current=tonumber(matches[2])
-ratio=current/max
+local max=tonumber(matches[3])
+local current=tonumber(matches[2])
+local ratio=current/max
 selectString( matches[2], 1 )
 if ratio==1 then fg("green")
 elseif ratio>0.9 then setFgColor(51, 204, 51)
