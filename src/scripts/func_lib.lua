@@ -9,6 +9,17 @@ function toggle_ddegroup()
     end
 end
 
+function toggle_abbilchat()
+    if abbilchatContainer == nil then
+        return
+    end
+    if persistent_variables["config"]["abbil_chat"] == false then
+        abbilchatContainer:hide()
+    else
+        abbilchatContainer:show()
+    end
+end
+
 function check_cast(cast_name)
     if gmcp.Char.Magie.incantesimi ~= nil then
         cast_name = string.lower(cast_name)
@@ -464,6 +475,7 @@ end
 function show_config()
     checho("\nLa configurazione del profilo attuale è:")
     checho("\n   DdEGroup: " .. bool2str(persistent_variables["config"]["dde_group"]))
+    checho("\n   AbbilChat: " .. bool2str(persistent_variables["config"]["abbil_chat"]))
     checho("\n   Suoni: " .. bool2str(persistent_variables["config"]["sounds"]))
     checho("\n   Gloria: " .. bool2str(persistent_variables["config"]["glory_timer"]))
     checho("\n   Appunti: " .. bool2str(persistent_variables["config"]["clipboard"]))
@@ -510,6 +522,13 @@ Ad esempio: <white>spam ddegroup <gray>oppure <white>spam gdcolor
 DDEGroup è uno schermo per monitorare i buff dei compagni di gruppo.
 Per abilitare/disabilitare DDEGroup usa il comando: <white>spam ddegroup on/off<gray>
 Per controllare le ulteriori opzioni di DDEGroup usa il comando: <white>observe<gray>]]
+                )
+            elseif string.starts("abbilchat", split[1]) then
+                cecho(
+                        [[
+
+AbbilChat è lo schermo sviluppato da Abbil per monitorare le comunicazioni.
+Per abilitare/disabilitare AbbilChat usa il comando: <white>spam abbilchat on/off<gray>]]
                 )
             elseif string.starts("suoni", split[1]) then
                 cecho(
@@ -587,6 +606,11 @@ Per scoprire i TAG colore disponibili in Dei delle Ere usa il comando: <white>ai
                 checho("\nDdEGroup: " .. bool2str(persistent_variables["config"]["dde_group"]))
                 save_persistent_var("config")
                 toggle_ddegroup()
+            elseif string.starts("abbilchat", split[1]) then
+                persistent_variables["config"]["abbil_chat"] = str2bool(split[2])
+                checho("\nAbbilChat: " .. bool2str(persistent_variables["config"]["abbil_chat"]))
+                save_persistent_var("config")
+                toggle_abbilchat()
             elseif string.starts("suoni", split[1]) then
                 persistent_variables["config"]["sounds"] = str2bool(split[2])
                 checho("\nSuoni: " .. bool2str(persistent_variables["config"]["sounds"]))
@@ -970,4 +994,16 @@ function send_ident_to_db(data)
     -- Lastly, we make the request:
     postHTTP(yajl.to_string(data), url, header)
     -- yajl.to_string converts our Lua table into a JSON-like string so the server can understand it
+end
+
+function getTableKeys(tbl)
+    local keys = {}
+    for key, _ in pairs(tbl) do
+        table.insert(keys, key)
+    end
+    return keys
+end
+
+function trim(s)
+  return (string.gsub(s, "^%s*(.-)%s*$", "%1"))
 end

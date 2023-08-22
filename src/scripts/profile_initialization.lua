@@ -10,6 +10,10 @@ if persistent_variables["config"]["dde_group"] == nil then
   persistent_variables["config"]["dde_group"] = true
   save_var = true
 end
+if persistent_variables["config"]["abbil_chat"] == nil then
+  persistent_variables["config"]["abbil_chat"] = true
+  save_var = true
+end
 if persistent_variables["config"]["glory_timer"] == nil then
   persistent_variables["config"]["glory_timer"] = true
   save_var = true
@@ -117,6 +121,29 @@ ddeGroupWidget =
 clearWindow("DdE Group")
 ddeGroupWidget:echo("\r\n*** DdE Group Caricato.\r\n")
 toggle_ddegroup()
+-- Contenitore e mini-console per DdE Chat
+abbilchatContainer = abbilchatContainer or Adjustable.Container:new({name = "Abbil Chat"})
+abbilchatContainer.name = "Abbil Chat"
+abbilchatContainer:unlockContainer()
+abbilchatWidget =
+  abbilchatWidget or
+  Geyser.MiniConsole:new(
+    {
+      name = "Abbil Chat",
+      x = 0,
+      y = 0,
+      autoWrap = true,
+      color = 'black',
+      scrollBar = false,
+      fontSize = 12,
+      width = "100%",
+      height = "100%",
+    },
+    abbilchatContainer
+  )
+clearWindow("Abbil Chat")
+abbilchatWidget:echo("\r\n*** Abbil Chat Caricato.\r\n")
+toggle_abbilchat()
 class_list = {}
 class_list["Chierico"] = new_class()
 class_list["Chierico"].buff.dps = {"benedizione", "aiuto divino"}

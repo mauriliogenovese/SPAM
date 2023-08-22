@@ -70,6 +70,10 @@ function gmcp_loop()
     if persistent_variables[character_name]["optional_buff"] == nil then
       persistent_variables[character_name]["optional_buff"] = {}
     end
+    --generate the persistent_variables[character_name]["custom_refresh"] entry for current character, if missing
+    if persistent_variables[character_name]["custom_refresh"] == nil then
+      persistent_variables[character_name]["custom_refresh"] = {}
+    end
     --if not otherwise specifies, i'm always in base observe mode
     if persistent_variables[character_name]["observe_list"][character_name] == nil then
       persistent_variables[character_name]["observe_list"][character_name] = "base"
@@ -152,6 +156,7 @@ function gmcp_loop()
         merge_tables(observe_spell_list.buff.base, observe_spell)
         if this_name == character_name then
           merge_tables(observe_spell_list.self_buff.base, observe_spell)
+          merge_tables(getTableKeys(persistent_variables[character_name]["custom_refresh"]), observe_spell)
         end
         if string.find(persistent_variables[character_name]["observe_list"][this_name], "tank") then
           merge_tables(observe_spell_list.buff.tank, observe_spell)
@@ -217,7 +222,11 @@ function gmcp_loop()
               ddeGroupWidget:dechoLink(
                 b,
                 function()
-                  send(observe_spell_list.command .. " '" .. b .. "' " .. this_name)
+                  if persistent_variables[character_name]["custom_refresh"][b] == nil then
+                    send(observe_spell_list.command .. " '" .. b .. "' " .. this_name)
+                  else
+                    sendAll(unpack(persistent_variables[character_name]["custom_refresh"][b]))
+                  end
                 end,
                 "Casta " .. b,
                 true
@@ -255,6 +264,5 @@ function gmcp_loop()
       observe_spell = nil
       active_observed = nil
     end
-    --delete_table(gruppo)
   end
 end
