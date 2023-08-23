@@ -110,7 +110,7 @@ function spam_eventHandler(event, ...)
             remote_version = {}
             table.load(file, remote_version)
             if compare_with_current_version(remote_version[1]) then
-                tempTimer(2, [[cecho("\n<red>E' disponibile una nuova versione di SPAM. Per scaricarla usa il comando: <white>spam update\n")]])
+                tempTimer(6, [[cecho("\n<red>ATTENZIONE: <grey>E' disponibile una nuova versione di SPAM. Per scaricarla usa il comando: <yellow>spam update\n")]])
             end
         end
         SPAM.downloading = false
@@ -373,30 +373,14 @@ function removeFirstWord(str)
 end
 
 function getPFcolor(current, max)
-    local colors = {
-        "FF0000",
-        "ff3500",
-        "fc4f00",
-        "f86400",
-        "f27600",
-        "eb8700",
-        "e29700",
-        "d7a700",
-        "cab500",
-        "bbc300",
-        "aad000",
-        "96dc00",
-        "7de800",
-        "5bf400",
-        "00FF00",
-    }
-    color_index = math.floor((current * table.getn(colors) / max))
+    local color_index = math.floor((current * #SPAM.colors / max))
     if color_index < 1 then
         color_index = 1
-    elseif color_index > table.getn(colors) then
-        color_index = table.getn(colors)
+    elseif color_index > #SPAM.colors then
+        color_index = #SPAM.colors
     end
-    return colors[color_index]
+    -- invert index because SPAM.colors is from red to green
+    return SPAM.colors[#SPAM.colors+1-color_index]
 end
 
 function role_list()
@@ -462,8 +446,8 @@ in Dei Delle Ere.
         checho(
                 [[
 
-Per avere maggiori informazioni su una impostazione usa: <white>spam nomeimpostazione<gray>
-Ad esempio: <white>spam ddegroup <gray>oppure <white>spam gdcolor
+Per avere maggiori informazioni su una impostazione usa: <yellow>spam nomeimpostazione<gray>
+Ad esempio: <yellow>spam ddegroup <gray>oppure <yellow>spam gdcolor
           ]]
         )
     else
@@ -768,6 +752,7 @@ function parse_ident(ident_text)
     table.remove(ident, 1)
     --get affects
     parsed["affects"] = affects_prefix .. implode(ident, "\n")
+    parsed["affects"] = parsed["affects"]:gsub("\n%s*$", "")
     parsed["SPAM.character_name"] = SPAM.character_name
     return parsed
 end

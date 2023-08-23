@@ -41,6 +41,20 @@ SPAM.config.globals["hide_lost_experience"] = {
     var_type = "bool",
     default = true
 }
+SPAM.config.globals["prompt_color"] = {
+    name = "Prompt_colorato",
+    desc = [[SPAM può colorare i tuoi punti ferita nel prompt con una scala verde-rosso
+Per abilitare/disabilitare la colorazione del prompt usa il comando: <yellow>spam prompt_colorato on/off]],
+    var_type = "bool",
+    default = true
+}
+SPAM.config.globals["equip_color"] = {
+    name = "Equip_colorato",
+    desc = [[SPAM può colorare lo stato di usura degli oggetti con una scala verde-rosso
+Per abilitare/disabilitare la colorazione dell'usura degli oggetti usa il comando: <yellow>spam equip_colorato on/off]],
+    var_type = "bool",
+    default = true
+}
 SPAM.config.globals["hide_immune_shield"] = {
     name = "Nascondi_scudoni",
     desc = [[Per nascondere le righe sugli scudoni che NON colpiscono usa il comando: <yellow>spam nascondi_scudoni on/off]],
@@ -205,7 +219,7 @@ SPAM.ddeGroupWidget =
     SPAM.ddeGroupContainer
   )
 clearWindow("DdE Group")
-SPAM.ddeGroupWidget:echo("\r\n*** DdE Group Caricato.\r\n")
+SPAM.ddeGroupWidget:echo("\n*** DdE Group Caricato.\n")
 toggle_ddegroup()
 -- Contenitore e mini-console per DdE Chat
 SPAM.abbilchatContainer = SPAM.abbilchatContainer or Adjustable.Container:new({name = "Abbil Chat"})
@@ -229,7 +243,7 @@ SPAM.abbilchatWidget =
     SPAM.abbilchatContainer
   )
 clearWindow("Abbil Chat")
-SPAM.abbilchatWidget:echo("\r\n*** Abbil Chat Caricato.\r\n")
+SPAM.abbilchatWidget:echo("\n*** Abbil Chat Caricato.\n")
 toggle_abbilchat()
 SPAM.class_list = {}
 SPAM.class_list["Chierico"] = new_class()

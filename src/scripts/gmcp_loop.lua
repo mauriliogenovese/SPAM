@@ -65,9 +65,7 @@ function gmcp_loop()
         function(k1, v1)
           table.insert(
             ob_func_list,
-            function()
-              ob_role(this_name, v1, false)
-            end
+            [[ob_role("]] .. this_name .. [[", "]] .. v1 .. [[", false)]]
           )
         end
       )
@@ -83,9 +81,7 @@ function gmcp_loop()
           function(k1, v1)
             table.insert(
               heal_func_list,
-              function()
-                send(SPAM.observe_spell_list.command .. " '" .. v1 .. "' " .. this_name)
-              end
+              [[send(SPAM.observe_spell_list.command .. " ']] .. v1 .. [[' ]] .. this_name .. [[")]]
             )
           end
         )
@@ -104,9 +100,7 @@ function gmcp_loop()
             function(k1, v1)
               table.insert(
                 move_func_list,
-                function()
-                  send(SPAM.observe_spell_list.command .. " '" .. v1 .. "' " .. this_name)
-                end
+                [[send(SPAM.observe_spell_list.command .. " ']] .. v1 .. [[' ]] .. this_name .. [[")]]
               )
             end
           )
@@ -187,13 +181,13 @@ function gmcp_loop()
               SPAM.ddeGroupWidget:decho(" - ")
               SPAM.ddeGroupWidget:dechoLink(
                 b,
-                function()
+                [[
                   if SPAM.config.get("custom_refresh")[b] == nil then
-                    send(SPAM.observe_spell_list.command .. " '" .. b .. "' " .. this_name)
+                    send(SPAM.observe_spell_list.command .. " ']] .. b .. [[' ]] .. this_name ..[[")
                   else
-                    sendAll(unpack(SPAM.config.get("custom_refresh")[b]))
+                    sendAll(unpack(SPAM.config.get("custom_refresh")["]] .. b .. [["]))
                   end
-                end,
+                ]],
                 "Casta " .. b,
                 true
               )
@@ -211,9 +205,7 @@ function gmcp_loop()
                 if b.nome == "volo" or b.nome == "branchie" or b.nome == "levitazione" then
                   SPAM.ddeGroupWidget:dechoLink(
                     " - " .. color_tag .. b.nome .. "<200,200,200>",
-                    function()
-                      send(SPAM.observe_spell_list.command .. " '" .. b.nome .. "' " .. this_name)
-                    end,
+                    [[send(SPAM.observe_spell_list.command .. " ']] .. b.nome .. [[' ]] .. this_name[[")]],
                     "Casta " .. b.nome,
                     true
                   )

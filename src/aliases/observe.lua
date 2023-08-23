@@ -35,7 +35,7 @@ if #split > 1 then
     local allyName = getAllyName(split[2])
     if allyName == nil then
       cecho("\n<red>Nessun alleato trovato per " .. split[2])
-      echo("\nLa sintassi corretta è: observe optionalbuff alleato cast\n")
+      cecho("\nLa sintassi corretta è: <yellow>observe optionalbuff alleato cast\n")
       send("\n")
       return
     end
