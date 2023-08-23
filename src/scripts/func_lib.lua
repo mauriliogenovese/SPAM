@@ -104,7 +104,7 @@ function compare_with_current_version(newversion)
 end
 
 function spam_eventHandler(event, ...)
-    if event == "sysDownloadDone" and SPAM_downloading then
+    if event == "sysDownloadDone" and SPAM.downloading then
         local file = arg[1]
         if string.ends(file, "/version") then
             remote_version = {}
@@ -113,9 +113,9 @@ function spam_eventHandler(event, ...)
                 tempTimer(2, [[cecho("\n<red>E' disponibile una nuova versione di SPAM. Per scaricarla usa il comando: <white>spam update\n")]])
             end
         end
-        SPAM_downloading = false
-    elseif event == "sysDownloadError" and SPAM_downloading then
-        SPAM_downloading = false
+        SPAM.downloading = false
+    elseif event == "sysDownloadError" and SPAM.downloading then
+        SPAM.downloading = false
     end
 end
 

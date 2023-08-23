@@ -75,12 +75,6 @@ SPAM.config.globals["dev"] = {
     default = false,
     hidden = true
 }
---SPAM.config.globals[""] = {
---    name = "",
---    desc = [[]],
---    var_type = "bool",
---    default = true
---}
 
 SPAM.config.characters = {}
 SPAM.config.characters["observe_list"] = {
@@ -132,19 +126,9 @@ SPAM.config.characters["gd_end"] = {
     var_type = "string",
     default = "",
 }
---SPAM.config.characters[""] = {
---    name = "",
---    desc = [[]],
---    var_type = "list",
---    default = {},
---    hidden = true
---}
-
-
 
 SPAM.config.load_globals()
 SPAM.config.load_characters()
-
 
 if SPAM.config.get("mapper") then
     enableTrigger("DDE_mapper_Trigger_Group")
@@ -158,7 +142,7 @@ SPAM.config.set("hide_immune_shield",false)
 --update check
 registerAnonymousEventHandler("sysDownloadDone", "spam_eventHandler")
 registerAnonymousEventHandler("sysDownloadError", "spam_eventHandler")
-SPAM.spam_downloading = true
+SPAM.downloading = true
 local version_file = "https://raw.githubusercontent.com/mauriliogenovese/SPAM/main/version"
 if SPAM.config.get("dev") == true then
     version_file = "https://raw.githubusercontent.com/mauriliogenovese/SPAM/dev/version"
