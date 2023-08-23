@@ -470,7 +470,11 @@ Ad esempio: <white>spam ddegroup <gray>oppure <white>spam gdcolor
         local split = explode(string)
         split[1] = string.lower(split[1])
         if #split == 1 then
-            SPAM.config.show_desc(split[1])
+            if split[1] == "update" then
+                spam_update()
+            else
+                SPAM.config.show_desc(split[1])
+            end
         else
             SPAM.config.set_by_name(split[1], removeFirstWord(string))
         end
