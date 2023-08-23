@@ -11,40 +11,14 @@ function gmcp_loop()
   --character loading
   if SPAM.character_name ~= gmcp.Char.Name.name then
     SPAM.character_name = gmcp.Char.Name.name
-    initialize_persistent_var(SPAM.character_name)
+    SPAM.config.load_character(SPAM.character_name)
     SPAM.observe_spell_list = nil
-    --first character login
-    local save_var = false
-    if SPAM.persistent_variables[SPAM.character_name]["observe_list"] == nil then
-      SPAM.persistent_variables[SPAM.character_name]["observe_list"] = {}
-      save_var = true
-    end
-    if SPAM.persistent_variables[SPAM.character_name]["optional_buff"] == nil then
-      SPAM.persistent_variables[SPAM.character_name]["optional_buff"] = {}
-      save_var = true
-    end
-    if SPAM.persistent_variables[SPAM.character_name]["gd_start"] == nil then
-      SPAM.persistent_variables[SPAM.character_name]["gd_start"] = ""
-      save_var = true
-    end
-    if SPAM.persistent_variables[SPAM.character_name]["gd_end"] == nil then
-      SPAM.persistent_variables[SPAM.character_name]["gd_end"] = ""
-      save_var = true
-    end
-    if SPAM.persistent_variables[SPAM.character_name]["glory_timer"] == nil then
-      SPAM.persistent_variables[SPAM.character_name]["glory_timer"] = {}
-      save_var = true
-    end
-    if save_var == true then
-      save_persistent_var(SPAM.character_name)
-    end
-    --return needed to refresh classes
     gmcp.Char.Classi.classi = nil
-    --mod_generic_mapper()
+    --return NEEDED to refresh classes
     return
   end
   --party observer
-  if SPAM.persistent_variables["config"]["dde_group"] == true then
+  if SPAM.config.get("dde_group") == true then
     clearWindow("DdE Group")
     local gruppo = {}
     if gmcp.Char.Gruppo == nil or gmcp.Char.Gruppo.gruppo == nil then
@@ -66,17 +40,9 @@ function gmcp_loop()
     if SPAM.observe_spell_list == nil then
       gen_spell_list(gmcp.Char.Classi.classi)
     end
-    --generate the SPAM.persistent_variables[SPAM.character_name]["optional_buff"] entry for current character, if missing
-    if SPAM.persistent_variables[SPAM.character_name]["optional_buff"] == nil then
-      SPAM.persistent_variables[SPAM.character_name]["optional_buff"] = {}
-    end
-    --generate the SPAM.persistent_variables[SPAM.character_name]["custom_refresh"] entry for current character, if missing
-    if SPAM.persistent_variables[SPAM.character_name]["custom_refresh"] == nil then
-      SPAM.persistent_variables[SPAM.character_name]["custom_refresh"] = {}
-    end
     --if not otherwise specifies, i'm always in base observe mode
-    if SPAM.persistent_variables[SPAM.character_name]["observe_list"][SPAM.character_name] == nil then
-      SPAM.persistent_variables[SPAM.character_name]["observe_list"][SPAM.character_name] = "base"
+    if SPAM.config.get("observe_list")[SPAM.character_name] == nil then
+      SPAM.config.get("observe_list")[SPAM.character_name] = "base"
     end
     --group loop
     local party_names = {}
@@ -151,27 +117,27 @@ function gmcp_loop()
       end
       SPAM.ddeGroupWidget:decho(")")
       --generate spell to check for the current group member
-      if SPAM.persistent_variables[SPAM.character_name]["observe_list"][this_name] ~= nil then
+      if SPAM.config.get("observe_list")[this_name] ~= nil then
         local observe_spell = {}
         merge_tables(SPAM.observe_spell_list.buff.base, observe_spell)
         if this_name == SPAM.character_name then
           merge_tables(SPAM.observe_spell_list.self_buff.base, observe_spell)
-          merge_tables(getTableKeys(SPAM.persistent_variables[SPAM.character_name]["custom_refresh"]), observe_spell)
+          merge_tables(getTableKeys(SPAM.config.get("custom_refresh")), observe_spell)
         end
-        if string.find(SPAM.persistent_variables[SPAM.character_name]["observe_list"][this_name], "tank") then
+        if string.find(SPAM.config.get("observe_list")[this_name], "tank") then
           merge_tables(SPAM.observe_spell_list.buff.tank, observe_spell)
           if this_name == SPAM.character_name then
             merge_tables(SPAM.observe_spell_list.self_buff.tank, observe_spell)
           end
         end
-        if string.find(SPAM.persistent_variables[SPAM.character_name]["observe_list"][this_name], "dps") then
+        if string.find(SPAM.config.get("observe_list")[this_name], "dps") then
           merge_tables(SPAM.observe_spell_list.buff.dps, observe_spell)
           if this_name == SPAM.character_name then
             merge_tables(SPAM.observe_spell_list.self_buff.dps, observe_spell)
           end
         end
-        if SPAM.persistent_variables[SPAM.character_name]["optional_buff"][this_name] ~= nil then
-          for key, val in pairs(SPAM.persistent_variables[SPAM.character_name]["optional_buff"][this_name]) do
+        if SPAM.config.get("optional_buff")[this_name] ~= nil then
+          for key, val in pairs(SPAM.config.get("optional_buff")[this_name]) do
             if val == true then
               table.insert(observe_spell, key)
             end
@@ -222,10 +188,10 @@ function gmcp_loop()
               SPAM.ddeGroupWidget:dechoLink(
                 b,
                 function()
-                  if SPAM.persistent_variables[SPAM.character_name]["custom_refresh"][b] == nil then
+                  if SPAM.config.get("custom_refresh")[b] == nil then
                     send(SPAM.observe_spell_list.command .. " '" .. b .. "' " .. this_name)
                   else
-                    sendAll(unpack(SPAM.persistent_variables[SPAM.character_name]["custom_refresh"][b]))
+                    sendAll(unpack(SPAM.config.get("custom_refresh")[b]))
                   end
                 end,
                 "Casta " .. b,

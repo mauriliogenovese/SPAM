@@ -20,13 +20,11 @@ local split = explode(matches[3])
 if #split == 1 then
   if string.starts("list", string.lower(split[1])) then
     echo("\nLista observe:")
-    display(SPAM.persistent_variables[SPAM.character_name]["observe_list"])
+    display(SPAM.config.get("observe_list"))
     return
   end
   if string.starts("clear", string.lower(split[1])) then
-    SPAM.persistent_variables[SPAM.character_name]["observe_list"] = nil
-    SPAM.persistent_variables[SPAM.character_name]["observe_list"] = {}
-    save_persistent_var(SPAM.character_name)
+    SPAM.config.set("observe_list", {})
     echo("\nLista observe svuotata")
     send("\n")
     return
@@ -41,37 +39,36 @@ if #split > 1 then
       send("\n")
       return
     end
-    if SPAM.persistent_variables[SPAM.character_name]["optional_buff"][allyName] == nil then
-      SPAM.persistent_variables[SPAM.character_name]["optional_buff"][allyName] = {}
+    if SPAM.config.get("optional_buff")[allyName] == nil then
+      SPAM.config.get("optional_buff")[allyName] = {}
     end
     local buff = removeFirstTwoWords(matches[3])
-    if SPAM.persistent_variables[SPAM.character_name]["optional_buff"][allyName][buff] == true then
+    if SPAM.config.get("optional_buff")[allyName][buff] == true then
       echo("\nRimuovo " .. buff .. " per " .. allyName .. "\n")
-      SPAM.persistent_variables[SPAM.character_name]["optional_buff"][allyName][buff] = nil
+      SPAM.config.get("optional_buff")[allyName][buff] = nil
     else
       echo("\nOsservo " .. buff .. " per " .. allyName .. "\n")
-      SPAM.persistent_variables[SPAM.character_name]["optional_buff"][allyName][buff] = true
+      SPAM.config.get("optional_buff")[allyName][buff] = true
     end
     send("\n")
-    save_persistent_var(SPAM.character_name)
+    SPAM.config.save_characters()
     return
   elseif string.starts("customrefresh", string.lower(split[1])) then
-    if SPAM.persistent_variables[SPAM.character_name]["custom_refresh"] == nil then
-      SPAM.persistent_variables[SPAM.character_name]["custom_refresh"] = {}
+    if SPAM.config.get("custom_refresh") == nil then
+      SPAM.config.set("custom_refresh", {})
     end
     local exp = explode(removeFirstWord(matches[3]), "-")
     if #exp == 2 then
       exp[1] = trim(exp[1])
-      if SPAM.persistent_variables[SPAM.character_name]["custom_refresh"][exp[1]] ~= nil then
+      if SPAM.config.get("custom_refresh")[exp[1]] ~= nil then
         echo("\nRimuovo customrefresh " .. exp[1] .. "\n")
-        SPAM.persistent_variables[SPAM.character_name]["custom_refresh"][exp[1]] = nil
+        SPAM.config.get("custom_refresh")[exp[1]] = nil
       else
         echo("\nOsservo customrefresh " .. exp[1] .. " with command" .. exp[2] .. "\n")
-        SPAM.persistent_variables[SPAM.character_name]["custom_refresh"][exp[1]] = explode(exp[2],",")
-        display(SPAM.persistent_variables[SPAM.character_name]["custom_refresh"])
+        SPAM.config.get("custom_refresh")[exp[1]] = explode(exp[2],",")
       end
       send("\n")
-      save_persistent_var(SPAM.character_name)
+      SPAM.config.save_characters()
       return
 
     end

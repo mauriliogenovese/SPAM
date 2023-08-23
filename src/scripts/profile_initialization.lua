@@ -1,65 +1,166 @@
 SPAM = SPAM or {}
-initialize_persistent_var("config")
 SPAM.package_name = "@PKGNAME@"
---first profile login
-local save_var = false
-if SPAM.persistent_variables["config"]["sounds"] == nil then
-  SPAM.persistent_variables["config"]["sounds"] = true
-  save_var = true
-end
-if SPAM.persistent_variables["config"]["dde_group"] == nil then
-  SPAM.persistent_variables["config"]["dde_group"] = true
-  save_var = true
-end
-if SPAM.persistent_variables["config"]["abbil_chat"] == nil then
-  SPAM.persistent_variables["config"]["abbil_chat"] = true
-  save_var = true
-end
-if SPAM.persistent_variables["config"]["glory_timer"] == nil then
-  SPAM.persistent_variables["config"]["glory_timer"] = true
-  save_var = true
-end
-if SPAM.persistent_variables["config"]["hide_lost_experience"] == nil then
-  SPAM.persistent_variables["config"]["hide_lost_experience"] = true
-  save_var = true
-end
-if SPAM.persistent_variables["config"]["hide_immune_shield"] == nil then
-  SPAM.persistent_variables["config"]["hide_immune_shield"] = true
-  save_var = true
-end
-if SPAM.persistent_variables["config"]["clipboard"] == nil then
-  SPAM.persistent_variables["config"]["clipboard"] = true
-  save_var = true
-end
-if SPAM.persistent_variables["config"]["mapper"] == nil then
-  SPAM.persistent_variables["config"]["mapper"] = false
-  save_var = true
-end
-if SPAM.persistent_variables["config"]["auto_send"] == nil then
-  SPAM.persistent_variables["config"]["auto_send"] = false
-  save_var = true
-end
-if SPAM.persistent_variables["config"]["dev"] == nil then
-  SPAM.persistent_variables["config"]["dev"] = false
-  save_var = true
-end
-if save_var == true then
-  save_persistent_var("config")
-end
-if SPAM.persistent_variables["config"]["mapper"] then
+
+SPAM.config = SPAM.config or {}
+SPAM.config.globals_savelocation = getMudletHomeDir() .. "/@PKGNAME@_globals.lua"
+SPAM.config.characters_savelocation = getMudletHomeDir() .. "/@PKGNAME@_characters.lua"
+SPAM.config.globals = {}
+SPAM.config.globals["dde_group"] = {
+    name = "DdEgroup",
+    desc = [[DDEGroup è uno schermo per monitorare i buff dei compagni di gruppo.
+Per abilitare/disabilitare DDEGroup usa il comando: <yellow>spam ddegroup on/off<gray>
+Per controllare le ulteriori opzioni di DDEGroup usa il comando: <yellow>observe<gray>]],
+    var_type = "bool",
+    default = true
+}
+SPAM.config.globals["sounds"] = {
+    name = "Suoni",
+    desc = [[Alcune funzioni di SPAM potrebbero riprodurre dei suoni.
+Per controllare la riproduzione dei suoni usa il comando: <yellow>spam suoni on/off]],
+    var_type = "bool",
+    default = true
+}
+SPAM.config.globals["abbil_chat"] = {
+    name = "AbbilChat",
+    desc = [[AbbilChat è lo schermo sviluppato da Abbil per monitorare le comunicazioni.
+Per abilitare/disabilitare AbbilChat usa il comando: <yellow>spam abbilchat on/off<gray>]],
+    var_type = "bool",
+    default = true
+}
+SPAM.config.globals["glory"] = {
+    name = "Gloria",
+    desc = [[La funzione Gloria permette di tenere traccia dei mob gloria uccisi nelle ultime 24 ore.
+Per abilitare/disabilitare questa funzione usa il comando: <yellow>spam gloria on/off<gray>
+Per mostrare i mob gloria uccisi nelle ultime 24 ore usa il comando: <yellow>gloria]],
+    var_type = "bool",
+    default = true
+}
+SPAM.config.globals["hide_lost_experience"] = {
+    name = "Nascondi_px_persi",
+    desc = [[Per nascondere le righe che notificano la perdita di px oltre il livello usa il comando: <yellow>spam nascondi_px_persi on/off]],
+    var_type = "bool",
+    default = true
+}
+SPAM.config.globals["hide_immune_shield"] = {
+    name = "Nascondi_scudoni",
+    desc = [[Per nascondere le righe sugli scudoni che NON colpiscono usa il comando: <yellow>spam nascondi_scudoni on/off]],
+    var_type = "bool",
+    default = false
+}
+SPAM.config.globals["clipboard"] = {
+    name = "Appunti",
+    desc = [[SPAM intercetta i valuta mostri e le identificazioni e li copia negli appunti.
+Per controllare l'inserimento negli appunti usa il comando: <yellow>spam appunti on/off]],
+    var_type = "bool",
+    default = true
+}
+SPAM.config.globals["mapper"] = {
+    name = "Mapper",
+    desc = [[SPAM apporta alcune modifiche al mapper di Mudlet per renderlo compatibile con DDE.
+Per controllare il mapper usa il comando: <yellow>spam mapper on/off]],
+    var_type = "bool",
+    default = false
+}
+SPAM.config.globals["auto_send"] = {
+    name = "NariaDB",
+    desc = [[SPAM può inviare automaticamente le ientificazioni viste al database oggetti gestito da Nikeb.
+Per controllare l'invio automatico delle identificazioni usa il comando: <white>spam NariaDB on/off]],
+    var_type = "bool",
+    default = false
+}
+SPAM.config.globals["dev"] = {
+    name = "dev",
+    desc = [[]],
+    var_type = "bool",
+    default = false,
+    hidden = true
+}
+--SPAM.config.globals[""] = {
+--    name = "",
+--    desc = [[]],
+--    var_type = "bool",
+--    default = true
+--}
+
+SPAM.config.characters = {}
+SPAM.config.characters["observe_list"] = {
+    name = "",
+    desc = [[]],
+    var_type = "list",
+    default = {},
+    hidden = true
+}
+SPAM.config.characters["optional_buff"] = {
+    name = "",
+    desc = [[]],
+    var_type = "list",
+    default = {},
+    hidden = true
+}
+SPAM.config.characters["custom_refresh"] = {
+    name = "",
+    desc = [[]],
+    var_type = "list",
+    default = {},
+    hidden = true
+}
+SPAM.config.characters["glory_timer"] = {
+    name = "",
+    desc = [[]],
+    var_type = "list",
+    default = {},
+    hidden = true
+}
+SPAM.config.characters["gd_start"] = {
+    name = "gdcolor_prefisso",
+    desc = [[SPAM ti permette di impostare un suffisso e un prefisso per personalizzare il comando gd
+Per impostare un prefisso usa il comando: <white>spam gdcolor_prefisso prefisso<gray>
+Per impostare un suffisso usa il comando: <white>spam gdcolor_suffisso suffisso<gray>
+
+Ad esempio per ottenere questo risultato: <blue>[<white>Seymour<blue>] dice al gruppo '<yellow>**<cyan>ciao<yellow>**<blue>'.
+<gray>Dovresti usare i seguenti comandi
+<white>spam gdcolor_prefisso &Y**&C
+spam gdcolor_suffisso &Y**<gray>
+
+Per scoprire i TAG colore disponibili in Dei delle Ere usa il comando: <white>aiuto colori<gray>]],
+    var_type = "string",
+    default = "",
+}
+SPAM.config.characters["gd_end"] = {
+    name = "gdcolor_suffisso",
+    desc = SPAM.config.characters["gd_start"].desc,
+    var_type = "string",
+    default = "",
+}
+--SPAM.config.characters[""] = {
+--    name = "",
+--    desc = [[]],
+--    var_type = "list",
+--    default = {},
+--    hidden = true
+--}
+
+
+
+SPAM.config.load_globals()
+SPAM.config.load_characters()
+
+
+if SPAM.config.get("mapper") then
     enableTrigger("DDE_mapper_Trigger_Group")
     tempTimer(0.5,mod_generic_mapper)
 else
     disableTrigger("DDE_mapper_Trigger_Group")
 end
+
 --temporary fix for game bug
-SPAM.persistent_variables["config"]["hide_immune_shield"] = false
+SPAM.config.set("hide_immune_shield",false)
 --update check
 registerAnonymousEventHandler("sysDownloadDone", "spam_eventHandler")
 registerAnonymousEventHandler("sysDownloadError", "spam_eventHandler")
 SPAM.spam_downloading = true
 local version_file = "https://raw.githubusercontent.com/mauriliogenovese/SPAM/main/version"
-if SPAM.persistent_variables["config"]["dev"] == true then
+if SPAM.config.get("dev") == true then
     version_file = "https://raw.githubusercontent.com/mauriliogenovese/SPAM/dev/version"
 end
 downloadFile(getMudletHomeDir() .. "/@PKGNAME@/version", version_file)
@@ -208,3 +309,4 @@ SPAM.class_list["Necromante"].self_buff.base = {"scudo di ossa"}
 SPAM.class_list["Necromante"].self_buff.tank = {"armatura di ombra", "pegno dei vinti"}
 SPAM.class_list["Necromante"].command = "evoc"
 SPAM.class_list["Necromante"].move = {"ristora"}
+

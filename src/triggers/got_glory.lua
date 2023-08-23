@@ -1,5 +1,5 @@
 if SPAM.lastDead == nil or SPAM.lastDead == '' then
   return
 end
-SPAM.persistent_variables[SPAM.character_name]["glory_timer"][SPAM.lastDead] = os.time()
-save_persistent_var(SPAM.character_name)
+SPAM.config.get("glory_timer")[SPAM.lastDead] = os.time()
+SPAM.config.save_characters()

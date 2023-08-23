@@ -4,7 +4,7 @@ function toggle_ddegroup()
     if SPAM.ddeGroupContainer == nil then
         return
     end
-    if SPAM.persistent_variables["config"]["dde_group"] == false then
+    if SPAM.config.get("dde_group") == false then
         SPAM.ddeGroupContainer:hide()
     else
         SPAM.ddeGroupContainer:show()
@@ -15,7 +15,7 @@ function toggle_abbilchat()
     if SPAM.abbilchatContainer == nil then
         return
     end
-    if SPAM.persistent_variables["config"]["abbil_chat"] == false then
+    if SPAM.config.get("abbil_chat") == false then
         SPAM.abbilchatContainer:hide()
     else
         SPAM.abbilchatContainer:show()
@@ -37,7 +37,7 @@ end
 function spam_update()
     uninstallPackage("@PKGNAME@")
     local git_url = "https://raw.githubusercontent.com/mauriliogenovese/SPAM/main/build/SPAM.mpackage"
-    if SPAM.persistent_variables["config"]["dev"] == true then
+    if SPAM.config.get("dev") == true then
         git_url = "https://raw.githubusercontent.com/mauriliogenovese/SPAM/dev/build/SPAM.mpackage"
     end
     installPackage(git_url)
@@ -205,7 +205,7 @@ function get_os()
 end
 
 function copy_to_clipboard(string)
-    if SPAM.persistent_variables["config"]["clipboard"] == false then
+    if SPAM.config.get("clipboard") == false then
         return
     end
     local os_name = get_os()
@@ -227,7 +227,7 @@ function copy_to_clipboard(string)
 end
 
 function play_sound(file)
-    if SPAM.persistent_variables["config"]["sounds"] == false then
+    if SPAM.config.get("sounds") == false then
         return
     end
     if get_os() == "linux" then
@@ -245,25 +245,6 @@ function play_sound(file)
     end
 end
 
-function initialize_persistent_var(varname)
-    if SPAM.persistent_variables == nil then
-        SPAM.persistent_variables = {}
-    end
-    local savelocation = getMudletHomeDir() .. "/" .. varname .. ".lua"
-    if SPAM.persistent_variables[varname] == nil then
-        SPAM.persistent_variables[varname] = {}
-    end
-    if file_exists(savelocation) then
-        table.load(savelocation, SPAM.persistent_variables[varname])
-    else
-        save_persistent_var(varname)
-    end
-end
-
-function save_persistent_var(varname)
-    local savelocation = getMudletHomeDir() .. "/" .. varname .. ".lua"
-    table.save(savelocation, SPAM.persistent_variables[varname])
-end
 
 -- We need this function for sorting.
 
@@ -442,21 +423,16 @@ function ob_role(name, test_role, checkname)
             echo("I ruoli ammessi sono: base, tank, dps, tankdps, remove\n")
             return false
         elseif role == "remove" then
-            SPAM.persistent_variables[SPAM.character_name]["observe_list"][allyName] = nil
+            SPAM.config.get("observe_list")[allyName] = nil
             echo("\n" .. allyName .. " non più in osservazione\n")
         else
-            SPAM.persistent_variables[SPAM.character_name]["observe_list"][allyName] = role
+            SPAM.config.get("observe_list")[allyName] = role
             echo("\n" .. allyName .. " in osservazione come " .. role .. "\n")
         end
         send("\n")
-        save_persistent_var(SPAM.character_name)
+        SPAM.config.save_characters()
         return true
     end
-end
-
-function set_char_permanent_var(varname, string)
-    SPAM.persistent_variables[SPAM.character_name][varname] = string
-    save_persistent_var(SPAM.character_name)
 end
 
 function bool2str(bool)
@@ -474,29 +450,6 @@ function str2bool(str)
     return false
 end
 
-function show_config()
-    checho("\nLa configurazione del profilo attuale è:")
-    checho("\n   DdEGroup: " .. bool2str(SPAM.persistent_variables["config"]["dde_group"]))
-    checho("\n   AbbilChat: " .. bool2str(SPAM.persistent_variables["config"]["abbil_chat"]))
-    checho("\n   Suoni: " .. bool2str(SPAM.persistent_variables["config"]["sounds"]))
-    checho("\n   Gloria: " .. bool2str(SPAM.persistent_variables["config"]["glory_timer"]))
-    checho("\n   Appunti: " .. bool2str(SPAM.persistent_variables["config"]["clipboard"]))
-    checho("\n   NariaDB: " .. bool2str(SPAM.persistent_variables["config"]["auto_send"]))
-    checho("\n   Mapper: " .. bool2str(SPAM.persistent_variables["config"]["mapper"]))
-    checho(
-            "\n   Nascondi_scudoni: " .. bool2str(SPAM.persistent_variables["config"]["hide_immune_shield"])
-    )
-    checho(
-            "\n   Nascondi_px_persi: " .. bool2str(SPAM.persistent_variables["config"]["hide_lost_experience"])
-    )
-    if SPAM.persistent_variables["config"]["dev"] == true then
-        checho("\n   Dev: " .. bool2str(SPAM.persistent_variables["config"]["dev"]))
-    end
-    checho("\n\nLa configurazione del personaggio <" .. SPAM.character_name .. "> è:")
-    checho("\n   gdcolor_prefisso al gd: " .. SPAM.persistent_variables[SPAM.character_name]["gd_start"])
-    checho("\n   gdcolor_suffisso al gd: " .. SPAM.persistent_variables[SPAM.character_name]["gd_end"])
-end
-
 function spam_main(string)
     local help_string = [[
 Questo è l'aiuto per SPAM (Seymour PAckage for Mudlet), un insieme
@@ -505,7 +458,7 @@ in Dei Delle Ere.
 ]]
     if string == "" then
         checho(help_string)
-        show_config()
+        SPAM.config.show_all()
         checho(
                 [[
 
@@ -517,143 +470,9 @@ Ad esempio: <white>spam ddegroup <gray>oppure <white>spam gdcolor
         local split = explode(string)
         split[1] = string.lower(split[1])
         if #split == 1 then
-            if string.starts("ddegroup", split[1]) then
-                cecho(
-                        [[
-
-DDEGroup è uno schermo per monitorare i buff dei compagni di gruppo.
-Per abilitare/disabilitare DDEGroup usa il comando: <white>spam ddegroup on/off<gray>
-Per controllare le ulteriori opzioni di DDEGroup usa il comando: <white>observe<gray>]]
-                )
-            elseif string.starts("abbilchat", split[1]) then
-                cecho(
-                        [[
-
-AbbilChat è lo schermo sviluppato da Abbil per monitorare le comunicazioni.
-Per abilitare/disabilitare AbbilChat usa il comando: <white>spam abbilchat on/off<gray>]]
-                )
-            elseif string.starts("suoni", split[1]) then
-                cecho(
-                        [[
-
-Alcune funzioni di SPAM potrebbero riprodurre dei suoni.
-Per controllare la riproduzione dei suoni usa il comando: <white>spam suoni on/off]]
-                )
-            elseif string.starts("update", split[1]) then
-                cecho("<red>\nAggiornamento di @PKGNAME@ in corso!\n")
-                spam_update()
-            elseif string.starts("appunti", split[1]) then
-                cecho(
-                        [[
-
-SPAM intercetta i valuta mostri e le identificazioni e li copia negli appunti.
-Per controllare l'inserimento negli appunti usa il comando: <white>spam appunti on/off]]
-                )
-            elseif string.starts("nariadb", split[1]) then
-                cecho(
-                        [[
-
-SPAM può inviare automaticamente le ientificazioni viste al database oggetti gestito da Nikeb.
-Per controllare l'invio automatico delle identificazioni usa il comando: <white>spam NariaDB on/off]]
-                )
-            elseif string.starts("mapper", split[1]) then
-                cecho(
-                        [[
-
-SPAM apporta alcune modifiche al mapper di Mudlet per renderlo compatibile con DDE.
-Per controllare il mapper usa il comando: <white>spam mapper on/off]]
-                )
-            elseif string.starts("nascondi_px_persi", split[1]) then
-                cecho(
-                        [[
-
-Per nascondere le righe che notificano la perdita di px oltre il livello usa il comando: <white>spam nascondi_px_persi on/off]]
-                )
-            elseif string.starts("nascondi_scudoni", split[1]) then
-                cecho(
-                        [[
-
-Per nascondere le righe sugli scudoni che NON colpiscono usa il comando: <white>spam nascondi_scudoni on/off]]
-                )
-            elseif string.starts("gloria", split[1]) then
-                cecho(
-                        [[
-
-La funzione Gloria permette di tenere traccia dei mob gloria uccisi nelle ultime 24 ore.
-Per abilitare/disabilitare questa funzione usa il comando: <white>spam gloria on/off<gray>
-Per mostrare i mob gloria uccisi nelle ultime 24 ore usa il comando: <white>gloria]]
-                )
-            elseif string.starts("gdcolor", split[1]) then
-                cecho(
-                        [[
-
-SPAM ti permette di impostare un suffisso e un prefisso per personalizzare il comando gd
-Per impostare un prefisso usa il comando: <white>spam gdcolor_prefisso prefisso<gray>
-Per impostare un suffisso usa il comando: <white>spam gdcolor_suffisso suffisso<gray>
-
-Ad esempio per ottenere questo risultato: <blue>[<white>Seymour<blue>] dice al gruppo '<yellow>**<cyan>ciao<yellow>**<blue>'.
-<gray>Dovresti usare i seguenti comandi
-<white>spam gdcolor_prefisso &Y**&C
-spam gdcolor_suffisso &Y**<gray>
-
-Per scoprire i TAG colore disponibili in Dei delle Ere usa il comando: <white>aiuto colori<gray>
-              ]]
-                )
-            else
-                cecho("\nScelta non valida")
-            end
+            SPAM.config.show_desc(split[1])
         else
-            if string.starts("ddegroup", split[1]) then
-                SPAM.persistent_variables["config"]["dde_group"] = str2bool(split[2])
-                checho("\nDdEGroup: " .. bool2str(SPAM.persistent_variables["config"]["dde_group"]))
-                save_persistent_var("config")
-                toggle_ddegroup()
-            elseif string.starts("abbilchat", split[1]) then
-                SPAM.persistent_variables["config"]["abbil_chat"] = str2bool(split[2])
-                checho("\nAbbilChat: " .. bool2str(SPAM.persistent_variables["config"]["abbil_chat"]))
-                save_persistent_var("config")
-                toggle_abbilchat()
-            elseif string.starts("suoni", split[1]) then
-                SPAM.persistent_variables["config"]["sounds"] = str2bool(split[2])
-                checho("\nSuoni: " .. bool2str(SPAM.persistent_variables["config"]["sounds"]))
-                save_persistent_var("config")
-            elseif string.starts("appunti", split[1]) then
-                SPAM.persistent_variables["config"]["clipboard"] = str2bool(split[2])
-                checho("\nAppunti: " .. bool2str(SPAM.persistent_variables["config"]["clipboard"]))
-                save_persistent_var("config")
-            elseif string.starts("nariadb", split[1]) then
-                SPAM.persistent_variables["config"]["auto_send"] = str2bool(split[2])
-                checho("\nNariaDB: " .. bool2str(SPAM.persistent_variables["config"]["auto_send"]))
-                save_persistent_var("config")
-            elseif string.starts("mapper", split[1]) then
-                SPAM.persistent_variables["config"]["mapper"] = str2bool(split[2])
-                checho("\nMapper: " .. bool2str(SPAM.persistent_variables["config"]["mapper"]))
-                cecho("\n<red>ATTENZIONE: <grey>La modifica sarà attiva dal prossimo riavvio del client!")
-                save_persistent_var("config")
-            elseif string.starts("nascondi_px_persi", split[1]) then
-                SPAM.persistent_variables["config"]["hide_lost_experience"] = str2bool(split[2])
-                checho("\nnascondi_px_persi: " .. bool2str(SPAM.persistent_variables["config"]["hide_lost_experience"]))
-                save_persistent_var("config")
-            elseif string.starts("nascondi_scudoni", split[1]) then
-                SPAM.persistent_variables["config"]["hide_immune_shield"] = str2bool(split[2])
-                checho("\nnascondi_scudoni: " .. bool2str(SPAM.persistent_variables["config"]["hide_immune_shield"]))
-                save_persistent_var("config")
-            elseif string.starts("gloria", split[1]) then
-                SPAM.persistent_variables["config"]["glory_timer"] = str2bool(split[2])
-                checho("\nGloria: " .. bool2str(SPAM.persistent_variables["config"]["glory_timer"]))
-                save_persistent_var("config")
-            elseif split[1] == "gdcolor_prefisso" then
-                set_char_permanent_var("gd_start", removeFirstWord(string))
-                checho("\ngdcolor_prefisso al gd: " .. SPAM.persistent_variables[SPAM.character_name]["gd_start"])
-            elseif split[1] == "gdcolor_suffisso" then
-                set_char_permanent_var("gd_end", removeFirstWord(string))
-                checho("\ngdcolor_suffisso al gd: " .. SPAM.persistent_variables[SPAM.character_name]["gd_end"])
-            elseif split[1] == "dev" then
-                SPAM.persistent_variables["config"]["dev"] = str2bool(split[2])
-                checho("\ndev: " .. bool2str(SPAM.persistent_variables["config"]["dev"]))
-            else
-                cecho("\nScelta non valida")
-            end
+            SPAM.config.set_by_name(split[1], removeFirstWord(string))
         end
     end
     send(" ")
@@ -661,12 +480,12 @@ end
 
 function show_glory_timer()
     send("gloria")
-    if SPAM.persistent_variables["config"]["glory_timer"] == false then
+    if SPAM.config.get("glory") == false then
         return
     end
     local oneDayAgo = os.time() - 24 * 60 * 60
     local printed_title = false
-    for key, value in pairs(SPAM.persistent_variables[SPAM.character_name]["glory_timer"]) do
+    for key, value in pairs(SPAM.config.get("glory_timer")) do
         if value > oneDayAgo then
             --print(key .. ": " .. os.date("%H:%M", value + 60 * 60))
         else
@@ -674,7 +493,7 @@ function show_glory_timer()
                 cecho("\n<yellow>MOB GLORIA PASSATI:")
                 printed_title = true
             end
-            SPAM.persistent_variables[SPAM.character_name]["glory_timer"][key] = -1
+            SPAM.config.get("glory_timer")[key] = -1
             cecho("\n    <white>" .. key)
         end
     end
@@ -683,7 +502,7 @@ function show_glory_timer()
     end
     cecho("\n<yellow>MOB GLORIA NELLE ULTIME 24 ORE:")
     local array = {}
-    makePairs(SPAM.persistent_variables[SPAM.character_name]["glory_timer"], array)
+    makePairs(SPAM.config.get("glory_timer"), array)
     table.sort(array, greater)
     printPairs(array)
     print("\n")
@@ -956,7 +775,7 @@ end
 
 function send_ident_to_db(data)
     -- send to db only if function is enabled
-    if SPAM.persistent_variables["config"]["auto_send"] == false then
+    if SPAM.config.get("auto_send") == false then
         return
     end
     -- This will create a JSON message body. Many modern REST APIs expect a JSON body.
@@ -1008,4 +827,168 @@ end
 
 function trim(s)
   return (string.gsub(s, "^%s*(.-)%s*$", "%1"))
+end
+
+function SPAM.config.save_globals()
+    table.save(SPAM.config.globals_savelocation, SPAM.config.persistent_globals)
+    toggle_ddegroup()
+    toggle_abbilchat()
+end
+
+function SPAM.config.load_globals()
+    if SPAM.config.persistent_globals == nil then
+        SPAM.config.persistent_globals = {}
+    end
+    if file_exists(SPAM.config.globals_savelocation) then
+        table.load(SPAM.config.globals_savelocation, SPAM.config.persistent_globals)
+    end
+    SPAM.config.initialize_persistent_globals()
+end
+
+function SPAM.config.initialize_persistent_globals()
+    local save = false
+    for k, v in pairs(SPAM.config.globals) do
+        if SPAM.config.persistent_globals[k] == nil then
+            SPAM.config.persistent_globals[k] = v.default
+            save = true
+        end
+    end
+    SPAM.config.save_globals()
+end
+
+function SPAM.config.save_characters()
+    table.save(SPAM.config.characters_savelocation, SPAM.config.persistent_characters)
+end
+
+function SPAM.config.load_characters()
+    if SPAM.config.persistent_characters == nil then
+        SPAM.config.persistent_characters = {}
+    end
+    if file_exists(SPAM.config.characters_savelocation) then
+        table.load(SPAM.config.characters_savelocation, SPAM.config.persistent_characters)
+    end
+end
+
+function SPAM.config.load_character(character_name)
+    if SPAM.config.persistent_characters[character_name] == nil then
+        SPAM.config.persistent_characters[character_name] = {}
+    end
+    SPAM.config.initialize_persistent_character(character_name)
+end
+
+function SPAM.config.initialize_persistent_character(character_name)
+    local save = false
+    for k, v in pairs(SPAM.config.characters) do
+        if SPAM.config.persistent_characters[character_name][k] == nil then
+            SPAM.config.persistent_characters[character_name][k] = v.default
+            save = true
+        end
+    end
+    SPAM.config.save_characters()
+end
+
+function SPAM.config.show_global(config_name)
+    local row = ""
+    if SPAM.config.globals[config_name] ~= nil then
+        row = "    " .. SPAM.config.globals[config_name].name ..": "
+        if SPAM.config.globals[config_name].var_type == "bool" then
+            if SPAM.config.globals[config_name].hidden == true and SPAM.config.persistent_globals[config_name] == false then
+                return
+            end
+            row = row .. bool2str(SPAM.config.persistent_globals[config_name])
+        else
+            row = row .. SPAM.config.persistent_globals[config_name]
+            end
+        cecho(row.."\n")
+    end
+end
+
+function SPAM.config.show_character(config_name)
+    local row = ""
+    if SPAM.config.characters[config_name] ~= nil and SPAM.config.characters[config_name].hidden ~= true then
+        row = "    " .. SPAM.config.characters[config_name].name ..": "
+        if SPAM.config.characters[config_name].var_type == "bool" then
+            row = row .. bool2str(SPAM.config.persistent_characters[SPAM.character_name][config_name])
+        else
+            row = row .. SPAM.config.persistent_characters[SPAM.character_name][config_name]
+            end
+        cecho(row.."\n")
+    end
+end
+
+function SPAM.config.show_all()
+    checho("\nLa configurazione del profilo attuale è:\n")
+    for k, v in pairs(SPAM.config.globals) do
+        SPAM.config.show_global(k)
+    end
+    if SPAM.character_name ~= nil then
+        checho("\nLa configurazione del personaggio <" .. SPAM.character_name .. "> è:\n")
+        for k, v in pairs(SPAM.config.characters) do
+            SPAM.config.show_character(k)
+        end
+    end
+end
+
+function SPAM.config.show_desc(config_name)
+    for k, v in pairs(SPAM.config.globals) do
+        if k == config_name or string.starts(string.lower(v.name), string.lower(config_name)) then
+            cecho("\n" .. v.desc .. "\n\n")
+            return
+        end
+    end
+    for k, v in pairs(SPAM.config.characters) do
+        if k == config_name or string.starts(string.lower(v.name), string.lower(config_name))  then
+            cecho("\n" .. v.desc .. "\n\n")
+            return
+        end
+    end
+    cecho("\nScelta non valida\n\n")
+end
+
+function SPAM.config.get(config_name)
+    if SPAM.config.globals[config_name] ~= nil then
+        return SPAM.config.persistent_globals[config_name]
+    elseif SPAM.character_name ~= nil and SPAM.config.characters[config_name] ~= nil then
+        return SPAM.config.persistent_characters[SPAM.character_name][config_name]
+    end
+end
+
+function SPAM.config.set(config_name, value, report)
+    report = report or false
+    if SPAM.config.globals[config_name] ~= nil then
+        SPAM.config.persistent_globals[config_name] = value
+        if report then
+            SPAM.config.show_global(config_name)
+        end
+        SPAM.config.save_globals()
+    elseif SPAM.character_name ~= nil and SPAM.config.characters[config_name] ~= nil then
+        SPAM.config.persistent_characters[SPAM.character_name][config_name] = value
+        if report then
+            SPAM.config.show_character(config_name)
+        end
+        SPAM.config.save_characters()
+    end
+end
+
+function SPAM.config.set_by_name(config_name, value, report)
+    report = report or true
+    for k, v in pairs(SPAM.config.globals) do
+        if string.starts(string.lower(v.name), string.lower(config_name)) then
+            if v.var_type == "bool" then
+                value = str2bool(value)
+            end
+            SPAM.config.set(k,value,report)
+            return
+        end
+    end
+    for k, v in pairs(SPAM.config.characters) do
+        if string.starts(string.lower(v.name), string.lower(config_name)) then
+            if v.var_type == "bool" then
+                value = str2bool(value)
+            end
+            SPAM.config.set(k,value,report)
+            return
+        end
+    end
+    cecho("\nScelta non valida\n\n")
 end
