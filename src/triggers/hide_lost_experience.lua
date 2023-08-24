@@ -1,3 +1,3 @@
-if persistent_variables["config"]["hide_lost_experience"] == true then
+if SPAM.config.get("hide_lost_experience") == true then
   deleteLine()
 end

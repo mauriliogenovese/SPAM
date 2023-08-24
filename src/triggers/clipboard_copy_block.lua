@@ -1,0 +1,1 @@
+SPAM.string2clipboard = ""

@@ -169,8 +169,8 @@
   },
 
   {
-    "name": "clipboard",
-    "fireLength" : "25",
+    "name": "clipboard_copy_block",
+    "fireLength" : "35",
     "patterns": [
       {
         "pattern" : "^L'oggetto '(.+)$",
@@ -183,10 +183,23 @@
     ],
     "children": [
       {
-        "name" : "line parser",
+        "name" : "line_parser",
         "patterns": [
           {
             "pattern" : "^.*$",
+            "type" : "regex"
+          }
+        ]
+      },
+      {
+        "name" : "end_copy_block",
+        "patterns": [
+          {
+            "pattern" : "^L'oggetto e' (UNICO|COMUNE|RARO).$",
+            "type" : "regex"
+          },
+           {
+            "pattern" : "^Ora sai che ognuno dei suoi colpi potrebbe infliggere(.+)$",
             "type" : "regex"
           }
         ]
@@ -237,3 +250,4 @@
     ]
   }
 ]
+

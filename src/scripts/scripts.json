@@ -12,5 +12,11 @@
     "eventHandlerList": [
       "gmcp.Char"
     ]
+  },
+  {
+    "name": "gmcp_chat",
+    "eventHandlerList": [
+      "gmcp.Comm.Channel.Text"
+    ]
   }
 ]
