@@ -8,8 +8,8 @@ SPAM.config.globals = {}
 SPAM.config.globals["dde_group"] = {
     name = "DdEgroup",
     desc = [[DDEGroup è uno schermo per monitorare i buff dei compagni di gruppo.
-Per abilitare/disabilitare DDEGroup usa il comando: <yellow>spam ddegroup on/off<gray>
-Per controllare le ulteriori opzioni di DDEGroup usa il comando: <yellow>observe<gray>]],
+Per abilitare/disabilitare DDEGroup usa il comando: <yellow>spam ddegroup on/off<grey>
+Per controllare le ulteriori opzioni di DDEGroup usa il comando: <yellow>observe<grey>]],
     var_type = "bool",
     default = true
 }
@@ -23,14 +23,14 @@ Per controllare la riproduzione dei suoni usa il comando: <yellow>spam suoni on/
 SPAM.config.globals["abbil_chat"] = {
     name = "AbbilChat",
     desc = [[AbbilChat è lo schermo sviluppato da Abbil per monitorare le comunicazioni.
-Per abilitare/disabilitare AbbilChat usa il comando: <yellow>spam abbilchat on/off<gray>]],
+Per abilitare/disabilitare AbbilChat usa il comando: <yellow>spam abbilchat on/off<grey>]],
     var_type = "bool",
     default = true
 }
 SPAM.config.globals["glory"] = {
     name = "Gloria",
     desc = [[La funzione Gloria permette di tenere traccia dei mob gloria uccisi nelle ultime 24 ore.
-Per abilitare/disabilitare questa funzione usa il comando: <yellow>spam gloria on/off<gray>
+Per abilitare/disabilitare questa funzione usa il comando: <yellow>spam gloria on/off<grey>
 Per mostrare i mob gloria uccisi nelle ultime 24 ore usa il comando: <yellow>gloria]],
     var_type = "bool",
     default = true
@@ -89,6 +89,21 @@ SPAM.config.globals["dev"] = {
     default = false,
     hidden = true
 }
+SPAM.config.globals["gdcolor"] = {
+    name = "gdcolor",
+    desc = [[SPAM ti permette di impostare un suffisso e un prefisso per personalizzare il comando gd
+Per impostare un prefisso usa il comando: <yellow>spam gdcolor_prefisso prefisso<grey>
+Per impostare un suffisso usa il comando: <yellow>spam gdcolor_suffisso suffisso<grey>
+
+Ad esempio per ottenere questo risultato: <blue>[<white>Seymour<blue>] dice al gruppo '<yellow>**<cyan>ciao<yellow>**<blue>'.
+<grey>Dovresti usare i seguenti comandi
+<yellow>spam gdcolor_prefisso &Y**&C
+spam gdcolor_suffisso &Y**<grey>
+
+Per scoprire i TAG colore disponibili in Dei delle Ere usa il comando: <yellow>aiuto colori<grey>]],
+    var_type = "bool",
+    default = true,
+}
 
 SPAM.config.characters = {}
 SPAM.config.characters["observe_list"] = {
@@ -121,22 +136,13 @@ SPAM.config.characters["glory_timer"] = {
 }
 SPAM.config.characters["gd_start"] = {
     name = "gdcolor_prefisso",
-    desc = [[SPAM ti permette di impostare un suffisso e un prefisso per personalizzare il comando gd
-Per impostare un prefisso usa il comando: <white>spam gdcolor_prefisso prefisso<gray>
-Per impostare un suffisso usa il comando: <white>spam gdcolor_suffisso suffisso<gray>
-
-Ad esempio per ottenere questo risultato: <blue>[<white>Seymour<blue>] dice al gruppo '<yellow>**<cyan>ciao<yellow>**<blue>'.
-<gray>Dovresti usare i seguenti comandi
-<white>spam gdcolor_prefisso &Y**&C
-spam gdcolor_suffisso &Y**<gray>
-
-Per scoprire i TAG colore disponibili in Dei delle Ere usa il comando: <white>aiuto colori<gray>]],
+    desc = SPAM.config.globals["gdcolor"].desc,
     var_type = "string",
     default = "",
 }
 SPAM.config.characters["gd_end"] = {
     name = "gdcolor_suffisso",
-    desc = SPAM.config.characters["gd_start"].desc,
+    desc = SPAM.config.globals["gdcolor"].desc,
     var_type = "string",
     default = "",
 }

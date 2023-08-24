@@ -446,8 +446,8 @@ in Dei Delle Ere.
         checho(
                 [[
 
-Per avere maggiori informazioni su una impostazione usa: <yellow>spam nomeimpostazione<gray>
-Ad esempio: <yellow>spam ddegroup <gray>oppure <yellow>spam gdcolor
+Per avere maggiori informazioni su una impostazione usa: <yellow>spam nomeimpostazione<grey>
+Ad esempio: <yellow>spam ddegroup <grey>oppure <yellow>spam gdcolor
           ]]
         )
     else
