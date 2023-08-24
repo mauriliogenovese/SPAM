@@ -34,4 +34,4 @@ Per le opzioni del monitor buff è possibile digitare il comando <observe>
    [Abbil]: https://moylen.eu/dde/
    [Nikeb]: http://arendil.sytes.net:5000/
    [Muddler]: https://github.com/demonnic/muddler
-   [ultima release]: https://raw.githubusercontent.com/mauriliogenovese/SPAM/main/build/SPAM.mpackage
+   [ultima release]: https://github.com/mauriliogenovese/SPAM/releases/latest/download/SPAM.mpackage
