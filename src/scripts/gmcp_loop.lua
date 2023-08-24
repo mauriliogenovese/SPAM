@@ -205,7 +205,7 @@ function gmcp_loop()
                                 if b.nome == "volo" or b.nome == "branchie" or b.nome == "levitazione" then
                                     SPAM.ddeGroupWidget:dechoLink(
                                             " - " .. color_tag .. b.nome .. "<200,200,200>",
-                                            [[send(SPAM.observe_spell_list.command .. " ']] .. b.nome .. [[' ]] .. this_name [[")]],
+                                            [[send(SPAM.observe_spell_list.command .. " ']] .. b.nome .. [[' ]] .. this_name .. [[")]],
                                             "Casta " .. b.nome,
                                             true
                                     )
