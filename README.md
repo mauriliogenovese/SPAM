@@ -24,7 +24,7 @@ Oppure scaricare ed importare in Mudlet l'[ultima release].
 Per i successivi aggiornamenti è possibile utilizzare in gioco il comando `spam update`
 
 ## Utilizzo
-Per esplorare tutte le funzioni del package basta digitare il comando `spam` in gioco
+Per esplorare tutte le funzioni del package basta digitare il comando `spam` in gioco.
 Per le opzioni del monitor buff è possibile digitare il comando `observe`
 
 
