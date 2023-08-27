@@ -87,7 +87,7 @@ SPAM.config.globals["fast_login"] = {
     desc = [[SPAM può automatizzare la procedura di login per evitare di dover digitare invio e 1 alla connessione.
 Per abilitare/disabilitare questa funzione usa il comando: <white>spam login on/off]],
     var_type = "bool",
-    default = false
+    default = true
 }
 SPAM.config.globals["dev"] = {
     name = "dev",
@@ -174,8 +174,8 @@ end
 --temporary fix for game bug
 SPAM.config.set("hide_immune_shield",false)
 --update check
-registerAnonymousEventHandler("sysDownloadDone", "SPAM.eventHandler")
-registerAnonymousEventHandler("sysDownloadError", "SPAM.eventHandler")
+registerAnonymousEventHandler("sysDownloadDone", "SPAM.event_handler")
+registerAnonymousEventHandler("sysDownloadError", "SPAM.event_handler")
 SPAM.downloading = true
 local version_file = "https://raw.githubusercontent.com/mauriliogenovese/SPAM/main/version"
 if SPAM.config.get("dev") == true then
@@ -219,11 +219,11 @@ SPAM.colors =
     "FF0000",
   }
 -- Contenitore e mini-console per DdE Group
-SPAM.ddeGroupContainer = SPAM.ddeGroupContainer or Adjustable.Container:new({name = "DdE Group"})
-SPAM.ddeGroupContainer.name = "DdE Group"
-SPAM.ddeGroupContainer:unlockContainer()
-SPAM.ddeGroupWidget =
-  SPAM.ddeGroupWidget or
+SPAM.dde_group_container = SPAM.dde_group_container or Adjustable.Container:new({name = "DdE Group"})
+SPAM.dde_group_container.name = "DdE Group"
+SPAM.dde_group_container:unlockContainer()
+SPAM.dde_group_widget =
+  SPAM.dde_group_widget or
   Geyser.MiniConsole:new(
     {
       name = "DdE Group",
@@ -236,17 +236,17 @@ SPAM.ddeGroupWidget =
       width = "100%",
       height = "100%",
     },
-    SPAM.ddeGroupContainer
+    SPAM.dde_group_container
   )
 clearWindow("DdE Group")
-SPAM.ddeGroupWidget:echo("\n*** DdE Group Caricato.\n")
-SPAM.toggle_ddegroup()
+SPAM.dde_group_widget:echo("\n*** DdE Group Caricato.\n")
+SPAM.toggle_dde_group()
 -- Contenitore e mini-console per DdE Chat
-SPAM.abbilchatContainer = SPAM.abbilchatContainer or Adjustable.Container:new({name = "Abbil Chat"})
-SPAM.abbilchatContainer.name = "Abbil Chat"
-SPAM.abbilchatContainer:unlockContainer()
-SPAM.abbilchatWidget =
-  SPAM.abbilchatWidget or
+SPAM.abbil_chat_container = SPAM.abbil_chat_container or Adjustable.Container:new({name = "Abbil Chat"})
+SPAM.abbil_chat_container.name = "Abbil Chat"
+SPAM.abbil_chat_container:unlockContainer()
+SPAM.abbil_chat_widget =
+  SPAM.abbil_chat_widget or
   Geyser.MiniConsole:new(
     {
       name = "Abbil Chat",
@@ -260,11 +260,11 @@ SPAM.abbilchatWidget =
       width = "100%",
       height = "100%",
     },
-    SPAM.abbilchatContainer
+    SPAM.abbil_chat_container
   )
 clearWindow("Abbil Chat")
-SPAM.abbilchatWidget:echo("\n*** Abbil Chat Caricato.\n")
-SPAM.toggle_abbilchat()
+SPAM.abbil_chat_widget:echo("\n*** Abbil Chat Caricato.\n")
+SPAM.toggle_abbil_chat()
 SPAM.class_list = {}
 SPAM.class_list["Chierico"] = SPAM.new_class()
 SPAM.class_list["Chierico"].buff.dps = {"benedizione", "aiuto divino"}

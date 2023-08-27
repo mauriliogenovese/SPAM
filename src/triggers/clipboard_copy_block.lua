@@ -1,1 +1,1 @@
-SPAM.string2clipboard = ""
+SPAM.string_to_clipboard = ""

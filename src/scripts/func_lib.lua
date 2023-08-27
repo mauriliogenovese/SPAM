@@ -3,88 +3,88 @@ SPAM = SPAM or {}
 -- string manipulation functions
 SPAM.string = SPAM.string or {}
 
-function SPAM.string.trim(s)
-  return (string.gsub(s, "^%s*(.-)%s*$", "%1"))
+function SPAM.string.trim(input_string)
+  return (string.gsub(input_string, "^%s*(.-)%s*$", "%1"))
 end
 
-function SPAM.string.parse_bool(bool)
-    if bool then
+function SPAM.string.parse_bool(input_bool)
+    if input_bool then
         return "<green>on"
     end
     return "<red>off"
 end
 
-function SPAM.string.to_bool(str)
-    local str = string.lower(str)
+function SPAM.string.to_bool(input_string)
+    local str = string.lower(input_string)
     if str == "on" or str == "true" or str == "1" or str == 1 then
         return true
     end
     return false
 end
 
-function SPAM.string.removeLastNumericDigits(inputString)
-    if type(inputString) ~= "string" then
+function SPAM.string.remove_last_numeric_char(input_string)
+    if type(input_string) ~= "string" then
         return nil
     end
 
-    local lastChar = string.sub(inputString, -1) -- Get the last character
-    local secondLastChar = string.sub(inputString, -2, -2) -- Get the second to last character
+    local last_char = string.sub(input_string, -1) -- Get the last character
+    local second_last_char = string.sub(input_string, -2, -2) -- Get the second to last character
 
-    if tonumber(lastChar) and tonumber(secondLastChar) then
-        local modifiedString = string.sub(inputString, 1, -3) -- Remove the last two characters
-        return modifiedString
+    if tonumber(last_char) and tonumber(second_last_char) then
+        local modified_string = string.sub(input_string, 1, -3) -- Remove the last two characters
+        return modified_string
     else
-        return inputString
+        return input_string
     end
 end
 
-function SPAM.string.starts(String, Start)
-    return string.sub(String, 1, string.len(Start)) == Start
+function SPAM.string.starts(input_string, start)
+    return string.sub(input_string, 1, string.len(start)) == start
 end
 
-function SPAM.string.firstToUpper(str)
-    return (str:gsub("^%l", string.upper))
+function SPAM.string.first_upper(input_string)
+    return (input_string:gsub("^%l", string.upper))
 end
 
-function SPAM.string.explode(inputstr, sep)
-    if sep == nil then
-        sep = "%s"
+function SPAM.string.explode(input_string, separator)
+    if separator == nil then
+        separator = "%s"
     end
     local t = {}
-    for str in string.gmatch(inputstr, "([^" .. sep .. "]+)") do
+    for str in string.gmatch(input_string, "([^" .. separator .. "]+)") do
         table.insert(t, str)
     end
     return t
 end
 
-function SPAM.string.implode(list, separator)
+function SPAM.string.implode(input_table, separator)
     local result = ""
-    for i, value in ipairs(list) do
+    for i, value in ipairs(input_table) do
         result = result .. value
-        if i < #list then
+        if i < #input_table then
             result = result .. separator
         end
     end
     return result
 end
 
-function SPAM.string.get_last_word(inputString)
-    local lastWord = nil
-    local lastChar = inputString:sub(-1)
+function SPAM.string.get_last_word(input_string)
+    local last_word = nil
+    local last_char = input_string:sub(-1)
     -- Get the last character of the input string
     -- Remove the last character if it's a period
-    if lastChar == "." then
-        inputString = inputString:sub(1, -2)
+    if last_char == "." then
+        input_string = input_string:sub(1, -2)
     end
     -- Split the inputString by spaces and ' characters
     local words = {}
-    for word in inputString:gmatch("[^%s']+") do
+    for word in input_string:gmatch("[^%s']+") do
         table.insert(words, word)
     end
     if #words > 0 then
-        lastWord = words[#words]
+        last_word = words[#words]
     end
-    return lastWord
+    return last_word
 end
 
 function SPAM.string.escape(input_string)
@@ -96,24 +96,24 @@ function SPAM.string.escape(input_string)
     end
 end
 
-function SPAM.string.removeFirstTwoWords(str)
+function SPAM.string.remove_first_two_words(input_string)
     -- cerca la posizione della terza parola nella stringa
-    local _, pos = string.find(str, "%S+%s+%S+%s+")
+    local _, pos = string.find(input_string, "%S+%s+%S+%s+")
     if pos then
         -- se la terza parola esiste, restituisce la parte rimanente della stringa
-        return string.sub(str, pos + 1)
+        return string.sub(input_string, pos + 1)
     else
         -- se la terza parola non esiste, restituisce una stringa vuota
         return ""
     end
 end
 
-function SPAM.string.removeFirstWord(str)
+function SPAM.string.remove_first_word(input_string)
     -- cerca la posizione della terza parola nella stringa
-    local _, pos = string.find(str, "%S+%s+")
+    local _, pos = string.find(input_string, "%S+%s+")
     if pos then
         -- se la terza parola esiste, restituisce la parte rimanente della stringa
-        return string.sub(str, pos + 1)
+        return string.sub(input_string, pos + 1)
     else
         -- se la terza parola non esiste, restituisce una stringa vuota
         return ""
@@ -132,58 +132,58 @@ function SPAM.table.merge(old_table, new_table)
     )
 end
 
-function SPAM.table.delete(x)
-    for k in pairs(x) do
-        x[k] = nil
+function SPAM.table.delete(input_table)
+    for k in pairs(input_table) do
+        input_table[k] = nil
     end
 end
 
 --remove duplicates from a table
-function SPAM.table.deduplicate(x)
+function SPAM.table.deduplicate(input_table)
     local seen = {}
-    for index, item in ipairs(x) do
+    for index, item in ipairs(input_table) do
         if seen[item] then
-            table.remove(x, index)
+            table.remove(input_table, index)
         else
             seen[item] = true
         end
     end
     if seen["nuovo vigore"] then
-        for k in pairs(x) do
-            x[k] = nil
+        for k in pairs(input_table) do
+            input_table[k] = nil
         end
-        table.insert(x, "nuovo vigore")
+        table.insert(input_table, "nuovo vigore")
     end
 end
 
-function SPAM.table.get_keys(tbl)
+function SPAM.table.get_keys(input_table)
     local keys = {}
-    for key, _ in pairs(tbl) do
+    for key, _ in pairs(input_table) do
         table.insert(keys, key)
     end
     return keys
 end
 
 
-function SPAM.toggle_ddegroup()
-    if SPAM.ddeGroupContainer == nil then
+function SPAM.toggle_dde_group()
+    if SPAM.dde_group_container == nil then
         return
     end
     if SPAM.config.get("dde_group") == false then
-        SPAM.ddeGroupContainer:hide()
+        SPAM.dde_group_container:hide()
     else
-        SPAM.ddeGroupContainer:show()
+        SPAM.dde_group_container:show()
     end
 end
 
-function SPAM.toggle_abbilchat()
-    if SPAM.abbilchatContainer == nil then
+function SPAM.toggle_abbil_chat()
+    if SPAM.abbil_chat_container == nil then
         return
     end
     if SPAM.config.get("abbil_chat") == false then
-        SPAM.abbilchatContainer:hide()
+        SPAM.abbil_chat_container:hide()
     else
-        SPAM.abbilchatContainer:show()
+        SPAM.abbil_chat_container:show()
     end
 end
 
@@ -208,8 +208,8 @@ function SPAM.update()
     installPackage(git_url)
 end
 
-function SPAM.file_exists(name)
-    local f = io.open(name, "r")
+function SPAM.file_exists(file_name)
+    local f = io.open(file_name, "r")
     if f ~= nil then
         io.close(f)
         return true
@@ -223,11 +223,11 @@ function SPAM.parse_version(string)
     return major, minor, patch
 end
 
-function SPAM.compare_with_current_version(newversion)
-    if newversion == "@VERSION@" then
+function SPAM.compare_with_current_version(new_version)
+    if new_version == "@VERSION@" then
         return false
     end
-    v1_major, v1_minor, v1_patch = SPAM.parse_version(newversion)
+    v1_major, v1_minor, v1_patch = SPAM.parse_version(new_version)
     v2_major, v2_minor, v2_patch = SPAM.parse_version("@VERSION@")
     if v1_major > v2_major then
         return true
@@ -243,7 +243,7 @@ function SPAM.compare_with_current_version(newversion)
     return false
 end
 
-function SPAM.eventHandler(event, ...)
+function SPAM.event_handler(event, ...)
     if event == "sysDownloadDone" and SPAM.downloading then
         local file = arg[1]
         if string.ends(file, "/version") then
@@ -259,7 +259,7 @@ function SPAM.eventHandler(event, ...)
     end
 end
 
-function SPAM.getAllyName(name)
+function SPAM.get_ally_name(name)
     local name = string.lower(name)
     if gmcp.Char.Gruppo.gruppo == nil then
         if SPAM.string.starts(string.lower(gmcp.Char.Name.name), name) then
@@ -269,7 +269,7 @@ function SPAM.getAllyName(name)
     end
     local gruppo = gmcp.Char.Gruppo.gruppo
     for i, v in ipairs(gruppo) do
-        v.nome = SPAM.beautifyName(v.nome)
+        v.nome = SPAM.beautify_name(v.nome)
         if SPAM.string.starts(string.lower(v.nome), name) then
             return v.nome
         end
@@ -279,7 +279,7 @@ end
 
 --remove articles or other unnecessary names from followers
 
-function SPAM.beautifyName(name)
+function SPAM.beautify_name(name)
     if SPAM.string.starts(string.lower(name), "un enorme ") then
         name = string.gsub(string.lower(name), "un enorme ", "")
     elseif SPAM.string.starts(string.lower(name), "una ") then
@@ -298,7 +298,7 @@ function SPAM.beautifyName(name)
     if words[1] == nil then
         words[1] = name
     end
-    words[1] = SPAM.string.firstToUpper(words[1])
+    words[1] = SPAM.string.first_upper(words[1])
     return words[1]
 end
 
@@ -343,11 +343,11 @@ end
 
 -- Populate the array with key,value pairs from hashTable.
 
-function SPAM.makePairs(hashTable, array, _k)
-    local k, v = next(hashTable, _k)
+function SPAM.make_pairs(input_table, array, _k)
+    local k, v = next(input_table, _k)
     if k then
         table.insert(array, { k, v })
-        return SPAM.makePairs(hashTable, array, k)
+        return SPAM.make_pairs(input_table, array, k)
     end
 end
 
@@ -371,14 +371,14 @@ function SPAM.disp_time(time)
 end
 
 -- Print the pairs from the array.
-function SPAM.printPairs(array, _i)
+function SPAM.print_pairs(array, _i)
     local i = _i or 1
     local pair = array[i]
     if pair then
         local k, v = unpack(pair)
         if v > 0 then
             cecho("\n    <white>" .. k .. ': <grey>' .. os.date("%H:%M", v) .. " (" .. SPAM.disp_time(os.difftime(os.time(), v + 24 * 60 * 60)) .. ")")
-            return SPAM.printPairs(array, i + 1)
+            return SPAM.print_pairs(array, i + 1)
         end
     end
 end
@@ -436,7 +436,7 @@ function SPAM.gen_spell_list(my_class_list)
     SPAM.deduplicate_class(SPAM.observe_spell_list)
 end
 
-function SPAM.getPFcolor(current, max)
+function SPAM.get_pf_color(current, max)
     local color_index = math.floor((current * #SPAM.colors / max))
     if color_index < 1 then
         color_index = 1
@@ -451,10 +451,10 @@ function SPAM.role_list()
     return { "base", "tank", "dps", "tankdps", "remove" }
 end
 
-function SPAM.ob_role(name, test_role, checkname)
+function SPAM.ob_role(name, test_role, check_name)
     local roles = SPAM.role_list()
-    if checkname == true then
-        allyName = SPAM.getAllyName(name)
+    if check_name == true then
+        allyName = SPAM.get_ally_name(name)
     else
         allyName = name
     end
@@ -482,13 +482,13 @@ function SPAM.ob_role(name, test_role, checkname)
     end
 end
 
-function SPAM.main_help(string)
+function SPAM.main_help(input_string)
     local help_string = [[
 Questo è l'aiuto per SPAM (Seymour PAckage for Mudlet), un insieme
 di alias, trigger e script per migliorare l'esperienza di gioco
 in Dei Delle Ere.
 ]]
-    if string == "" then
+    if input_string == "" then
         checho(help_string)
         SPAM.config.show_all()
         checho(
@@ -499,8 +499,8 @@ Ad esempio: <yellow>spam ddegroup <grey>oppure <yellow>spam gdcolor
           ]]
         )
     else
-        local split = SPAM.string.explode(string)
-        split[1] = string.lower(split[1])
+        local split = SPAM.string.explode(input_string)
+        split[1] = input_string.lower(split[1])
         if #split == 1 then
             if split[1] == "update" then
                 SPAM.update()
@@ -508,7 +508,7 @@ Ad esempio: <yellow>spam ddegroup <grey>oppure <yellow>spam gdcolor
                 SPAM.config.show_desc(split[1])
             end
         else
-            SPAM.config.set_by_name(split[1], SPAM.string.removeFirstWord(string))
+            SPAM.config.set_by_name(split[1], SPAM.string.remove_first_word(input_string))
         end
     end
     send(" ")
@@ -519,10 +519,10 @@ function SPAM.show_glory_timer()
     if SPAM.config.get("glory") == false then
         return
     end
-    local oneDayAgo = os.time() - 24 * 60 * 60
+    local one_day_ago = os.time() - 24 * 60 * 60
     local printed_title = false
     for key, value in pairs(SPAM.config.get("glory_timer")) do
-        if value > oneDayAgo then
+        if value > one_day_ago then
             --print(key .. ": " .. os.date("%H:%M", value + 60 * 60))
         else
             if not printed_title then
@@ -538,9 +538,9 @@ function SPAM.show_glory_timer()
     end
     cecho("\n<yellow>MOB GLORIA NELLE ULTIME 24 ORE:")
     local array = {}
-    SPAM.makePairs(SPAM.config.get("glory_timer"), array)
+    SPAM.make_pairs(SPAM.config.get("glory_timer"), array)
     table.sort(array, greater)
-    SPAM.printPairs(array)
+    SPAM.print_pairs(array)
     print("\n")
 end
 
@@ -599,7 +599,7 @@ function SPAM.mod_mudlet_mapper()
     SPAM.oldsanitize = map.sanitizeRoomName
     map.sanitizeRoomName = function(roomtitle)
         roomtitle = string.gsub(roomtitle, ".----N----. ", "")
-        roomtitle = SPAM.string.removeLastNumericDigits(roomtitle)
+        roomtitle = SPAM.string.remove_last_numeric_char(roomtitle)
         return SPAM.oldsanitize(roomtitle)
     end
     map.save.prompt_pattern[map.character] = "^PF:(.+)>$"
@@ -696,9 +696,9 @@ function SPAM.parse_ident(ident_text)
     --get the diffusion from last line
     parsed["diffusione"] = SPAM.string.get_last_word(table.remove(ident))
     --get weight and value
-    local weightline = SPAM.string.explode(ident[1], " ")
-    parsed["peso"] = weightline[5]
-    parsed["valore"] = weightline[8]:gsub(",", "")
+    local weight_line = SPAM.string.explode(ident[1], " ")
+    parsed["peso"] = weight_line[5]
+    parsed["valore"] = weight_line[8]:gsub(",", "")
     table.remove(ident, 1)
     --get rent
     parsed["affitto"] = SPAM.string.get_last_word(ident[1]):gsub(",", "")
@@ -746,12 +746,13 @@ function SPAM.parse_ident(ident_text)
     --get affects
     parsed["affects"] = affects_prefix .. SPAM.string.implode(ident, "\n")
     parsed["affects"] = parsed["affects"]:gsub("\n%s*$", "")
-    parsed["SPAM.character_name"] = SPAM.character_name
+    SPAM.debug(parsed)
     return parsed
 end
 
 function SPAM.ident_to_query(parsed)
     local data = { ["sql"] = "INSERT INTO tblident_temp (nome, peso, affitto, livello, ac, proprieta, affects, diffusione, informazioni, tipo, area, valore, danno_min, danno_max, danno_media,tipo_danno) VALUES('" .. SPAM.string.escape(parsed["nome"]) .. "', " .. SPAM.string.escape(parsed["peso"]) .. ", " .. SPAM.string.escape(parsed["affitto"]) .. ",  " .. SPAM.string.escape(parsed["livello"]) .. ", " .. SPAM.string.escape(parsed["ac"]) .. ", '" .. SPAM.string.escape(parsed["proprieta"]) .. "', '" .. SPAM.string.escape(parsed["affects"]) .. "', '" .. SPAM.string.escape(parsed["diffusione"]) .. "',  '" .. SPAM.string.escape(SPAM.character_name) .. "', 'da verificare', '', " .. SPAM.string.escape(parsed["valore"]) .. ", " .. SPAM.string.escape(parsed["danno_min"]) .. ", " .. SPAM.string.escape(parsed["danno_max"]) .. ", " .. SPAM.string.escape(parsed["danno_media"]) .. ",'" .. SPAM.string.escape(parsed["tipo_danno"]) .. "');" }
+    SPAM.debug(data)
     return data
 end
 
@@ -799,10 +800,17 @@ function SPAM.send_ident_to_db(data)
     -- yajl.to_string converts our Lua table into a JSON-like string so the server can understand it
 end
 
+function SPAM.debug(var)
+    if SPAM.config.get("debug") == true then
+        cecho("\n<red>DEBUG PRINT:\n")
+        display(var)
+    end
+end
+
 function SPAM.config.save_globals()
     table.save(SPAM.config.globals_savelocation, SPAM.config.persistent_globals)
-    SPAM.toggle_ddegroup()
-    SPAM.toggle_abbilchat()
+    SPAM.toggle_dde_group()
+    SPAM.toggle_abbil_chat()
 end
 
 function SPAM.config.load_globals()

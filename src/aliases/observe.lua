@@ -14,8 +14,6 @@ Per aggiungere un buff personalizzato usa: <yellow>observe customrefresh cast-co
 <grey>Ad esempio: <yellow>observe customrefresh scudo di ghiaccio-impuigna bacchetta,zap me,rimuovi bacchetta
 
 ]]
-local roles = {"remove", "base", "tank", "dps", "tankdps", "dpstank"}
-local role = ""
 local split = SPAM.string.explode(matches[3])
 if #split == 1 then
   if SPAM.string.starts("list", string.lower(split[1])) then
@@ -36,23 +34,23 @@ if #split == 1 then
 end
 if #split > 1 then
   if SPAM.string.starts("optionalbuff", string.lower(split[1])) then
-    local allyName = SPAM.getAllyName(split[2])
-    if allyName == nil then
+    local ally_name = SPAM.get_ally_name(split[2])
+    if ally_name == nil then
       cecho("\n<red>Nessun alleato trovato per " .. split[2])
       cecho("\nLa sintassi corretta è: <yellow>observe optionalbuff alleato cast\n")
       send("\n")
       return
     end
-    if SPAM.config.get("optional_buff")[allyName] == nil then
-      SPAM.config.get("optional_buff")[allyName] = {}
+    if SPAM.config.get("optional_buff")[ally_name] == nil then
+      SPAM.config.get("optional_buff")[ally_name] = {}
     end
-    local buff = SPAM.string.removeFirstTwoWords(matches[3])
-    if SPAM.config.get("optional_buff")[allyName][buff] == true then
-      echo("\nRimuovo " .. buff .. " per " .. allyName .. "\n")
-      SPAM.config.get("optional_buff")[allyName][buff] = nil
+    local buff = SPAM.string.remove_first_two_words(matches[3])
+    if SPAM.config.get("optional_buff")[ally_name][buff] == true then
+      echo("\nRimuovo " .. buff .. " per " .. ally_name .. "\n")
+      SPAM.config.get("optional_buff")[ally_name][buff] = nil
     else
-      echo("\nOsservo " .. buff .. " per " .. allyName .. "\n")
-      SPAM.config.get("optional_buff")[allyName][buff] = true
+      echo("\nOsservo " .. buff .. " per " .. ally_name .. "\n")
+      SPAM.config.get("optional_buff")[ally_name][buff] = true
     end
     send("\n")
     SPAM.config.save_characters()
@@ -61,7 +59,7 @@ if #split > 1 then
     if SPAM.config.get("custom_refresh") == nil then
       SPAM.config.set("custom_refresh", {})
     end
-    local exp = SPAM.string.explode(SPAM.string.removeFirstWord(matches[3]), "-")
+    local exp = SPAM.string.explode(SPAM.string.remove_first_word(matches[3]), "-")
     if #exp == 2 then
       exp[1] = SPAM.string.trim(exp[1])
       if SPAM.config.get("custom_refresh")[exp[1]] ~= nil then
