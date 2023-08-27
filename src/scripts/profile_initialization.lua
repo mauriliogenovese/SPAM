@@ -82,8 +82,22 @@ Per controllare l'invio automatico delle identificazioni usa il comando: <white>
     var_type = "bool",
     default = false
 }
+SPAM.config.globals["fast_login"] = {
+    name = "Login",
+    desc = [[SPAM può automatizzare la procedura di login per evitare di dover digitare invio e 1 alla connessione.
+Per abilitare/disabilitare questa funzione usa il comando: <white>spam login on/off]],
+    var_type = "bool",
+    default = false
+}
 SPAM.config.globals["dev"] = {
     name = "dev",
+    desc = [[]],
+    var_type = "bool",
+    default = false,
+    hidden = true
+}
+SPAM.config.globals["debug"] = {
+    name = "debug",
     desc = [[]],
     var_type = "bool",
     default = false,
@@ -152,7 +166,7 @@ SPAM.config.load_characters()
 
 if SPAM.config.get("mapper") then
     enableTrigger("DDE_mapper_Trigger_Group")
-    tempTimer(0.5,mod_generic_mapper)
+    tempTimer(0.5,SPAM.mod_mudlet_mapper)
 else
     disableTrigger("DDE_mapper_Trigger_Group")
 end
@@ -160,8 +174,8 @@ end
 --temporary fix for game bug
 SPAM.config.set("hide_immune_shield",false)
 --update check
-registerAnonymousEventHandler("sysDownloadDone", "spam_eventHandler")
-registerAnonymousEventHandler("sysDownloadError", "spam_eventHandler")
+registerAnonymousEventHandler("sysDownloadDone", "SPAM.eventHandler")
+registerAnonymousEventHandler("sysDownloadError", "SPAM.eventHandler")
 SPAM.downloading = true
 local version_file = "https://raw.githubusercontent.com/mauriliogenovese/SPAM/main/version"
 if SPAM.config.get("dev") == true then
@@ -226,7 +240,7 @@ SPAM.ddeGroupWidget =
   )
 clearWindow("DdE Group")
 SPAM.ddeGroupWidget:echo("\n*** DdE Group Caricato.\n")
-toggle_ddegroup()
+SPAM.toggle_ddegroup()
 -- Contenitore e mini-console per DdE Chat
 SPAM.abbilchatContainer = SPAM.abbilchatContainer or Adjustable.Container:new({name = "Abbil Chat"})
 SPAM.abbilchatContainer.name = "Abbil Chat"
@@ -250,63 +264,63 @@ SPAM.abbilchatWidget =
   )
 clearWindow("Abbil Chat")
 SPAM.abbilchatWidget:echo("\n*** Abbil Chat Caricato.\n")
-toggle_abbilchat()
+SPAM.toggle_abbilchat()
 SPAM.class_list = {}
-SPAM.class_list["Chierico"] = new_class()
+SPAM.class_list["Chierico"] = SPAM.new_class()
 SPAM.class_list["Chierico"].buff.dps = {"benedizione", "aiuto divino"}
 SPAM.class_list["Chierico"].buff.base = {"santificazione", "volo"}
 --SPAM.class_list["Chierico"].self_buff.tank = {"protezione dal bene","protezione dal male","protezione dal fuoco","resistenza elettrica","protezione dalla energia","resistenza risucchio"}
 SPAM.class_list["Chierico"].heal = {"cura critiche", "guarigione", "cure leggere continue"}
 SPAM.class_list["Chierico"].move = {"nuovo vigore"}
-SPAM.class_list["Paladino"] = new_class()
+SPAM.class_list["Paladino"] = SPAM.new_class()
 SPAM.class_list["Paladino"].buff.dps = {"benedizione"}
 SPAM.class_list["Paladino"].self_buff.tank = {"aura benefica", "armatura sacra"}
 SPAM.class_list["Paladino"].self_buff.dps = {"crociata", "morale"}
 SPAM.class_list["Paladino"].heal = {"imposizione delle mani", "martirio"}
 SPAM.class_list["Paladino"].command = "prega"
-SPAM.class_list["Oscuro"] = new_class()
+SPAM.class_list["Oscuro"] = SPAM.new_class()
 SPAM.class_list["Oscuro"].self_buff.dps = {"rito oscuro"}
 SPAM.class_list["Oscuro"].self_buff.base = {"anima fiammeggiante", "scudo fiammeggiante"}
 SPAM.class_list["Oscuro"].command = "prega"
-SPAM.class_list["Mago"] = new_class()
+SPAM.class_list["Mago"] = SPAM.new_class()
 SPAM.class_list["Mago"].buff.dps = {"forza"}
 SPAM.class_list["Mago"].buff.tank = {"scudo", "armatura"}
 SPAM.class_list["Mago"].buff.base = {"volo"}
 SPAM.class_list["Mago"].self_buff.base = {"scudo infuocato"}
 SPAM.class_list["Mago"].self_buff.tank = {"pelle di pietra"}
 SPAM.class_list["Mago"].move = {"ristora"}
-SPAM.class_list["Cercatore"] = new_class()
+SPAM.class_list["Cercatore"] = SPAM.new_class()
 SPAM.class_list["Cercatore"].buff.base = {"santificazione", "volo", "agilita felina"}
 SPAM.class_list["Cercatore"].buff.dps = {"benedizione", "forza"}
 SPAM.class_list["Cercatore"].buff.tank = {"scudo"}
 SPAM.class_list["Cercatore"].self_buff.base = {"scudo di ghiaccio", "cuore di naria"}
 SPAM.class_list["Cercatore"].heal = {"cura serie", "guarigione", "brezza di naria"}
 SPAM.class_list["Cercatore"].move = {"ristora"}
-SPAM.class_list["Vampiro"] = new_class()
+SPAM.class_list["Vampiro"] = SPAM.new_class()
 SPAM.class_list["Vampiro"].buff.dps = {"forza"}
 SPAM.class_list["Vampiro"].buff.tank = {"scudo", "tenebre"}
 SPAM.class_list["Vampiro"].buff.base = {"volo"}
 SPAM.class_list["Vampiro"].self_buff.tank = {"pelle demoniaca"}
-SPAM.class_list["Druido"] = new_class()
+SPAM.class_list["Druido"] = SPAM.new_class()
 SPAM.class_list["Druido"].buff.base = {"volo", "agilita felina"}
 SPAM.class_list["Druido"].self_buff.base = {"scudo di ghiaccio", "spirito di naria"}
 SPAM.class_list["Druido"].self_buff.tank = {"pelle del drago", "pelle di corteccia"}
 SPAM.class_list["Druido"].heal = {"cura critiche", "brezza di naria"}
 SPAM.class_list["Druido"].move = {"nuovo vigore"}
-SPAM.class_list["Ranger"] = new_class()
+SPAM.class_list["Ranger"] = SPAM.new_class()
 SPAM.class_list["Ranger"].buff.base = {"agilita felina"}
 SPAM.class_list["Ranger"].self_buff.dps = {"ferocia animale"}
 SPAM.class_list["Ranger"].self_buff.tank = {"pelle di corteccia"}
 SPAM.class_list["Ranger"].heal = {"cura critiche"}
 SPAM.class_list["Ranger"].move = {"nuovo vigore"}
-SPAM.class_list["Psionico"] = new_class()
+SPAM.class_list["Psionico"] = SPAM.new_class()
 SPAM.class_list["Psionico"].buff.base = {"levitazione"}
 SPAM.class_list["Psionico"].self_buff.base = {"scudo di energia"}
 SPAM.class_list["Psionico"].self_buff.dps = {"forza psionica"}
 SPAM.class_list["Psionico"].self_buff.tank = {"scudo mentale", "sfera protettiva"}
 SPAM.class_list["Psionico"].heal = {"nostrum"}
 SPAM.class_list["Psionico"].command = "pensa"
-SPAM.class_list["Necromante"] = new_class()
+SPAM.class_list["Necromante"] = SPAM.new_class()
 SPAM.class_list["Necromante"].buff.base = {"levitazione"}
 SPAM.class_list["Necromante"].buff.tank = {"tenebre"}
 SPAM.class_list["Necromante"].self_buff.base = {"scudo di ossa"}

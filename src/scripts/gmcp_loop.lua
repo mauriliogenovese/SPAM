@@ -38,16 +38,17 @@ function gmcp_loop()
         end
         --generate the observable spell list
         if SPAM.observe_spell_list == nil then
-            gen_spell_list(gmcp.Char.Classi.classi)
+            SPAM.gen_spell_list(gmcp.Char.Classi.classi)
         end
         --if not otherwise specifies, i'm always in base observe mode
         if SPAM.config.get("observe_list")[SPAM.character_name] == nil then
             SPAM.config.get("observe_list")[SPAM.character_name] = "base"
+            SPAM.config.save_characters()
         end
         --group loop
         local party_names = {}
         for i, v in ipairs(gruppo) do
-            local this_name = beautifyName(v.nome)
+            local this_name = SPAM.beautifyName(v.nome)
             local name_x = 2
             while party_names[this_name] ~= nil do
                 if name_x > 2 then
@@ -59,20 +60,20 @@ function gmcp_loop()
             party_names[this_name] = true
             SPAM.ddeGroupWidget:decho("\n")
             local ob_func_list = {}
-            local ob_name_list = role_list()
+            local ob_name_list = SPAM.role_list()
             table.foreach(
                     ob_name_list,
                     function(k1, v1)
                         table.insert(
                                 ob_func_list,
-                                [[ob_role("]] .. this_name .. [[", "]] .. v1 .. [[", false)]]
+                                [[SPAM.ob_role("]] .. this_name .. [[", "]] .. v1 .. [[", false)]]
                         )
                     end
             )
             SPAM.ddeGroupWidget:hechoPopup(this_name, ob_func_list, ob_name_list, true)
             SPAM.ddeGroupWidget:decho("(")
             local this_hp = tonumber(v.hp)
-            local row = "#" .. getPFcolor(this_hp, 100) .. this_hp
+            local row = "#" .. SPAM.getPFcolor(this_hp, 100) .. this_hp
             --if player can cast heal spells, add them as link
             if next(SPAM.observe_spell_list.heal) ~= nil then
                 local heal_func_list = {}
@@ -113,21 +114,21 @@ function gmcp_loop()
             --generate spell to check for the current group member
             if SPAM.config.get("observe_list")[this_name] ~= nil then
                 local observe_spell = {}
-                merge_tables(SPAM.observe_spell_list.buff.base, observe_spell)
+                SPAM.table.merge(SPAM.observe_spell_list.buff.base, observe_spell)
                 if this_name == SPAM.character_name then
-                    merge_tables(SPAM.observe_spell_list.self_buff.base, observe_spell)
-                    merge_tables(getTableKeys(SPAM.config.get("custom_refresh")), observe_spell)
+                    SPAM.table.merge(SPAM.observe_spell_list.self_buff.base, observe_spell)
+                    SPAM.table.merge(SPAM.table.get_keys(SPAM.config.get("custom_refresh")), observe_spell)
                 end
                 if string.find(SPAM.config.get("observe_list")[this_name], "tank") then
-                    merge_tables(SPAM.observe_spell_list.buff.tank, observe_spell)
+                    SPAM.table.merge(SPAM.observe_spell_list.buff.tank, observe_spell)
                     if this_name == SPAM.character_name then
-                        merge_tables(SPAM.observe_spell_list.self_buff.tank, observe_spell)
+                        SPAM.table.merge(SPAM.observe_spell_list.self_buff.tank, observe_spell)
                     end
                 end
                 if string.find(SPAM.config.get("observe_list")[this_name], "dps") then
-                    merge_tables(SPAM.observe_spell_list.buff.dps, observe_spell)
+                    SPAM.table.merge(SPAM.observe_spell_list.buff.dps, observe_spell)
                     if this_name == SPAM.character_name then
-                        merge_tables(SPAM.observe_spell_list.self_buff.dps, observe_spell)
+                        SPAM.table.merge(SPAM.observe_spell_list.self_buff.dps, observe_spell)
                     end
                 end
                 if SPAM.config.get("optional_buff")[this_name] ~= nil then
@@ -137,7 +138,7 @@ function gmcp_loop()
                         end
                     end
                 end
-                deduplicate(observe_spell)
+                SPAM.table.deduplicate(observe_spell)
                 local spells = nil
                 spells = v.incantesimi
                 if spells ~= nil then

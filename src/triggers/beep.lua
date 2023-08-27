@@ -1,1 +1,1 @@
-play_sound(SPAM.ding_file)
+SPAM.play_sound(SPAM.ding_file)
