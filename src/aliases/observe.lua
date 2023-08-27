@@ -66,7 +66,7 @@ if #split > 1 then
         echo("\nRimuovo custom refresh " .. exp[1] .. "\n")
         SPAM.config.get("custom_refresh")[exp[1]] = nil
       else
-        echo("\nOsservo custom refresh " .. exp[1] .. " with command" .. exp[2] .. "\n")
+        echo("\nOsservo custom refresh " .. exp[1] .. " with commands: " .. exp[2] .. "\n")
         SPAM.config.get("custom_refresh")[exp[1]] = SPAM.string.explode(exp[2],",")
       end
       send("\n")
