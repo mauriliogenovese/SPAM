@@ -57,6 +57,14 @@ function SPAM.string.explode(input_string, separator)
     return t
 end
 
+function SPAM.string.int_to_fixed_string(input_int, len)
+    local my_string = tostring(input_int)
+    for i = 1, (len - string.len(my_string)) do
+        my_string = "0" .. my_string
+    end
+    return my_string
+end
+
 function SPAM.string.implode(input_table, separator)
     local result = ""
     for i, value in ipairs(input_table) do
@@ -171,7 +179,7 @@ function SPAM.toggle_dde_group()
     end
     if SPAM.config.get("dde_group") == false then
         SPAM.dde_group_container:hide()
-    else
+    elseif SPAM.dde_group_container.hidden == true then
         SPAM.dde_group_container:show()
     end
 end
@@ -182,9 +190,102 @@ function SPAM.toggle_abbil_chat()
     end
     if SPAM.config.get("abbil_chat") == false then
         SPAM.abbil_chat_container:hide()
-    else
+    elseif SPAM.abbil_chat_container.hidden == true then
         SPAM.abbil_chat_container:show()
     end
+end
+
+function SPAM.toggle_mem_helper()
+    if SPAM.mem_container == nil then
+        return
+    end
+    local is_stregone = false
+    for i, v in ipairs(gmcp.Char.Classi.classi) do
+        if v.classe == "Stregone" then
+            is_stregone = true
+            break
+        end
+    end
+
+    if is_stregone == false or SPAM.config.get("mem_helper") == false then
+        SPAM.mem_container:hide()
+    elseif SPAM.mem_container.hidden == true then
+        SPAM.mem_container:show()
+        send("mem")
+    end
+end
+
+function SPAM.finish_mem()
+    for k, v in pairs(SPAM.mem.temp) do
+        if SPAM.mem.prepared[k] == nil then
+            SPAM.mem.prepared[k] = v
+        else
+            SPAM.mem.prepared[k] = SPAM.mem.prepared[k] + v
+        end
+    end
+    SPAM.mem.temp = nil
+    SPAM.print_mem()
+end
+
+function SPAM.print_mem()
+    clearWindow("MEM Helper")
+    SPAM.mem_widget:cecho("\n")
+    local row = ""
+    for k, v in pairs(SPAM.mem.prepared) do
+        local this_n = v
+        row = SPAM.string.first_upper(k)
+        for i = 1, (25 - string.len(k)) do
+            row = row .. "."
+        end
+        row = row .. " (Memorizzati: <white>" .. SPAM.string.int_to_fixed_string(v, 2) .. "<grey>)"
+        local temp = "00"
+        if SPAM.mem.temp ~= nil and SPAM.mem.temp[k] ~= nil and SPAM.mem.temp[k] > 0 then
+            temp = SPAM.string.int_to_fixed_string(SPAM.mem.temp[k],2)
+            this_n = this_n + SPAM.mem.temp[k]
+        end
+        row = row .. " (In studio: <white>" .. temp .. "<grey>)\n"
+        if this_n > 0 then
+            SPAM.mem_widget:cecho(row)
+        end
+    end
+end
+
+function SPAM.cast_recall(matches)
+    local cast_name = ""
+    local target_name = ""
+    if string.sub(matches[3], 1, 1) == "'" then
+        matches[3] = string.sub(matches[3], 2)
+        if not string.find(matches[3], "'") then
+            cast_name = matches[3]
+        else
+            local split = SPAM.string.explode(matches[3], "'")
+            cast_name = split[1]
+            target_name = split[2]
+        end
+    else
+        local split = SPAM.string.explode(matches[3], " ")
+        cast_name = split[1]
+        if split[2] ~= nil then
+            target_name = split[2]
+        end
+    end
+    cast_name = string.lower(SPAM.string.trim(cast_name))
+    target_name = string.lower(SPAM.string.trim(target_name))
+    local best_match = ""
+    for k, v in pairs(SPAM.mem.prepared) do
+        if SPAM.string.starts(k, cast_name) then
+            if v > 0 then
+                send(matches[1])
+                return
+            else
+                best_match = k
+            end
+        end
+    end
+    if best_match ~= "" then
+        cast_name = best_match
+    end
+    cecho("\n<red>ATTENZIONE: <grey>il cast <white>" .. cast_name .. "<grey> non è disponibile\n")
 end
 
 function SPAM.check_cast(cast_name)
@@ -836,6 +937,7 @@ end
 
 function SPAM.config.save_characters()
     table.save(SPAM.config.characters_savelocation, SPAM.config.persistent_characters)
+    SPAM.toggle_mem_helper()
 end
 
 function SPAM.config.load_characters()

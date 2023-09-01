@@ -1,0 +1,1 @@
+SPAM.print_mem()

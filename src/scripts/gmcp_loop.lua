@@ -39,6 +39,7 @@ function gmcp_loop()
         --generate the observable spell list
         if SPAM.observe_spell_list == nil then
             SPAM.gen_spell_list(gmcp.Char.Classi.classi)
+            SPAM.toggle_mem_helper()
         end
         --if not otherwise specifies, i'm always in base observe mode
         if SPAM.config.get("observe_list")[SPAM.character_name] == nil then

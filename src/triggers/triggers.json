@@ -69,7 +69,7 @@
             "pattern": "Telegram: https://t.me/ddemud",
             "type": "substring"
           }
-        ],
+        ]
       },
 
       {
@@ -243,6 +243,84 @@
           {
             "pattern" : "E' tutto buio ...",
             "type" : "substring"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "mem_helper",
+    "isFolder": "yes",
+    "children": [
+      {
+        "name" : "max_mem",
+        "patterns": [
+          {
+            "pattern" : "^Puoi memorizzare fino a (.+) incantesimi$",
+            "type" : "regex"
+          }
+        ]
+      },
+      {
+        "name" : "max_mem_per_cast",
+        "patterns": [
+          {
+            "pattern" : "^Puoi memorizzare fino a (.+) incantesimi per ogni tipo$",
+            "type" : "regex"
+          }
+        ]
+      },
+      {
+        "name" : "start_mem",
+        "patterns": [
+          {
+            "pattern" : "^Apri il tuo libro delle magie ed inizi a studiare '(.+)'.$",
+            "type" : "regex"
+          }
+        ]
+      },
+      {
+        "name" : "stop_mem",
+        "patterns": [
+          {
+            "pattern" : "Abbandoni la meditazione",
+            "type" : "substring"
+          }
+        ]
+      },
+      {
+        "name" : "finish_mem",
+        "patterns": [
+          {
+            "pattern" : "Hai memorizzato tutti i tuoi incantesimi.",
+            "type" : "substring"
+          }
+        ]
+      },
+      {
+        "name" : "mem_row",
+        "patterns": [
+          {
+            "pattern" : "\\[(.+)\\]: (.+) \\(Memorizzati: (.+)\\) \\(In studio: (.+)\\)",
+            "type" : "regex"
+          }
+        ]
+      },
+      {
+        "name" : "mem_last_row",
+        "patterns": [
+          {
+            "pattern" : "incantesimi in memoria in totale.",
+            "type" : "substring"
+          }
+        ]
+      },
+      {
+        "name" : "cast_recalled",
+        "patterns": [
+          {
+            "pattern" : "^Pronunci le parole, '(.+)'$",
+            "type" : "regex"
           }
         ]
       }

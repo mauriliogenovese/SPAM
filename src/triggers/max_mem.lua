@@ -1,0 +1,1 @@
+SPAM.mem.max = tonumber(matches[2])

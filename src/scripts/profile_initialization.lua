@@ -87,7 +87,7 @@ SPAM.config.globals["fast_login"] = {
     desc = [[SPAM può automatizzare la procedura di login per evitare di dover digitare invio e 1 alla connessione.
 Per abilitare/disabilitare questa funzione usa il comando: <white>spam login on/off]],
     var_type = "bool",
-    default = true
+    default = false
 }
 SPAM.config.globals["dev"] = {
     name = "dev",
@@ -159,6 +159,13 @@ SPAM.config.characters["gd_end"] = {
     desc = SPAM.config.globals["gdcolor"].desc,
     var_type = "string",
     default = "",
+}
+SPAM.config.characters["mem_helper"] = {
+    name = "mem_helper",
+    desc = [[Se sei uno stregone, SPAM può tenere traccia dei cast memmati e mostrarli in uno schermino.
+Per abilitare/disabilitare questa funzione usa il comando: <yellow>spam mem_helper on/off<grey>]],
+    var_type = "bool",
+    default = false,
 }
 
 SPAM.config.load_globals()
@@ -241,7 +248,7 @@ SPAM.dde_group_widget =
 clearWindow("DdE Group")
 SPAM.dde_group_widget:echo("\n*** DdE Group Caricato.\n")
 SPAM.toggle_dde_group()
--- Contenitore e mini-console per DdE Chat
+-- Contenitore e mini-console per Abbil Chat
 SPAM.abbil_chat_container = SPAM.abbil_chat_container or Adjustable.Container:new({name = "Abbil Chat"})
 SPAM.abbil_chat_container.name = "Abbil Chat"
 SPAM.abbil_chat_container:unlockContainer()
@@ -265,6 +272,32 @@ SPAM.abbil_chat_widget =
 clearWindow("Abbil Chat")
 SPAM.abbil_chat_widget:echo("\n*** Abbil Chat Caricato.\n")
 SPAM.toggle_abbil_chat()
+-- Contenitore e mini-console per mem_helper
+SPAM.mem_container = SPAM.mem_container or Adjustable.Container:new({name = "MEM Helper"})
+SPAM.mem_container.name = "MEM Helper"
+SPAM.mem_container:unlockContainer()
+SPAM.mem_widget =
+  SPAM.mem_widget or
+  Geyser.MiniConsole:new(
+    {
+      name = "MEM Helper",
+      x = 0,
+      y = 0,
+      autoWrap = true,
+      color = 'black',
+      scrollBar = false,
+      font = getFont(),
+      fontSize = getFontSize(),
+      width = "100%",
+      height = "100%",
+    },
+    SPAM.mem_container
+  )
+clearWindow("MEM Helper")
+SPAM.mem_container:hide()
+SPAM.mem_widget:echo("\n*** MEM Helper Caricato.\n")
+SPAM.mem = {}
+SPAM.mem.prepared = {}
 SPAM.class_list = {}
 SPAM.class_list["Chierico"] = SPAM.new_class()
 SPAM.class_list["Chierico"].buff.dps = {"benedizione", "aiuto divino"}
@@ -289,6 +322,7 @@ SPAM.class_list["Mago"].buff.base = {"volo"}
 SPAM.class_list["Mago"].self_buff.base = {"scudo infuocato"}
 SPAM.class_list["Mago"].self_buff.tank = {"pelle di pietra"}
 SPAM.class_list["Mago"].move = {"ristora"}
+SPAM.class_list["Stregone"] = SPAM.class_list["Mago"]
 SPAM.class_list["Cercatore"] = SPAM.new_class()
 SPAM.class_list["Cercatore"].buff.base = {"santificazione", "volo", "agilita felina"}
 SPAM.class_list["Cercatore"].buff.dps = {"benedizione", "forza"}

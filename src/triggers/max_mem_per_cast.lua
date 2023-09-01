@@ -1,0 +1,1 @@
+SPAM.mem.max_per_cast = tonumber(matches[2])
