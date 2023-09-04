@@ -227,17 +227,28 @@ function SPAM.finish_mem()
     SPAM.print_mem()
 end
 
+function SPAM.get_known_cast(cast_name)
+    for _, v in ipairs(gmcp.Char.Skills) do
+        if v.tipo == "incantesimo" and SPAM.string.starts(v.nome, cast_name) then
+            return string.lower(v.nome)
+        end
+    end
+    return nil
+end
+
 function SPAM.print_mem()
     clearWindow("MEM Helper")
     SPAM.mem_widget:cecho("\n")
+    local mem_keys = SPAM.table.get_keys(SPAM.mem.prepared)
+    table.sort(mem_keys)
     local row = ""
-    for k, v in pairs(SPAM.mem.prepared) do
-        local this_n = v
+    for _, k in pairs(mem_keys) do
+        local this_n = SPAM.mem.prepared[k]
         row = SPAM.string.first_upper(k)
         for i = 1, (25 - string.len(k)) do
             row = row .. "."
         end
-        row = row .. " (Memorizzati: <white>" .. SPAM.string.int_to_fixed_string(v, 2) .. "<grey>)"
+        row = row .. " (Memorizzati: <white>" .. SPAM.string.int_to_fixed_string(this_n, 2) .. "<grey>)"
         local temp = "00"
         if SPAM.mem.temp ~= nil and SPAM.mem.temp[k] ~= nil and SPAM.mem.temp[k] > 0 then
             temp = SPAM.string.int_to_fixed_string(SPAM.mem.temp[k],2)
@@ -251,6 +262,10 @@ function SPAM.print_mem()
 end
 
 function SPAM.cast_recall(matches)
+    if SPAM.config.get("mem_helper") == false then
+        send(matches[1])
+        return
+    end
     local cast_name = ""
     local target_name = ""
     if string.sub(matches[3], 1, 1) == "'" then
@@ -270,20 +285,14 @@ function SPAM.cast_recall(matches)
         end
     end
     cast_name = string.lower(SPAM.string.trim(cast_name))
+    refined_cast_name = SPAM.get_known_cast(cast_name)
     target_name = string.lower(SPAM.string.trim(target_name))
-    local best_match = ""
-    for k, v in pairs(SPAM.mem.prepared) do
-        if SPAM.string.starts(k, cast_name) then
-            if v > 0 then
-                send(matches[1])
-                return
-            else
-                best_match = k
-            end
+    if refined_cast_name ~= nil then
+        cast_name = refined_cast_name
+        if SPAM.mem.prepared[cast_name] ~= nil and SPAM.mem.prepared[cast_name] > 0 then
+            send(matches[1])
+            return
         end
-    end
-    if best_match ~= "" then
-        cast_name = best_match
     end
     cecho("\n<red>ATTENZIONE: <grey>il cast <white>" .. cast_name .. "<grey> non è disponibile\n")
 end
