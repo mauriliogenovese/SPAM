@@ -163,9 +163,24 @@ SPAM.config.characters["gd_end"] = {
 SPAM.config.characters["mem_helper"] = {
     name = "mem_helper",
     desc = [[Se sei uno stregone, SPAM può tenere traccia dei cast memmati e mostrarli in uno schermino.
-Per abilitare/disabilitare questa funzione usa il comando: <yellow>spam mem_helper on/off<grey>]],
+Per abilitare/disabilitare questa funzione usa il comando: <yellow>spam mem_helper on/off<grey>
+Per sapere come usare la funzione di automem usa il comando: <yellow>automem aiuto]],
     var_type = "bool",
     default = false,
+}
+SPAM.config.characters["automem"] = {
+    name = "automem",
+    desc = [[]],
+    var_type = "list",
+    default = {},
+    hidden = true
+}
+SPAM.config.characters["cast_per_mem"] = {
+    name = "cast_per_mem",
+    desc = [[]],
+    var_type = "int",
+    default = 15,
+    hidden = true
 }
 
 SPAM.config.load_globals()

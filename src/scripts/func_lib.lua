@@ -140,6 +140,18 @@ function SPAM.table.merge(old_table, new_table)
     )
 end
 
+function SPAM.table.merge_class(old_table, new_table)
+    table.foreach(
+            old_table,
+            function(k, v)
+                local refined_cast_name = SPAM.get_known_cast(v)
+                if refined_cast_name ~= nil then
+                    table.insert(new_table, v)
+                end
+            end
+    )
+end
+
 function SPAM.table.delete(input_table)
     for k in pairs(input_table) do
         input_table[k] = nil
@@ -242,15 +254,19 @@ function SPAM.print_mem()
     local mem_keys = SPAM.table.get_keys(SPAM.mem.prepared)
     table.sort(mem_keys)
     local row = ""
+    local total_mem = 0
+    local total_mem_study = 0
     for _, k in pairs(mem_keys) do
         local this_n = SPAM.mem.prepared[k]
+        total_mem = total_mem + SPAM.mem.prepared[k]
         row = SPAM.string.first_upper(k)
         for i = 1, (25 - string.len(k)) do
             row = row .. "."
         end
-        row = row .. " (Memorizzati: <white>" .. SPAM.string.int_to_fixed_string(this_n, 2) .. "<grey>)"
+        row = row .. " (Memorizzati: <white>" .. SPAM.string.int_to_fixed_string(SPAM.mem.prepared[k], 2) .. "<grey>)"
         local temp = "00"
         if SPAM.mem.temp ~= nil and SPAM.mem.temp[k] ~= nil and SPAM.mem.temp[k] > 0 then
+            total_mem_study = total_mem_study + SPAM.mem.temp[k]
             temp = SPAM.string.int_to_fixed_string(SPAM.mem.temp[k],2)
             this_n = this_n + SPAM.mem.temp[k]
         end
@@ -259,11 +275,97 @@ function SPAM.print_mem()
             SPAM.mem_widget:cecho(row)
         end
     end
+    SPAM.mem_widget:cecho ("\nHai <cyan>" .. SPAM.string.int_to_fixed_string(total_mem_study,2) .. "<grey>/<cyan>" .. SPAM.string.int_to_fixed_string(SPAM.config.get("cast_per_mem"),2) ..  "<grey> incantesimi in studio.\n")
+    SPAM.mem_widget:cecho ("Hai <cyan>" .. SPAM.string.int_to_fixed_string(total_mem,2) .. "<grey>/<cyan>" .. SPAM.string.int_to_fixed_string(SPAM.mem.max,2) .. "<grey> incantesimi in memoria.\n")
+end
+
+function SPAM.get_preparing_cast()
+    local preparing = 0
+    if SPAM.mem.temp ~= nil then
+        for k, v in pairs(SPAM.mem.temp) do
+            preparing = preparing + v
+        end
+    end
+    return preparing
+end
+
+function SPAM.automem(matches)
+    if SPAM.config.get("mem_helper") == false then
+        send(matches[1])
+        return
+    end
+    if matches[1] == "automem" then
+        local available_slot = SPAM.config.get("cast_per_mem") - SPAM.get_preparing_cast()
+        if gmcp.Char.Vitals.stato ~= "Seduto" then
+            send("siedi")
+        end
+        for k, v in pairs(SPAM.config.get("automem")) do
+            local desired = v
+            local prepared = 0
+            if SPAM.mem.prepared[k] ~= nil then
+                prepared = SPAM.mem.prepared[k]
+            end
+            local preparing = 0
+            if SPAM.mem.temp ~= nil and SPAM.mem.temp[k] ~= nil then
+                preparing = SPAM.mem.temp[k]
+            end
+            for i=1,(desired-prepared-preparing) do
+                if available_slot < 1 then
+                    break
+                end
+                send("memorizza " .. k)
+                available_slot = available_slot -1
+            end
+        end
+        return
+    end
+    local split = SPAM.string.explode(matches[1])
+    if #split > 2 then
+        -- the last word should be the desired number
+        if split[#split]:match("^%-?%d+$") ~= nil then
+            local desired = tonumber(split[#split])
+            if desired > SPAM.mem.max_per_cast  then
+                desired = SPAM.mem.max_per_cast
+            end
+            -- remove the first and last word
+            table.remove(split)
+            table.remove(split, 1)
+            local cast_name = string.lower(SPAM.string.implode(split, " "))
+            local refined_cast_name = SPAM.get_known_cast(cast_name)
+            if refined_cast_name ~= nil then
+                if desired == 0 then
+                    cecho("<cyan>[AUTOMEM]<grey> ".. refined_cast_name .. " rimosso\n")
+                    SPAM.config.get("automem")[refined_cast_name] = nil
+                else
+                    cecho("<cyan>[AUTOMEM]<grey> ".. refined_cast_name .. ": " .. desired .. "\n")
+                    SPAM.config.get("automem")[refined_cast_name] = desired
+                end
+
+                SPAM.config.save_characters()
+            else
+                cecho("\n<red>ATTENZIONE: <grey>non conosci alcun cast: <white>" .. cast_name .. "\n")
+            end
+            return
+        end
+    elseif string.lower(split[2]) == "show" then
+        cecho("<grey>Lista dei cast in <cyan>AUTOMEM<grey>:\n")
+        display(SPAM.config.get("automem"))
+        return
+    end
+    cecho([[Questo comando permette a uno stregone di memmare automaticamente una lista scelta di cast
+Per settare un cast desiderato usare il comando: <yellow>automem nomecast numero
+<grey>ad esempio: <yellow>automem missile mag 5
+<grey>Per mostrare la lista dei cast desiderati usare il comando: <yellow>automem show
+<grey>Per iniziare a memmare i cast desiderati usare il comando: <yellow>automem]])
 end
 
 function SPAM.cast_recall(matches)
     if SPAM.config.get("mem_helper") == false then
         send(matches[1])
+        return
+    end
+    if gmcp.Char.Vitals.stato ~= "In Piedi" then
+        checho("\n<red>ATTENZIONE: <grey>devi essere in piedi per richiamare un incantesimo!\n")
         return
     end
     local cast_name = ""
@@ -503,19 +605,18 @@ function SPAM.new_class()
 end
 
 --merge 2 classes table by table
-
 function SPAM.merge_classes(new_class, old_class)
-    SPAM.table.merge(old_class.buff.dps, new_class.buff.dps)
-    SPAM.table.merge(old_class.buff.tank, new_class.buff.tank)
-    SPAM.table.merge(old_class.buff.base, new_class.buff.base)
-    SPAM.table.merge(old_class.self_buff.dps, new_class.self_buff.dps)
-    SPAM.table.merge(old_class.self_buff.tank, new_class.self_buff.tank)
-    SPAM.table.merge(old_class.self_buff.base, new_class.self_buff.base)
+    SPAM.table.merge_class(old_class.buff.dps, new_class.buff.dps)
+    SPAM.table.merge_class(old_class.buff.tank, new_class.buff.tank)
+    SPAM.table.merge_class(old_class.buff.base, new_class.buff.base)
+    SPAM.table.merge_class(old_class.self_buff.dps, new_class.self_buff.dps)
+    SPAM.table.merge_class(old_class.self_buff.tank, new_class.self_buff.tank)
+    SPAM.table.merge_class(old_class.self_buff.base, new_class.self_buff.base)
     if old_class.heal ~= nil then
-        SPAM.table.merge(old_class.heal, new_class.heal)
+        SPAM.table.merge_class(old_class.heal, new_class.heal)
     end
     if old_class.move ~= nil then
-        SPAM.table.merge(old_class.move, new_class.move)
+        SPAM.table.merge_class(old_class.move, new_class.move)
     end
     if old_class.command ~= nil then
         new_class.command = old_class.command

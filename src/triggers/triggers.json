@@ -323,6 +323,15 @@
             "type" : "regex"
           }
         ]
+      },
+      {
+        "name" : "cast_per_mem",
+        "patterns": [
+          {
+            "pattern" : "Non puoi memorizzare cosi' tanti incantesimi tutti in una volta!",
+            "type" : "substring"
+          }
+        ]
       }
     ]
   }
