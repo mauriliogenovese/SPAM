@@ -27,14 +27,6 @@
     "isFolder": "yes",
     "children": [
       {
-        "name": "empty_recall",
-        "regex": "^(r|ri|ric|rich|richi|richia|richiam|richiama|richiamo)$"
-      },
-      {
-        "name": "cast_recall",
-        "regex": "^(r|ri|ric|rich|richi|richia|richiam|richiama|richiamo) (.+)$"
-      },
-      {
         "name": "automem",
         "regex": "^automem(.+|)$"
       }

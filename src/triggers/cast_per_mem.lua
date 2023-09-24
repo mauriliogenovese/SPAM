@@ -1,1 +1,0 @@
-SPAM.config.set("cast_per_mem", SPAM.get_preparing_cast())

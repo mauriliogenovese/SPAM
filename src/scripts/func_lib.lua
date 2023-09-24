@@ -223,21 +223,9 @@ function SPAM.toggle_mem_helper()
         SPAM.mem_container:hide()
     elseif SPAM.mem_container.hidden == true then
         SPAM.mem_container:show()
-        send("mem")
     end
 end
 
-function SPAM.finish_mem()
-    for k, v in pairs(SPAM.mem.temp) do
-        if SPAM.mem.prepared[k] == nil then
-            SPAM.mem.prepared[k] = v
-        else
-            SPAM.mem.prepared[k] = SPAM.mem.prepared[k] + v
-        end
-    end
-    SPAM.mem.temp = nil
-    SPAM.print_mem()
-end
 
 function SPAM.get_known_cast(cast_name)
     for _, v in ipairs(gmcp.Char.Skills) do
@@ -251,42 +239,28 @@ end
 function SPAM.print_mem()
     clearWindow("MEM Helper")
     SPAM.mem_widget:cecho("\n")
-    local mem_keys = SPAM.table.get_keys(SPAM.mem.prepared)
-    table.sort(mem_keys)
-    local row = ""
-    local total_mem = 0
-    local total_mem_study = 0
-    for _, k in pairs(mem_keys) do
-        local this_n = SPAM.mem.prepared[k]
-        total_mem = total_mem + SPAM.mem.prepared[k]
-        row = SPAM.string.first_upper(k)
-        for i = 1, (25 - string.len(k)) do
+    SPAM.mem_widget:cecho ("\nHai <royal_blue>" .. gmcp.Char.Magie.memorizzare.in_memoria .. "<grey>/<cyan>" .. gmcp.Char.Magie.memorizzare.in_totale ..  "<grey> incantesimi memorizzati:\n")
+    for _, v in pairs(gmcp.Char.Magie.memorizzazioni) do
+        row = SPAM.string.first_upper(v.nome)
+        for i = 1, (30 - string.len(v.nome)) do
             row = row .. "."
         end
-        row = row .. " (Memorizzati: <white>" .. SPAM.string.int_to_fixed_string(SPAM.mem.prepared[k], 2) .. "<grey>)"
-        local temp = "00"
-        if SPAM.mem.temp ~= nil and SPAM.mem.temp[k] ~= nil and SPAM.mem.temp[k] > 0 then
-            total_mem_study = total_mem_study + SPAM.mem.temp[k]
-            temp = SPAM.string.int_to_fixed_string(SPAM.mem.temp[k],2)
-            this_n = this_n + SPAM.mem.temp[k]
+        row = row .. "  <royal_blue>" .. v.memorizzati .."<grey>/<cyan>" .. gmcp.Char.Magie.memorizzare.per_tipo .."<grey>"
+        if v.in_studio > 0 then
+            row = row .. "  In studio: <royal_blue>" .. v.in_studio .."<grey>"
         end
-        row = row .. " (In studio: <white>" .. temp .. "<grey>)\n"
-        if this_n > 0 then
-            SPAM.mem_widget:cecho(row)
+        if SPAM.config.get("automem")[v.nome] ~= nil then
+            row = row .. "  Automem: <royal_blue>" .. SPAM.config.get("automem")[v.nome] .."<grey>"
         end
+        row = row .. "\n"
+        SPAM.mem_widget:cecho(row)
     end
-    SPAM.mem_widget:cecho ("\nHai <cyan>" .. SPAM.string.int_to_fixed_string(total_mem_study,2) .. "<grey>/<cyan>" .. SPAM.string.int_to_fixed_string(SPAM.config.get("cast_per_mem"),2) ..  "<grey> incantesimi in studio.\n")
-    SPAM.mem_widget:cecho ("Hai <cyan>" .. SPAM.string.int_to_fixed_string(total_mem,2) .. "<grey>/<cyan>" .. SPAM.string.int_to_fixed_string(SPAM.mem.max,2) .. "<grey> incantesimi in memoria.\n")
-end
-
-function SPAM.get_preparing_cast()
-    local preparing = 0
-    if SPAM.mem.temp ~= nil then
-        for k, v in pairs(SPAM.mem.temp) do
-            preparing = preparing + v
-        end
+    SPAM.mem_widget:cecho("\n")
+    if gmcp.Char.Magie.memorizzare.in_studio == 0 then
+        SPAM.mem_widget:cecho ("Non stai memorizzando alcun incantesimo. Puoi memorizzarne ancora <royal_blue>" .. (gmcp.Char.Magie.memorizzare.in_totale - gmcp.Char.Magie.memorizzare.in_memoria) .. "<grey>.")
+    else
+        SPAM.mem_widget:cecho ("Stai memorizzando <royal_blue>" .. gmcp.Char.Magie.memorizzare.in_studio .. "<grey>/<cyan>" .. gmcp.Char.Magie.memorizzare.per_studio .. "<grey> incantesimi. Ne avrai memorizzati <royal_blue>" ..  (gmcp.Char.Magie.memorizzare.in_memoria + gmcp.Char.Magie.memorizzare.in_studio) .. "<grey>/<cyan>" .. gmcp.Char.Magie.memorizzare.in_totale .. "<grey> alla fine dei tuoi studi.")
     end
-    return preparing
 end
 
 function SPAM.automem(matches)
@@ -295,19 +269,23 @@ function SPAM.automem(matches)
         return
     end
     if matches[1] == "automem" then
-        local available_slot = SPAM.config.get("cast_per_mem") - SPAM.get_preparing_cast()
+        local available_slot = gmcp.Char.Magie.memorizzare.per_studio - gmcp.Char.Magie.memorizzare.in_studio
         if gmcp.Char.Vitals.stato ~= "Seduto" then
             send("siedi")
+        end
+        local current_mem = {}
+        for _, v in pairs(gmcp.Char.Magie.memorizzazioni) do
+            current_mem[v.nome] = {}
+            current_mem[v.nome]["in_studio"] = v.in_studio
+            current_mem[v.nome]["memorizzati"] = v.memorizzati
         end
         for k, v in pairs(SPAM.config.get("automem")) do
             local desired = v
             local prepared = 0
-            if SPAM.mem.prepared[k] ~= nil then
-                prepared = SPAM.mem.prepared[k]
-            end
             local preparing = 0
-            if SPAM.mem.temp ~= nil and SPAM.mem.temp[k] ~= nil then
-                preparing = SPAM.mem.temp[k]
+            if current_mem[k] ~= nil then
+                prepared = current_mem[k]["memorizzati"]
+                preparing = current_mem[k]["in_studio"]
             end
             for i=1,(desired-prepared-preparing) do
                 if available_slot < 1 then
@@ -324,8 +302,8 @@ function SPAM.automem(matches)
         -- the last word should be the desired number
         if split[#split]:match("^%-?%d+$") ~= nil then
             local desired = tonumber(split[#split])
-            if desired > SPAM.mem.max_per_cast  then
-                desired = SPAM.mem.max_per_cast
+            if desired > gmcp.Char.Magie.memorizzare.per_tipo  then
+                desired = gmcp.Char.Magie.memorizzare.per_tipo
             end
             -- remove the first and last word
             table.remove(split)
@@ -357,58 +335,6 @@ Per settare un cast desiderato usare il comando: <yellow>automem nomecast numero
 <grey>ad esempio: <yellow>automem missile mag 5
 <grey>Per mostrare la lista dei cast desiderati usare il comando: <yellow>automem show
 <grey>Per iniziare a memmare i cast desiderati usare il comando: <yellow>automem]])
-end
-
-function SPAM.cast_recall(matches)
-    if SPAM.config.get("mem_helper") == false then
-        send(matches[1])
-        return
-    end
-    if gmcp.Char.Vitals.stato ~= "In Piedi" then
-        checho("\n<red>ATTENZIONE: <grey>devi essere in piedi per richiamare un incantesimo!\n")
-        return
-    end
-    local cast_name = ""
-    local target_name = ""
-    if string.sub(matches[3], 1, 1) == "'" then
-        matches[3] = string.sub(matches[3], 2)
-        if not string.find(matches[3], "'") then
-            cast_name = matches[3]
-        else
-            local split = SPAM.string.explode(matches[3], "'")
-            cast_name = split[1]
-            target_name = split[2]
-        end
-    else
-        local split = SPAM.string.explode(matches[3], " ")
-        cast_name = split[1]
-        if split[2] ~= nil then
-            target_name = split[2]
-        end
-    end
-    cast_name = string.lower(SPAM.string.trim(cast_name))
-    refined_cast_name = SPAM.get_known_cast(cast_name)
-    target_name = string.lower(SPAM.string.trim(target_name))
-    if refined_cast_name ~= nil then
-        cast_name = refined_cast_name
-        if SPAM.mem.prepared[cast_name] ~= nil and SPAM.mem.prepared[cast_name] > 0 then
-            send(matches[1])
-            return
-        end
-    end
-    cecho("\n<red>ATTENZIONE: <grey>il cast <white>" .. cast_name .. "<grey> non è disponibile\n")
-end
-
-function SPAM.check_cast(cast_name)
-    if gmcp.Char.Magie.incantesimi ~= nil then
-        local cast_name = string.lower(cast_name)
-        for i, v in ipairs(gmcp.Char.Magie.incantesimi) do
-            if string.lower(v.nome) == cast_name then
-                return true
-            end
-        end
-    end
-    return false
 end
 
 function SPAM.update()

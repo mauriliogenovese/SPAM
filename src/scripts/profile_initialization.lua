@@ -175,13 +175,6 @@ SPAM.config.characters["automem"] = {
     default = {},
     hidden = true
 }
-SPAM.config.characters["cast_per_mem"] = {
-    name = "cast_per_mem",
-    desc = [[]],
-    var_type = "int",
-    default = 15,
-    hidden = true
-}
 
 SPAM.config.load_globals()
 SPAM.config.load_characters()
@@ -311,8 +304,6 @@ SPAM.mem_widget =
 clearWindow("MEM Helper")
 SPAM.mem_container:hide()
 SPAM.mem_widget:echo("\n*** MEM Helper Caricato.\n")
-SPAM.mem = {}
-SPAM.mem.prepared = {}
 SPAM.class_list = {}
 SPAM.class_list["Chierico"] = SPAM.new_class()
 SPAM.class_list["Chierico"].buff.dps = {"benedizione", "aiuto divino"}

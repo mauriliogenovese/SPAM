@@ -224,4 +224,7 @@ function gmcp_loop()
             active_observed = nil
         end
     end
+    if SPAM.mem_container.hidden == false then
+        SPAM.print_mem()
+    end
 end
