@@ -1,1 +1,1 @@
-show_glory_timer()
+SPAM.show_glory_timer()

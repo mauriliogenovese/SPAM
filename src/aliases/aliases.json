@@ -21,5 +21,15 @@
     "name": "observe",
     "command": "",
     "regex": "^(observe|ob)(.+|)$"
+  },
+  {
+    "name": "mem_helper",
+    "isFolder": "yes",
+    "children": [
+      {
+        "name": "automem",
+        "regex": "^automem(.+|)$"
+      }
+    ]
   }
 ]

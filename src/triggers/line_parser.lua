@@ -1,1 +1,1 @@
-SPAM.string2clipboard = SPAM.string2clipboard .. matches[1] .. "\n"
+SPAM.string_to_clipboard = SPAM.string_to_clipboard .. matches[1] .. "\n"

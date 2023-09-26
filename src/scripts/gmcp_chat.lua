@@ -29,5 +29,5 @@ function gmcp_chat()
     elseif (text.canale == "parla") then
         c = "255,255,0"
     end
-    SPAM.abbilchatWidget:decho("<" .. c .. ">[" .. italic_open .. text.canale .. italic_close .. da_a .. "]: <160,160,160>" .. ansi2decho(text.testo) .. "\n")
+    SPAM.abbil_chat_widget:decho("<" .. c .. ">[" .. italic_open .. text.canale .. italic_close .. da_a .. "]: <160,160,160>" .. ansi2decho(text.testo) .. "\n")
 end

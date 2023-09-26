@@ -1,1 +1,1 @@
-spam_main(matches[3])
+SPAM.main_help(matches[3])

@@ -1,65 +1,62 @@
 [
   {
-    "name" : "utility",
-    "isFolder" : "yes",
-    "children" : [
+    "name": "utility",
+    "isFolder": "yes",
+    "children": [
       {
-        "name" : "prompt_color",
+        "name": "prompt_color",
         "patterns": [
           {
-            "pattern" : "^PF:(.+?)\\/(.+?) (.+)$",
-            "type" : "regex"
+            "pattern": "^PF:(.+?)\\/(.+?) (.+)$",
+            "type": "regex"
           },
           {
-            "pattern" : "^Pf:(.+?)\\/(.+?) (.+)$",
-            "type" : "regex"
+            "pattern": "^Pf:(.+?)\\/(.+?) (.+)$",
+            "type": "regex"
           },
           {
-            "pattern" : "^PF: (.+?)\\/(.+?) (.+)$",
-            "type" : "regex"
+            "pattern": "^PF: (.+?)\\/(.+?) (.+)$",
+            "type": "regex"
           },
           {
-            "pattern" : "^Pf: (.+?)\\/(.+?) (.+)$",
-            "type" : "regex"
+            "pattern": "^Pf: (.+?)\\/(.+?) (.+)$",
+            "type": "regex"
           }
         ]
       },
-
       {
-        "name" : "item_color",
+        "name": "item_color",
         "patterns": [
           {
-            "pattern" : "^\\[(.+?)\\] (.+) \\.\\.(.+)\\.( \\[.+\\]|)( \\(Eterno\\)|)$",
-            "type" : "regex"
+            "pattern": "^\\[(.+?)\\] (.+) \\.\\.(.+)\\.( \\[.+\\]|)( \\(Eterno\\)|)$",
+            "type": "regex"
           },
           {
-            "pattern" : "^<(.+?)>(.+) \\.\\.(.+)\\.( \\(Eterno\\)|)$",
-            "type" : "regex"
+            "pattern": "^<(.+?)>(.+) \\.\\.(.+)\\.( \\(Eterno\\)|)$",
+            "type": "regex"
           }
         ]
       },
-
       {
-        "name" : "auto_trasf",
+        "name": "auto_trasf",
         "patterns": [
           {
-            "pattern" : "Ritorni al tuo corpo originario.",
-            "type" : "substring"
+            "pattern": "Ritorni al tuo corpo originario.",
+            "type": "substring"
           },
           {
             "pattern": "Stai assumendo le sembianze",
             "type": "substring"
           }
         ],
-        "command" : "ind tutto"
+        "command": "ind tutto"
       },
-
       {
-        "name" : "fast_login",
+        "name": "fast_login",
         "patterns": [
           {
-            "pattern" : " Laine sino all'algido sperone",
-            "type" : "substring"
+            "pattern": " Laine sino all'algido sperone",
+            "type": "substring"
           },
           {
             "pattern": "1) Entra nel MUD",
@@ -69,181 +66,172 @@
             "pattern": "Telegram: https://t.me/ddemud",
             "type": "substring"
           }
-        ],
-        "command" : "1"
+        ]
       },
-
       {
-        "name" : "auto_save",
+        "name": "auto_save",
         "patterns": [
           {
-            "pattern" : "^Ricevi (.+) punti esperienza.$",
-            "type" : "regex"
+            "pattern": "^Ricevi (.+) punti esperienza.$",
+            "type": "regex"
           }
         ],
-        "command" : "salva"
+        "command": "salva"
       },
-
       {
-        "name" : "beep",
+        "name": "beep",
         "patterns": [
           {
-            "pattern" : "vuole la tua attenzione.",
-            "type" : "substring"
+            "pattern": "vuole la tua attenzione.",
+            "type": "substring"
           }
         ]
       },
-
       {
-        "name" : "no_disconnect",
+        "name": "no_disconnect",
         "patterns": [
           {
-            "pattern" : "Scompari nel vuoto.",
-            "type" : "substring"
+            "pattern": "Scompari nel vuoto.",
+            "type": "substring"
           }
         ],
-        "command" : "guarda"
+        "command": "guarda"
       },
-
       {
-        "name" : "hide_lost_experience",
+        "name": "hide_lost_experience",
         "patterns": [
           {
-            "pattern" : "Tanta fatica per niente......",
-            "type" : "substring"
+            "pattern": "Tanta fatica per niente......",
+            "type": "substring"
           },
           {
-            "pattern" : "Devi andare in gilda per livellare il prima possibile",
-            "type" : "substring"
+            "pattern": "Devi andare in gilda per livellare il prima possibile",
+            "type": "substring"
           }
         ]
       },
-
       {
-        "name" : "hide_immune_shield",
+        "name": "hide_immune_shield",
         "patterns": [
           {
-            "pattern" : "^Le schegge (.+) stavano quasi per invest(.+)!$",
-            "type" : "regex"
+            "pattern": "^Le schegge (.+) stavano quasi per invest(.+)!$",
+            "type": "regex"
           },
           {
-            "pattern" : "^Le fiamme (.+) stavano quasi per invest(.+)!$",
-            "type" : "regex"
+            "pattern": "^Le fiamme (.+) stavano quasi per invest(.+)!$",
+            "type": "regex"
           },
           {
-            "pattern" : "^Le ossa (.+) stavano quasi per invest(.+)!$",
-            "type" : "regex"
+            "pattern": "^Le ossa (.+) stavano quasi per invest(.+)!$",
+            "type": "regex"
           },
           {
-            "pattern" : "^Le onde di energia (.+) stavano quasi per invest(.+)!$",
-            "type" : "regex"
+            "pattern": "^Le onde di energia (.+) stavano quasi per invest(.+)!$",
+            "type": "regex"
           }
         ]
       }
     ]
-
   },
   {
     "name": "glory_timer",
     "isFolder": "yes",
     "children": [
       {
-        "name" : "last_dead",
+        "name": "last_dead",
         "patterns": [
           {
-            "pattern" : "^(.+) e' mort(o|a)!!$",
-            "type" : "regex"
+            "pattern": "^(.+) e' mort(o|a)!!$",
+            "type": "regex"
           }
         ]
       },
       {
-        "name" : "got_glory",
+        "name": "got_glory",
         "patterns": [
           {
-            "pattern" : "gloria per questa uccisione!",
-            "type" : "substring"
+            "pattern": "gloria per questa uccisione!",
+            "type": "substring"
           }
         ]
       }
     ]
   },
-
   {
     "name": "clipboard_copy_block",
-    "fireLength" : "35",
+    "fireLength": "35",
     "patterns": [
       {
-        "pattern" : "^L'oggetto '(.+)$",
-        "type" : "regex"
+        "pattern": "^L'oggetto '(.+)$",
+        "type": "regex"
       },
       {
-        "pattern" : "^(.+)appartiene alla razza(.+)$",
-        "type" : "regex"
+        "pattern": "^(.+)appartiene alla razza(.+)$",
+        "type": "regex"
       }
     ],
     "children": [
       {
-        "name" : "line_parser",
+        "name": "line_parser",
         "patterns": [
           {
-            "pattern" : "^.*$",
-            "type" : "regex"
+            "pattern": "^.*$",
+            "type": "regex"
           }
         ]
       },
       {
-        "name" : "end_copy_block",
+        "name": "end_copy_block",
         "patterns": [
           {
-            "pattern" : "^L'oggetto e' (UNICO|COMUNE|RARO).$",
-            "type" : "regex"
+            "pattern": "^L'oggetto e' (UNICO|COMUNE|RARO).$",
+            "type": "regex"
           },
-           {
-            "pattern" : "^Ora sai che ognuno dei suoi colpi potrebbe infliggere(.+)$",
-            "type" : "regex"
+          {
+            "pattern": "^Ora sai che ognuno dei suoi colpi potrebbe infliggere(.+)$",
+            "type": "regex"
           }
         ]
       }
     ]
   },
-
   {
     "name": "DDE_mapper_Trigger_Group",
     "isFolder": "yes",
-    "isActive" : "no",
+    "isActive": "no",
     "children": [
       {
-        "name" : "DDE_Exits_Trigger",
+        "name": "DDE_Exits_Trigger",
         "patterns": [
           {
-            "pattern" : "(?i)^\\s*\\[\\s*Uscite:\\s*(.*)\\]",
-            "type" : "regex"
+            "pattern": "(?i)^\\s*\\[\\s*Uscite:\\s*(.*)\\]",
+            "type": "regex"
           }
         ]
       },
       {
-        "name" : "DDE_Failed_Move_Trigger",
+        "name": "DDE_Failed_Move_Trigger",
         "patterns": [
           {
-            "pattern" : "Questa stanza e' privata.",
-            "type" : "substring"
+            "pattern": "Questa stanza e' privata.",
+            "type": "substring"
           },
           {
-            "pattern" : "Non puoi andare da quella parte.",
-            "type" : "substring"
+            "pattern": "Non puoi andare da quella parte.",
+            "type": "substring"
           },
           {
-            "pattern" : "^(.*) e' chius(.*).$",
-            "type" : "regex"
+            "pattern": "^(.*) e' chius(.*).$",
+            "type": "regex"
           }
         ]
       },
       {
-        "name" : "DDE_Vision_Fail_Trigger",
+        "name": "DDE_Vision_Fail_Trigger",
         "patterns": [
           {
-            "pattern" : "E' tutto buio ...",
-            "type" : "substring"
+            "pattern": "E' tutto buio ...",
+            "type": "substring"
           }
         ]
       }
