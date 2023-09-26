@@ -166,7 +166,7 @@ SPAM.config.characters["mem_helper"] = {
 Per abilitare/disabilitare questa funzione usa il comando: <yellow>spam mem_helper on/off<grey>
 Per sapere come usare la funzione di automem usa il comando: <yellow>automem aiuto]],
     var_type = "bool",
-    default = false,
+    default = true,
 }
 SPAM.config.characters["automem"] = {
     name = "automem",

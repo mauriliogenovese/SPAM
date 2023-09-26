@@ -207,19 +207,23 @@ function SPAM.toggle_abbil_chat()
     end
 end
 
+function SPAM.is_class(class_name)
+    local is_class = false
+    for i, v in ipairs(gmcp.Char.Classi.classi) do
+        if string.lower(v.classe) == string.lower(class_name) then
+            is_class = true
+            break
+        end
+    end
+    return is_class
+end
+
 function SPAM.toggle_mem_helper()
     if SPAM.mem_container == nil then
         return
     end
-    local is_stregone = false
-    for i, v in ipairs(gmcp.Char.Classi.classi) do
-        if v.classe == "Stregone" then
-            is_stregone = true
-            break
-        end
-    end
 
-    if is_stregone == false or SPAM.config.get("mem_helper") == false then
+    if SPAM.is_class("stregone") == false or SPAM.config.get("mem_helper") == false then
         SPAM.mem_container:hide()
     elseif SPAM.mem_container.hidden == true then
         SPAM.mem_container:show()
@@ -318,7 +322,10 @@ function SPAM.automem(matches)
                     cecho("<cyan>[AUTOMEM]<grey> ".. refined_cast_name .. ": " .. desired .. "\n")
                     SPAM.config.get("automem")[refined_cast_name] = desired
                 end
-
+                SPAM.config.save_characters()
+            elseif SPAM.config.get("automem")[cast_name] ~= nil then
+                cecho("\n<red>ATTENZIONE: <grey>Rimuovo da automem cast non conosciuto: <white>" .. cast_name .. "\n")
+                SPAM.config.get("automem")[cast_name] = nil
                 SPAM.config.save_characters()
             else
                 cecho("\n<red>ATTENZIONE: <grey>non conosci alcun cast: <white>" .. cast_name .. "\n")
@@ -1038,7 +1045,7 @@ function SPAM.config.show_all()
         SPAM.config.show_global(k)
     end
     if SPAM.character_name ~= nil then
-        checho("\nLa configurazione del personaggio <" .. SPAM.character_name .. "> è:\n")
+        checho("\nLa configurazione del personaggio <white>" .. SPAM.character_name .. "<grey> è:\n")
         for k, v in pairs(SPAM.config.characters) do
             SPAM.config.show_character(k)
         end
