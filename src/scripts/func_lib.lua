@@ -1095,7 +1095,7 @@ function SPAM.parse_eval(eval_text)
            end
     end
 
-    send("gd &WArma per &R" .. nome .. "&W" .. weapon_string)
+
 
     local cast_string = ""
     if prop_c[sortedKeys_c[1]] == prop_c[sortedKeys_c[8]] then
@@ -1116,7 +1116,14 @@ function SPAM.parse_eval(eval_text)
             cast_string = cast_string .. v .. " "
         end
     end
-    send("gd &WElementi per &R" .. nome .. "&W" .. cast_string)
+
+    if gmcp.Char.Gruppo == nil or gmcp.Char.Gruppo.gruppo == nil then
+        cecho("\n\n<white>Arma per <red>" .. nome .. "<white>" .. weapon_string)
+        cecho("\n<white>Elementi per <red>" .. nome .. "<white>" .. cast_string .. "\n")
+    else
+        send("gd &WArma per &R" .. nome .. "&W" .. weapon_string)
+        send("gd &WElementi per &R" .. nome .. "&W" .. cast_string)
+    end
 end
 
 function SPAM.debug(var)
