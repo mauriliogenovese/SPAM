@@ -823,6 +823,21 @@ function SPAM.is_prop_row(row)
     return false
 end
 
+function SPAM.find_slot(name)
+    --remove last word to prevent all items classified as armature
+    local name_ex = SPAM.string.explode(name)
+    table.remove(name_ex)
+    name = SPAM.string.implode(name_ex, " ")
+    for slot, name_list in pairs(SPAM.slots) do
+        for i, v in ipairs(name_list) do
+            if string.find(name, v) then
+                return slot
+            end
+        end
+    end
+    return "da verificare"
+end
+
 function SPAM.parse_ident(ident_text)
     --get name and item type
     local ident = SPAM.string.explode(ident_text:gsub("\r", ""):gsub("\n\n", "\n"), "\n")
@@ -890,12 +905,14 @@ function SPAM.parse_ident(ident_text)
     --get affects
     parsed["affects"] = affects_prefix .. SPAM.string.implode(ident, "\n")
     parsed["affects"] = parsed["affects"]:gsub("\n%s*$", "")
+    --get type
+    parsed["tipo"] = SPAM.find_slot(parsed["nome"])
     SPAM.debug(parsed)
     return parsed
 end
 
 function SPAM.ident_to_query(parsed)
-    local data = { ["sql"] = "INSERT INTO tblident_temp (nome, peso, affitto, livello, ac, proprieta, affects, diffusione, informazioni, tipo, area, valore, danno_min, danno_max, danno_media,tipo_danno) VALUES('" .. SPAM.string.escape(parsed["nome"]) .. "', " .. SPAM.string.escape(parsed["peso"]) .. ", " .. SPAM.string.escape(parsed["affitto"]) .. ",  " .. SPAM.string.escape(parsed["livello"]) .. ", " .. SPAM.string.escape(parsed["ac"]) .. ", '" .. SPAM.string.escape(parsed["proprieta"]) .. "', '" .. SPAM.string.escape(parsed["affects"]) .. "', '" .. SPAM.string.escape(parsed["diffusione"]) .. "',  '" .. SPAM.string.escape(SPAM.character_name) .. "', 'da verificare', '', " .. SPAM.string.escape(parsed["valore"]) .. ", " .. SPAM.string.escape(parsed["danno_min"]) .. ", " .. SPAM.string.escape(parsed["danno_max"]) .. ", " .. SPAM.string.escape(parsed["danno_media"]) .. ",'" .. SPAM.string.escape(parsed["tipo_danno"]) .. "');" }
+    local data = { ["sql"] = "INSERT INTO tblident_temp (nome, peso, affitto, livello, ac, proprieta, affects, diffusione, informazioni, tipo, area, valore, danno_min, danno_max, danno_media,tipo_danno) VALUES('" .. SPAM.string.escape(parsed["nome"]) .. "', " .. SPAM.string.escape(parsed["peso"]) .. ", " .. SPAM.string.escape(parsed["affitto"]) .. ",  " .. SPAM.string.escape(parsed["livello"]) .. ", " .. SPAM.string.escape(parsed["ac"]) .. ", '" .. SPAM.string.escape(parsed["proprieta"]) .. "', '" .. SPAM.string.escape(parsed["affects"]) .. "', '" .. SPAM.string.escape(parsed["diffusione"]) .. "',  '" .. SPAM.string.escape(SPAM.character_name) .. "', '" .. parsed["tipo"] .. "', '', " .. SPAM.string.escape(parsed["valore"]) .. ", " .. SPAM.string.escape(parsed["danno_min"]) .. ", " .. SPAM.string.escape(parsed["danno_max"]) .. ", " .. SPAM.string.escape(parsed["danno_media"]) .. ",'" .. SPAM.string.escape(parsed["tipo_danno"]) .. "');" }
     SPAM.debug(data)
     return data
 end
@@ -942,6 +959,164 @@ function SPAM.send_ident_to_db(data)
     -- Lastly, we make the request:
     postHTTP(yajl.to_string(data), url, header)
     -- yajl.to_string converts our Lua table into a JSON-like string so the server can understand it
+end
+
+function SPAM.parse_eval(eval_text)
+    -- parse eval if function is enabled
+    if SPAM.config.get("parse_eval") == false then
+        return
+    end
+    local eval = SPAM.string.explode(eval_text:gsub("\r", ""):gsub("\n\n", "\n"), "\n")
+    local prop_w = {}
+    prop_w["armi da taglio"] = 0
+    prop_w["armi da punta"] = 0
+    prop_w["armi da botta"] = 0
+    local prop_m = {}
+    prop_m[" magico"] = 0
+    prop_m["non"] = 0
+    local prop_b = {}
+    prop_b["+1"] = 0
+    prop_b["+2"] = 0
+    prop_b["+3"] = 0
+    prop_b["+4"] = 0
+    prop_b["+5"] = 0
+    prop_b["+6"] = 0
+    local prop_c = {}
+    prop_c["energia"] = 0
+    prop_c["freddo"] = 0
+    prop_c["fuoco"] = 0
+    prop_c["acido"] = 0
+    prop_c["veleno"] = 0
+    prop_c["ombra"] = 0
+    prop_c["luce"] = 0
+    prop_c["sacro"] = 0
+    local mod = {}
+    mod["resistenza"] = -1
+    mod["immune"] = -2
+    mod["sensibile"] = 1
+
+    local nome = ""
+
+    for i, line in ipairs(eval) do
+        if nome == "" then
+            local split = SPAM.string.explode(line)
+            for i,v in pairs(split) do
+                if v == "appartiene" then
+                    break
+                end
+                nome = nome .. v .. " "
+            end
+        end
+        for mod_name, mod_val in pairs(mod) do
+            if string.find(line, mod_name) then
+                for prop_name,prop_val in pairs(prop_w) do
+                    if string.find(line, prop_name) then
+                        prop_w[prop_name] = prop_val + mod_val
+                    end
+                end
+
+                for prop_name,prop_val in pairs(prop_m) do
+                    if string.find(line, prop_name) then
+                        prop_m[prop_name] = prop_val + mod_val
+                    end
+                end
+
+                for prop_name,prop_val in pairs(prop_b) do
+                    if string.find(line, prop_name) then
+                        prop_b[prop_name] = prop_val + mod_val
+                    end
+                end
+
+                for prop_name,prop_val in pairs(prop_c) do
+                    if string.find(line, prop_name) then
+                        prop_c[prop_name] = prop_val + mod_val
+                    end
+                end
+            end
+        end
+    end
+
+    local sortedKeys_w = {}
+    for key in pairs(prop_w) do
+        table.insert(sortedKeys_w, key)
+    end
+    table.sort(sortedKeys_w, function(a, b) return prop_w[a] > prop_w[b] end)
+
+    local sortedKeys_b = {}
+    for key in pairs(prop_b) do
+        table.insert(sortedKeys_b, key)
+    end
+    table.sort(sortedKeys_b, function(a, b) return prop_b[a] > prop_b[b] end)
+
+    local sortedKeys_c = {}
+    for key in pairs(prop_c) do
+        table.insert(sortedKeys_c, key)
+    end
+    table.sort(sortedKeys_c, function(a, b) return prop_c[a] > prop_c[b] end)
+
+    local weapon_string
+
+    if prop_w[sortedKeys_w[1]] == prop_w[sortedKeys_w[3]] then
+        if prop_w[sortedKeys_w[1]] < 0 then
+            weapon_string = "mani nude"
+        else
+            weapon_string = "tutte le armi"
+        end
+    elseif prop_w[sortedKeys_w[1]] == prop_w[sortedKeys_w[2]] then
+        weapon_string =  sortedKeys_w[1] .. " o " .. sortedKeys_w[2]
+    else
+        weapon_string =  sortedKeys_w[1]
+    end
+
+    if prop_m[" magico"] == prop_m["non"] then
+        if prop_m["non-magico"] == -2 then
+            weapon_string = "immune alle armi"
+           end
+    elseif prop_m[" magico"] > prop_m["non"] then
+        weapon_string = weapon_string .. " magiche"
+    else
+        weapon_string = weapon_string .. " non magiche"
+    end
+
+    if prop_b[sortedKeys_b[1]] == prop_b[sortedKeys_b[6]] then
+        if prop_b[sortedKeys_b[1]] < 0 then
+            weapon_string = weapon_string .. " senza bonus"
+        end
+    else
+        local good_b = {}
+        for i=1,6 do
+            if prop_b[sortedKeys_b[i]] == prop_b[sortedKeys_b[1]] then
+                table.insert(good_b,sortedKeys_b[i])
+            end
+        end
+        table.sort(good_b)
+        for _, v in pairs(good_b) do
+            weapon_string = weapon_string .. " " .. v
+           end
+    end
+
+    send("gd &WArma per &R" .. nome .. "&W" .. weapon_string)
+
+    local cast_string = ""
+    if prop_c[sortedKeys_c[1]] == prop_c[sortedKeys_c[8]] then
+        if prop_b[sortedKeys_c[1]] ==-2 then
+            cast_string = "nessuno"
+        else
+            cast_string = "qualsiasi"
+        end
+    else
+        local good_c = {}
+        for i=1,8 do
+            if prop_c[sortedKeys_c[i]] == prop_c[sortedKeys_c[1]] then
+                table.insert(good_c,sortedKeys_c[i])
+            end
+        end
+        table.sort(good_c)
+        for _, v in pairs(good_c) do
+            cast_string = cast_string .. v .. " "
+        end
+    end
+    send("gd &WElementi per &R" .. nome .. "&W" .. cast_string)
 end
 
 function SPAM.debug(var)

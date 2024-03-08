@@ -82,6 +82,13 @@ Per controllare l'invio automatico delle identificazioni usa il comando: <white>
     var_type = "bool",
     default = false
 }
+SPAM.config.globals["parse_eval"] = {
+    name = "Valutamostri",
+    desc = [[SPAM può inviare automaticamente al gruppo suggerimenti sulle armi e sui cast da usare su un mob appena valutato con l'apposito incantesimo.
+Per controllare l'invio automatico delìi suggerimenti usa il comando: <white>spam valutamostri on/off]],
+    var_type = "bool",
+    default = true
+}
 SPAM.config.globals["fast_login"] = {
     name = "Login",
     desc = [[SPAM può automatizzare la procedura di login per evitare di dover digitare invio e 1 alla connessione.
@@ -368,3 +375,25 @@ SPAM.class_list["Necromante"].self_buff.tank = {"armatura di ombra", "pegno dei 
 SPAM.class_list["Necromante"].command = "evoc"
 SPAM.class_list["Necromante"].move = {"ristora"}
 
+SPAM.slots = {}
+SPAM.slots["armature"] = {"armatura", "corazza", "corpetto", "tunica", "veste", "cotta", "giacca"}
+SPAM.slots["anelli"] = {"anello","anellino"}
+SPAM.slots["armi"] = {"spad", "pugnale", "lama", "mazza", "bastone", "daga", "frusta","bastone","ascia"}
+SPAM.slots["bacchette"] = {"bacchetta"}
+SPAM.slots["bracciali"] = {"bracciale", "braccialetto", "polsiera"}
+SPAM.slots["cinture"] = {"cintura", "cinturone", "fascia"}
+SPAM.slots["collane"] = {"collana", "collanina"}
+SPAM.slots["elmi"] = {"elmo", "corona", "diadema", "copricapo"}
+SPAM.slots["gambali"] = {"pantaloni", "gambali", "cavigliere"}
+SPAM.slots["guanti"] = {"guanto"}
+SPAM.slots["guardiabraccia"] = {"guardiabraccia", "coprispalle", "spallaccio"}
+SPAM.slots["luci"] = {"luce", "sfera"}
+SPAM.slots["mantelli"] = {"mantello"}
+SPAM.slots["occhiali"] = {"occhiali"}
+SPAM.slots["orecchini"] = {"orecchin"}
+SPAM.slots["pozioni"] = {"pozione"}
+SPAM.slots["protezioni"] = {"protezion"}
+SPAM.slots["scudi"] = {"scudo"}
+SPAM.slots["stivali"] = {"stivali", "sandali", "scarpe", "calzari"}
+SPAM.slots["viso"] = {"maschera"}
+SPAM.slots["cibo"] = {"cibo"}

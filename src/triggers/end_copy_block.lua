@@ -6,3 +6,6 @@ if SPAM.config.get("auto_send") == true and string.find(matches[1], "oggetto") t
     local sql = SPAM.ident_to_query(parsed)
     SPAM.send_ident_to_db(sql)
 end
+if SPAM.config.get("parse_eval") == true then
+    SPAM.parse_eval(SPAM.string_to_clipboard)
+end
