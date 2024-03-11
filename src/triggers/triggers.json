@@ -80,7 +80,15 @@
             "type": "regex"
           }
         ],
-        "command": "salva"
+      },
+      {
+        "name": "auto_saved",
+        "patterns": [
+          {
+            "pattern": "La tua storia fa ora parte del grande libro degli Dei Delle Ere.",
+            "type": "substring"
+          }
+        ],
       },
       {
         "name": "beep",
