@@ -1202,6 +1202,9 @@ function SPAM.config.show_global(config_name)
             end
             row = row .. SPAM.string.parse_bool(SPAM.config.persistent_globals[config_name])
         else
+            if SPAM.config.globals[config_name].hidden == true then
+                return
+            end
             row = row .. SPAM.config.persistent_globals[config_name]
             end
         cecho(row.."\n")

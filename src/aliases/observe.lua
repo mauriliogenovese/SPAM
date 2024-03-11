@@ -12,6 +12,7 @@ Se vuoi monitorare i buff di un alleato usa: <yellow>observe nomealleato ruolo
 (ad esempio indossando un oggetto, o qualsiasi altra cosa).
 Per aggiungere un buff personalizzato usa: <yellow>observe customrefresh cast-comando1,comando2,...
 <grey>Ad esempio: <yellow>observe customrefresh scudo di ghiaccio-impuigna bacchetta,zap me,rimuovi bacchetta
+<grey>Infine, per modificare la dimensione del font nel BuffObserver usa: <yellow>observe font +/-
 
 ]]
 local split = SPAM.string.explode(matches[3])
@@ -72,8 +73,20 @@ if #split > 1 then
       send("\n")
       SPAM.config.save_characters()
       return
-
     end
+  elseif SPAM.string.starts("font", string.lower(split[1])) then
+    if split[2] == "+" then
+      SPAM.dde_group_widget:setFontSize(SPAM.dde_group_widget:getFontSize()+1)
+      echo("\nDimension del testo aumentata\n")
+    elseif split[2] == "-" then
+      SPAM.dde_group_widget:setFontSize(SPAM.dde_group_widget:getFontSize()-1)
+      echo("\nDimension del testo ridotta\n")
+    else
+      cecho("\n<red>Comando invalido:<white> " .. split[2])
+      cecho("\nLa sintassi corretta è: <yellow>observe font +/-\n")
+    end
+    SPAM.config.set("buff_font_size", SPAM.dde_group_widget:getFontSize())
+    return
   end
   if SPAM.ob_role(split[1], split[2], true) then
     return

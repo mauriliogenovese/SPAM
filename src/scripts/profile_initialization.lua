@@ -125,6 +125,13 @@ Per scoprire i TAG colore disponibili in Dei delle Ere usa il comando: <yellow>a
     var_type = "bool",
     default = true,
 }
+SPAM.config.globals["buff_font_size"] = {
+    name = "",
+    desc = [[]],
+    var_type = "int",
+    default = getFontSize(),
+    hidden = true
+}
 
 SPAM.config.characters = {}
 SPAM.config.characters["observe_list"] = {
@@ -254,7 +261,7 @@ SPAM.dde_group_widget =
       autoWrap = true,
       color = 'black',
       scrollBar = false,
-      fontSize = 12,
+      fontSize = SPAM.config.get("buff_font_size"),
       width = "100%",
       height = "100%",
     },
