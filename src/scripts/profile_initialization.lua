@@ -383,7 +383,7 @@ SPAM.class_list["Necromante"].command = "evoc"
 SPAM.class_list["Necromante"].move = {"ristora"}
 
 SPAM.slots = {}
-SPAM.slots["armature"] = {"armatura", "corazza", "corpetto", "tunica", "veste", "cotta", "giacca"}
+SPAM.slots["armature"] = {"armatura", "corazza", "corpetto", "tunica", "veste", "cotta", "giacca", "camic"}
 SPAM.slots["anelli"] = {"anello","anellino"}
 SPAM.slots["armi"] = {"spad", "pugnale", "lama", "mazza", "bastone", "daga", "frusta","bastone","ascia"}
 SPAM.slots["bacchette"] = {"bacchetta"}
@@ -391,7 +391,7 @@ SPAM.slots["bracciali"] = {"bracciale", "braccialetto", "polsiera"}
 SPAM.slots["cinture"] = {"cintura", "cinturone", "fascia"}
 SPAM.slots["collane"] = {"collana", "collanina"}
 SPAM.slots["elmi"] = {"elmo", "corona", "diadema", "copricapo"}
-SPAM.slots["gambali"] = {"pantaloni", "gambali", "cavigliere"}
+SPAM.slots["gambali"] = {"pantaloni", "gambali", "cavigliere", "calzoni"}
 SPAM.slots["guanti"] = {"guanto"}
 SPAM.slots["guardiabraccia"] = {"guardiabraccia", "coprispalle", "spallaccio"}
 SPAM.slots["luci"] = {"luce", "sfera"}

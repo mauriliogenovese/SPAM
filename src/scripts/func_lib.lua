@@ -825,9 +825,7 @@ end
 
 function SPAM.find_slot(name)
     --remove last word to prevent all items classified as armature
-    local name_ex = SPAM.string.explode(name)
-    table.remove(name_ex)
-    name = SPAM.string.implode(name_ex, " ")
+    name = string.gsub(name, "un'armatura",""):lower()
     for slot, name_list in pairs(SPAM.slots) do
         for i, v in ipairs(name_list) do
             if string.find(name, v) then
@@ -987,9 +985,7 @@ function SPAM.parse_eval(eval_text)
     prop_c["fuoco"] = 0
     prop_c["acido"] = 0
     prop_c["veleno"] = 0
-    prop_c["ombra"] = 0
-    prop_c["luce"] = 0
-    prop_c["sacro"] = 0
+    prop_c["elettricita"] = 0
     local mod = {}
     mod["resistenza"] = -1
     mod["immune"] = -2
@@ -1098,7 +1094,7 @@ function SPAM.parse_eval(eval_text)
 
 
     local cast_string = ""
-    if prop_c[sortedKeys_c[1]] == prop_c[sortedKeys_c[8]] then
+    if prop_c[sortedKeys_c[1]] == prop_c[sortedKeys_c[6]] then
         if prop_b[sortedKeys_c[1]] ==-2 then
             cast_string = "nessuno"
         else
