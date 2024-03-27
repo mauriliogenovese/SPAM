@@ -38,6 +38,10 @@
           {
             "pattern": "^(.+?)\\) (.+) \\.\\.(.+)$",
             "type": "regex"
+          },
+          {
+            "pattern": "^Guardando(.+?)(noti che )(.+)\\.$",
+            "type": "regex"
           }
         ]
       },
@@ -79,7 +83,7 @@
             "pattern": "^Ricevi (.+) punti esperienza.$",
             "type": "regex"
           }
-        ],
+        ]
       },
       {
         "name": "auto_saved",
@@ -88,7 +92,7 @@
             "pattern": "La tua storia fa ora parte del grande libro degli Dei Delle Ere.",
             "type": "substring"
           }
-        ],
+        ]
       },
       {
         "name": "beep",
