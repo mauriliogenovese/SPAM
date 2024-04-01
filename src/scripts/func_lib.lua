@@ -429,6 +429,8 @@ function SPAM.beautify_name(name)
         name = string.gsub(string.lower(name), "un enorme ", "")
     elseif SPAM.string.starts(string.lower(name), "una ") then
         name = string.gsub(string.lower(name), "una ", "")
+    elseif SPAM.string.starts(string.lower(name), "uno ") then
+        name = string.gsub(string.lower(name), "uno ", "")
     elseif SPAM.string.starts(string.lower(name), "l'") then
         name = string.gsub(string.lower(name), "l'", "")
     elseif SPAM.string.starts(string.lower(name), "della ") then
