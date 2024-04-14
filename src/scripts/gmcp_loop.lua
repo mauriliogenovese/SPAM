@@ -142,6 +142,12 @@ function gmcp_loop()
                 SPAM.table.deduplicate(observe_spell)
                 local spells = nil
                 spells = v.incantesimi
+                -- for me, check property (from items) other than cast
+                if this_name == SPAM.character_name and gmcp.Char.Magie.proprieta ~= nil then
+                    for i, v in ipairs(gmcp.Char.Magie.proprieta) do
+                        table.insert(spells, v.nome)
+                    end
+                end
                 if spells ~= nil then
                     local active = nil
                     active = {}
