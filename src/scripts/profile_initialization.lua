@@ -155,6 +155,13 @@ SPAM.config.characters["custom_refresh"] = {
     default = {},
     hidden = true
 }
+SPAM.config.characters["autocast"] = {
+    name = "",
+    desc = [[]],
+    var_type = "bool",
+    default = false,
+    hidden = true
+}
 SPAM.config.characters["glory_timer"] = {
     name = "",
     desc = [[]],

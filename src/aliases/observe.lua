@@ -31,6 +31,15 @@ if #split == 1 then
     echo("\nLista observe svuotata")
     send("\n")
     return
+  elseif SPAM.string.starts("autocast", string.lower(split[1])) then
+    if SPAM.config.get("autocast") == true then
+      echo("\nAutocast disabilitato\n")
+      SPAM.config.set("autocast", false)
+    else
+      echo("\nAutocast abilitato\n")
+      SPAM.config.set("autocast", true)
+    end
+    return
   end
 end
 if #split > 1 then

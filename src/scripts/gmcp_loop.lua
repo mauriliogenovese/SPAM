@@ -13,6 +13,7 @@ function gmcp_loop()
         SPAM.character_name = gmcp.Char.Name.name
         SPAM.config.load_character(SPAM.character_name)
         SPAM.observe_spell_list = nil
+        SPAM.last_autocast = os.time()
         -- gmcp.Char.Classi.classi = nil
         -- return NEEDED to refresh classes
         return
@@ -186,6 +187,16 @@ function gmcp_loop()
                     local active_observed = {}
                     for a, b in ipairs(observe_spell) do
                         if not active[b] then
+                            --check per autocast
+                            if
+                            this_name == SPAM.character_name and
+                                    SPAM.config.get("autocast") == true and
+                                    SPAM.config.get("custom_refresh")[b] == nil and
+                                    SPAM.can_autocast(b) then
+                                SPAM.last_autocast = os.time()
+                                send(SPAM.observe_spell_list.command .. " '" .. b .. "' " .. this_name)
+
+                            end
                             SPAM.dde_group_widget:decho(" - ")
                             SPAM.dde_group_widget:dechoLink(
                                     b,

@@ -240,6 +240,15 @@ function SPAM.get_known_cast(cast_name)
     return nil
 end
 
+function SPAM.get_known_cast_mana(cast_name)
+    for _, v in ipairs(gmcp.Char.Skills) do
+        if v.tipo == "incantesimo" and SPAM.string.starts(v.nome, cast_name) then
+            return v.mana
+        end
+    end
+    return 10000
+end
+
 function SPAM.print_mem()
     clearWindow("MEM Helper")
     SPAM.mem_widget:cecho("\n")
@@ -690,6 +699,18 @@ function SPAM.show_glory_timer()
     table.sort(array, greater)
     SPAM.print_pairs(array)
     print("\n")
+end
+
+function SPAM.can_autocast(spell_name)
+    if
+    gmcp.Char.Vitals.stato ~= "In Piedi" or
+            gmcp.Char.Vitals.lag ~= 0 or
+            gmcp.Char.Vitals.tank ~= nil or
+            os.time() < SPAM.last_autocast + 2 or
+            SPAM.get_known_cast_mana(spell_name) > gmcp.Char.Vitals.mana then
+        return false
+    end
+    return true
 end
 
 function SPAM.mod_mudlet_mapper()
