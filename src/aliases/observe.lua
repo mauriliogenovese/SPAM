@@ -8,6 +8,8 @@ Se vuoi monitorare i buff di un alleato usa: <yellow>observe nomealleato ruolo
 <grey>Per visionare tutti gli alleati in observe usa: <yellow>observe list
 <grey>Per svuotare la lista degli alleati in observe usa: <yellow>observe clear
 <grey>Per aggiungere un buff optionale usa: <yellow>observe optionalbuff nomealleato cast
+<grey>Per abilitare/disabilitare la funzione di autocast usa: <yellow>observe autocast
+<grey>La funzione di autocast rinnova automaticamete gli incantesimi osservati su se stessi.
 <grey>Inoltre è possibile riattivare un buff su se stessi con comandi personalizzati
 (ad esempio indossando un oggetto, o qualsiasi altra cosa).
 Per aggiungere un buff personalizzato usa: <yellow>observe customrefresh cast-comando1,comando2,...
