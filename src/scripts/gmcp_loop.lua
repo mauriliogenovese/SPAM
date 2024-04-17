@@ -22,6 +22,8 @@ function gmcp_loop()
     if SPAM.config.get("dde_group") == true then
         clearWindow("DdE Group")
         local gruppo = {}
+        SPAM.party_fight_check()
+        end
         if gmcp.Char.Gruppo == nil or gmcp.Char.Gruppo.gruppo == nil then
             --if not in group, create a similar structure to show player info
             gruppo[1] = {}

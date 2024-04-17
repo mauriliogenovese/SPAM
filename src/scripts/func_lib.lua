@@ -701,11 +701,23 @@ function SPAM.show_glory_timer()
     print("\n")
 end
 
+function SPAM.party_fight_check()
+    local n_in_combat = 0
+    for i, gr in ipairs(gmcp.Char.Gruppo.gruppo) do
+        if gr.combatte then
+            n_in_combat = n_in_combat + 1
+        end
+    end
+    -- usa n_in_combat
+    SPAM.party_in_fight = n_in_combat > 0
+end
+
 function SPAM.can_autocast(spell_name)
     if
     gmcp.Char.Vitals.stato ~= "In Piedi" or
             gmcp.Char.Vitals.lag ~= 0 or
             gmcp.Char.Vitals.tank ~= nil or
+            SPAM.party_in_fight == true or
             os.time() < SPAM.last_autocast + 2 or
             SPAM.get_known_cast_mana(spell_name) > gmcp.Char.Vitals.mana then
         return false

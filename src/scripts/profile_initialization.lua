@@ -411,3 +411,6 @@ SPAM.slots["scudi"] = {"scudo"}
 SPAM.slots["stivali"] = {"stivali", "sandali", "scarpe", "calzari"}
 SPAM.slots["viso"] = {"maschera"}
 SPAM.slots["cibo"] = {"cibo"}
+
+SPAM.party_in_fight = false
+SPAM.last_autocast = 0
