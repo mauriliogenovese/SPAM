@@ -702,6 +702,10 @@ function SPAM.show_glory_timer()
 end
 
 function SPAM.party_fight_check()
+    if gmcp.Char.Gruppo == nil or gmcp.Char.Gruppo.gruppo == nil then
+        return false
+    end
+
     local n_in_combat = 0
     for i, gr in ipairs(gmcp.Char.Gruppo.gruppo) do
         if gr.combatte then
