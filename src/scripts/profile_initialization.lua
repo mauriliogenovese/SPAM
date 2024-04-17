@@ -414,3 +414,5 @@ SPAM.slots["cibo"] = {"cibo"}
 
 SPAM.party_in_fight = false
 SPAM.last_autocast = 0
+SPAM.last_command = ""
+SPAM.last_command_time = os.time()

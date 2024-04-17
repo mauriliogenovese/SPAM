@@ -723,6 +723,7 @@ function SPAM.can_autocast(spell_name)
             gmcp.Char.Vitals.tank ~= nil or
             SPAM.party_in_fight == true or
             os.time() < SPAM.last_autocast + 2 or
+            os.time() > SPAM.last_command_time + 60*5 or
             SPAM.get_known_cast_mana(spell_name) > gmcp.Char.Vitals.mana then
         return false
     end
