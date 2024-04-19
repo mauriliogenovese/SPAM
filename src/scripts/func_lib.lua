@@ -1338,3 +1338,22 @@ function SPAM.config.set_by_name(config_name, value, report)
     end
     cecho("\nScelta non valida\n\n")
 end
+
+function SPAM.search_equip(name)
+    for k, v in pairs(gmcp.Char.Items.equip) do
+        if SPAM.string.starts(string.lower(v.oggetto), name) then
+            return true
+        end
+    end
+    return false
+end
+
+function SPAM.get_equip_slot(slot)
+    for k, v in pairs(gmcp.Char.Items.equip) do
+        if v.doveshort == slot then
+            local item = SPAM.string.explode(v.oggetto, "..")
+            return item[1]:sub(1,-2)
+        end
+    end
+    return nil
+end
