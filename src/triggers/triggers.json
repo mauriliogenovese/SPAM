@@ -146,6 +146,15 @@
             "type": "regex"
           }
         ]
+      },
+      {
+        "name": "aka_list",
+        "patterns": [
+          {
+            "pattern": "^(Eroe Minore|Eroe|Eroe Maggiore|Eroe Leggendario|Adepto|Novizio|Campione|Medio|Esperto|Adeptp)[ \\t]{2,}(.+?)[ \\t]{2,}(.+?) (.+)$",
+            "type": "regex"
+          }
+        ]
       }
     ]
   },

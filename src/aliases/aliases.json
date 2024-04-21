@@ -31,5 +31,10 @@
         "regex": "^automem(.+|)$"
       }
     ]
+  },
+  {
+    "name": "aka",
+    "command": "",
+    "regex": "^aka (.+?) (.+)$"
   }
 ]

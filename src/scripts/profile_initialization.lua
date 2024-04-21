@@ -132,6 +132,22 @@ SPAM.config.globals["buff_font_size"] = {
     default = getFontSize(),
     hidden = true
 }
+SPAM.config.globals["aka"] = {
+    name = "Aka",
+    desc = [[SPAM permette di impostare un soprannome (aka da Also Known As) da visualizzare vicino il nome degli alri personaggi nella lista del comando chi.
+Per abilitare/disabilitare questa funzione usa il comando: <white>spam Aka on/off
+<grey>Per impostare un soprannome usa il comando: <white>aka nomepg soprannome
+<grey>Per rimuovere un soprannome usa il comando: <white>aka nomepg remove]],
+    var_type = "bool",
+    default = true
+}
+SPAM.config.globals["aka_list"] = {
+    name = "",
+    desc = [[]],
+    var_type = "list",
+    default = {},
+    hidden = true
+}
 
 SPAM.config.characters = {}
 SPAM.config.characters["observe_list"] = {
