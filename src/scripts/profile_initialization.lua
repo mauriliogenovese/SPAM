@@ -428,6 +428,27 @@ SPAM.slots["stivali"] = {"stivali", "sandali", "scarpe", "calzari"}
 SPAM.slots["viso"] = {"maschera"}
 SPAM.slots["cibo"] = {"cibo"}
 
+SPAM.slots_name = {}
+SPAM.slots_name["indossa in testa"] = "elmi"
+SPAM.slots_name["indossa sul viso"] = "viso"
+SPAM.slots_name["indossa sugli occhi"] = "occhiali"
+SPAM.slots_name["indossa sulle orecchie"] = "orecchini"
+SPAM.slots_name["indossa sul collo"] = "collane"
+SPAM.slots_name["indossa sulla schiena"] = "zaini"
+SPAM.slots_name["indossa sul corpo"] = "armature"
+SPAM.slots_name["indossa attorno al corpo"] = ""
+SPAM.slots_name["indossa sulle braccia"] = "guardiabraccia"
+SPAM.slots_name["indossa sul polso"] = "bracciali"
+SPAM.slots_name["indossa sulle mani"] = "guanti"
+SPAM.slots_name["indossa in vita"] = "cinture"
+SPAM.slots_name["indossa sulle anche"] = "protezioni"
+SPAM.slots_name["indossa sulle gambe"] = "gambali"
+SPAM.slots_name["usa come scudo"] = "scudi"
+SPAM.slots_name["indossa su un dito"] = "anelli"
+SPAM.slots_name["impugna"] = "armi"
+SPAM.slots_name["impugna come missile"] = "armi"
+SPAM.slots_name["usa come fonte di luce"] = "luci"
+
 SPAM.party_in_fight = false
 SPAM.last_autocast = 0
 SPAM.last_command = ""

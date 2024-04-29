@@ -46,15 +46,26 @@ function SPAM.string.first_upper(input_string)
     return (input_string:gsub("^%l", string.upper))
 end
 
-function SPAM.string.explode(input_string, separator)
-    if separator == nil then
-        separator = "%s"
+function SPAM.string.explode(str, delimiter)
+    if delimiter == nil then
+        delimiter = " "
     end
-    local t = {}
-    for str in string.gmatch(input_string, "([^" .. separator .. "]+)") do
-        table.insert(t, str)
+    local result = {};
+    local startPoint, endPoint = 1, 1;
+    for i = 1, str:len() do
+        if (i + 1) > str:len() then
+            endPoint = str:len();
+        end
+        if (str:sub(i, i + (delimiter:len() - 1)) == delimiter) then
+            endPoint = i - 1;
+            table.insert(result, str:sub(startPoint, endPoint));
+            startPoint = i + (delimiter:len());
+        elseif (i == str:len()) then
+            endPoint = str:len();
+            table.insert(result, str:sub(startPoint, endPoint));
+        end
     end
-    return t
+    return result
 end
 
 function SPAM.string.int_to_fixed_string(input_int, len)
@@ -374,7 +385,7 @@ end
 
 function SPAM.parse_version(string)
     local major, minor, patch = string.match(string, "(%d+)%.(%d+)%.(%d+)")
-    return major, minor, patch
+    return tonumber(major), tonumber(minor), tonumber(patch)
 end
 
 function SPAM.compare_with_current_version(new_version)
@@ -450,6 +461,8 @@ function SPAM.beautify_name(name)
         name = string.gsub(string.lower(name), "un ", "")
     elseif SPAM.string.starts(string.lower(name), "un' ") then
         name = string.gsub(string.lower(name), "un' ", "")
+    elseif SPAM.string.starts(string.lower(name), "un'") then
+        name = string.gsub(string.lower(name), "un'", "")
     end
     local words = {}
     words[1], words[2] = name:match("(%w+)(%W+)")
@@ -656,7 +669,7 @@ Ad esempio: <yellow>spam ddegroup <grey>oppure <yellow>spam gdcolor
           ]]
         )
     else
-        local split = SPAM.string.explode(input_string)
+        local split = SPAM.string.explode(input_string:sub(2,-1))
         split[1] = input_string.lower(split[1])
         if #split == 1 then
             if split[1] == "update" then
@@ -865,26 +878,38 @@ function SPAM.is_prop_row(row)
     return false
 end
 
-function SPAM.find_slot(name)
-    --remove last word to prevent all items classified as armature
-    name = string.gsub(name, "un'armatura",""):lower()
-    for slot, name_list in pairs(SPAM.slots) do
-        for i, v in ipairs(name_list) do
-            if string.find(name, v) then
-                return slot
-            end
+function SPAM.find_slot(row)
+    if row[2] == nil or row[2] == "afferra" then
+        if string.find(row[1], "una luce") then
+            return "luci"
+        elseif string.find(row[1], "una pergamena") then
+            return "pergamene"
+        elseif string.find(row[1], "bacchetta magica") then
+            return "bacchette"
+        elseif string.find(row[1], "una pozione") then
+            return "pozioni"
+        elseif string.find(row[1], "cibo") then
+            return "cibo"
+        else
+            return "afferrati"
         end
+    elseif SPAM.slots_name[row[2]] ~= nil then
+        return SPAM.slots_name[row[2]]
     end
+    
     return "da verificare"
 end
 
 function SPAM.parse_ident(ident_text)
     --get name and item type
     local ident = SPAM.string.explode(ident_text:gsub("\r", ""):gsub("\n\n", "\n"), "\n")
-    ident[1] = SPAM.string.explode(ident[1], ".")[1]
+    local firstrow = SPAM.string.explode(ident[1]:sub(1, -2), ", che si ")
+    if firstrow[2] == nil then
+        firstrow = SPAM.string.explode(ident[1]:sub(1, -2), ".")
+    end
     local parsed = {}
-    parsed["nome"] = ident[1] .. "."
-    local itm_type = SPAM.string.get_last_word(ident[1])
+    parsed["nome"] = firstrow[1] .. "."
+    local itm_type = SPAM.string.get_last_word(firstrow[1])
     table.remove(ident, 1)
     --if item is weapon, get weapon type
     parsed["tipo_danno"] = ""
@@ -946,7 +971,7 @@ function SPAM.parse_ident(ident_text)
     parsed["affects"] = affects_prefix .. SPAM.string.implode(ident, "\n")
     parsed["affects"] = parsed["affects"]:gsub("\n%s*$", "")
     --get type
-    parsed["tipo"] = SPAM.find_slot(parsed["nome"])
+    parsed["tipo"] = SPAM.find_slot(firstrow)
     SPAM.debug(parsed)
     return parsed
 end
