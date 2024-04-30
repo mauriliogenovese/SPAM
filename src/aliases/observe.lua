@@ -18,6 +18,9 @@ Per aggiungere un buff personalizzato usa: <yellow>observe customrefresh cast-co
 
 ]]
 local split = SPAM.string.explode(matches[3])
+if split[1] == "" then
+  table.remove(split, 1)
+end
 if #split == 1 then
   if SPAM.string.starts("list", string.lower(split[1])) then
     cecho("\n<yellow>Lista observe: ")
