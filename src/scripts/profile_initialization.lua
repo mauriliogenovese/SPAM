@@ -148,6 +148,12 @@ SPAM.config.globals["aka_list"] = {
     default = {},
     hidden = true
 }
+SPAM.config.globals["chat_log"] = {
+    name = "Chat_log",
+    desc = [[SPAM stampa le ultime 10 comunicazioni con il comando: <yellow>chat_log]],
+    var_type = "bool",
+    default = false
+}
 
 SPAM.config.characters = {}
 SPAM.config.characters["observe_list"] = {
@@ -453,3 +459,4 @@ SPAM.party_in_fight = false
 SPAM.last_autocast = 0
 SPAM.last_command = ""
 SPAM.last_command_time = os.time()
+SPAM.chat_log = {}

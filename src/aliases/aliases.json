@@ -36,5 +36,10 @@
     "name": "aka",
     "command": "",
     "regex": "^aka (.+?) (.+)$"
+  },
+  {
+    "name": "chat_log",
+    "command": "",
+    "regex": "^chat_log$"
   }
 ]
