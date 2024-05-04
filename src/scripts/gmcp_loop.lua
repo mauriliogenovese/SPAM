@@ -184,11 +184,15 @@ function gmcp_loop()
                     if active["volo"] then
                         active["levitazione"] = true
                     end
-                    if active["protezione dal bene"] then
-                        active["protezione dal male"] = true
+                    if active["protezione dalla luce"] or active["protezione dalla oscurita"] or active["protezione da equilibrio"] then
+                        active["protezione dalla oscurita"] = true
+                        active["protezione dalla luce"] = true
+                        active["protezione da equilibrio"] = true
                     end
-                    if active["protezione dal male"] then
-                        active["protezione dal bene"] = true
+                    if active["individuazione luce"] or active["individuazione oscurita"] or active["individuazione equilibrio"] then
+                        active["individuazione oscurita"] = true
+                        active["individuazione luce"] = true
+                        active["individuazione equilibrio"] = true
                     end
                     local active_observed = {}
                     for a, b in ipairs(observe_spell) do
