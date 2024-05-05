@@ -457,6 +457,9 @@ SPAM.slots_name["impugna"] = "armi"
 SPAM.slots_name["impugna come missile"] = "armi"
 SPAM.slots_name["usa come fonte di luce"] = "luci"
 
+SPAM.ignore_autocast = {}
+SPAM.ignore_autocast["cure leggere continue"] = true
+
 SPAM.party_in_fight = false
 SPAM.last_autocast = 0
 SPAM.last_command = ""
