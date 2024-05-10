@@ -730,6 +730,13 @@ function SPAM.party_fight_check()
 end
 
 function SPAM.can_autocast(spell_name)
+    if gmcp.Char.Magie.proprieta ~= nil then
+      for i, v in ipairs(gmcp.Char.Magie.proprieta) do
+        if v.nome == "silenzio" then
+          return false
+        end
+      end
+    end
     if
     gmcp.Char.Vitals.stato ~= "In Piedi" or
             gmcp.Char.Vitals.lag ~= 0 or
@@ -738,6 +745,7 @@ function SPAM.can_autocast(spell_name)
             os.time() < SPAM.last_autocast + 2 or
             os.time() > SPAM.last_command_time + 60*5 or
             SPAM.ignore_autocast[spell_name] == true or
+            gmcp.Char.Vitals.hp/gmcp.Char.Vitals.maxhp < 0.5 or
             SPAM.get_known_cast_mana(spell_name) > gmcp.Char.Vitals.mana then
         return false
     end
