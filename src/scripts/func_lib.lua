@@ -740,6 +740,7 @@ function SPAM.can_autocast(spell_name)
     if
     gmcp.Char.Vitals.stato ~= "In Piedi" or
             gmcp.Char.Vitals.lag ~= 0 or
+            gmcp.Char.Coda.numero ~= 0 or
             gmcp.Char.Vitals.tank ~= nil or
             SPAM.party_in_fight == true or
             os.time() < SPAM.last_autocast + 2 or
@@ -1063,9 +1064,12 @@ function SPAM.parse_eval(eval_text)
     prop_c["veleno"] = 0
     prop_c["elettricita"] = 0
     local mod = {}
-    mod["resistenza"] = -1
-    mod["immune"] = -2
-    mod["sensibile"] = 1
+    mod["grande resistenza"] = -3
+    mod["buona resistenza"] = -2
+    mod["minima resistenza"] = -1
+    mod["parzialmente sensibile"] = 1
+    mod["abbastanza sensibile"] = 2
+    mod["molto sensibile"] = 3
 
     local nome = ""
 

@@ -60,6 +60,15 @@
         "command": "ind tutto"
       },
       {
+        "name": "nocast_room",
+        "patterns": [
+          {
+            "pattern": "Una forza misteriosa non ti permette di concentrarti abbastanza.",
+            "type": "substring"
+          }
+        ]
+      },
+      {
         "name": "fast_login",
         "patterns": [
           {

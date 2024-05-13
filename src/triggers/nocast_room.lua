@@ -1,0 +1,1 @@
+SPAM.last_autocast = os.time()+10
