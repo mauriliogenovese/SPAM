@@ -1063,7 +1063,10 @@ function SPAM.parse_eval(eval_text)
     prop_c["acido"] = 0
     prop_c["veleno"] = 0
     prop_c["elettricita"] = 0
+    prop_c["ombra"] = 0
+    prop_c["mentale"] = 0
     local mod = {}
+    mod["immune"] = -4
     mod["grande resistenza"] = -3
     mod["buona resistenza"] = -2
     mod["minima resistenza"] = -1
@@ -1145,7 +1148,7 @@ function SPAM.parse_eval(eval_text)
     end
 
     if prop_m[" magico"] == prop_m["non"] then
-        if prop_m["non-magico"] == -2 then
+        if prop_m["non-magico"] == mod["immune"] then
             weapon_string = "immune alle armi"
            end
     elseif prop_m[" magico"] > prop_m["non"] then
@@ -1175,7 +1178,7 @@ function SPAM.parse_eval(eval_text)
 
     local cast_string = ""
     if prop_c[sortedKeys_c[1]] == prop_c[sortedKeys_c[6]] then
-        if prop_b[sortedKeys_c[1]] ==-2 then
+        if prop_b[sortedKeys_c[1]] == mod["immune"] then
             cast_string = "nessuno"
         else
             cast_string = "qualsiasi"
