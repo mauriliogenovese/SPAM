@@ -172,18 +172,17 @@ end
 --remove duplicates from a table
 function SPAM.table.deduplicate(input_table)
     local seen = {}
-    for index, item in ipairs(input_table) do
+    local index = 1
+
+    while index <= #input_table do
+        local item = input_table[index]
         if seen[item] then
+            -- Remove the duplicate
             table.remove(input_table, index)
         else
             seen[item] = true
+            index = index + 1
         end
-    end
-    if seen["nuovo vigore"] then
-        for k in pairs(input_table) do
-            input_table[k] = nil
-        end
-        table.insert(input_table, "nuovo vigore")
     end
 end
 
@@ -591,6 +590,21 @@ function SPAM.deduplicate_class(class)
     SPAM.table.deduplicate(class.self_buff.tank)
     SPAM.table.deduplicate(class.self_buff.base)
     SPAM.table.deduplicate(class.move)
+
+    -- remove other move spell if nuovo vigore is available
+    local has_vigor = false
+    for _, v in ipairs(class.move) do
+        if v == "nuovo vigore" then
+            has_vigor = true
+        end
+    end
+    if has_vigor then
+        for k in pairs(class.move) do
+            class.move[k] = nil
+        end
+        table.insert(class.move, "nuovo vigore")
+    end
+
 end
 
 --generate spell list to observe based on player classes
