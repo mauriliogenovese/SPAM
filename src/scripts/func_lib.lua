@@ -703,7 +703,7 @@ function SPAM.show_glory_timer()
     if SPAM.config.get("glory") == false then
         return
     end
-    local one_day_ago = os.time() - 24 * 60 * 60
+    local one_day_ago = os.time() - 20 * 60 * 60
     local printed_title = false
     for key, value in pairs(SPAM.config.get("glory_timer")) do
         if value > one_day_ago then
@@ -720,7 +720,7 @@ function SPAM.show_glory_timer()
     if printed_title then
         echo("\n")
     end
-    cecho("\n<yellow>MOB GLORIA NELLE ULTIME 24 ORE:")
+    cecho("\n<yellow>MOB GLORIA NELLE ULTIME 20 ORE:")
     local array = {}
     SPAM.make_pairs(SPAM.config.get("glory_timer"), array)
     table.sort(array, greater)
