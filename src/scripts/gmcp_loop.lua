@@ -35,11 +35,6 @@ function gmcp_loop()
             gruppo[1].hp = math.floor(100 * gmcp.Char.Vitals.hp / gmcp.Char.Vitals.maxhp)
             gruppo[1].move = math.floor(100 * gmcp.Char.Vitals.move / gmcp.Char.Vitals.maxmove)
             gruppo[1].incantesimi = {}
-            if gmcp.Char.Magie.incantesimi ~= nil then
-                for i, v in ipairs(gmcp.Char.Magie.incantesimi) do
-                    table.insert(gruppo[1].incantesimi, v.nome)
-                end
-            end
         else
             gruppo = gmcp.Char.Gruppo.gruppo
         end
@@ -152,6 +147,11 @@ function gmcp_loop()
                 -- for me, check property (from items) other than cast
                 if this_name == SPAM.character_name and gmcp.Char.Magie.proprieta ~= nil then
                     for i, v in ipairs(gmcp.Char.Magie.proprieta) do
+                        table.insert(spells, v.nome)
+                    end
+                end
+             if this_name == SPAM.character_name and gmcp.Char.Magie.incantesimi ~= nil then
+                    for i, v in ipairs(gmcp.Char.Magie.incantesimi) do
                         table.insert(spells, v.nome)
                     end
                 end
