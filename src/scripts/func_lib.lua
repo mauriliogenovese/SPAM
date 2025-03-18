@@ -550,7 +550,7 @@ function SPAM.print_pairs(array, _i)
     if pair then
         local k, v = unpack(pair)
         if v > 0 then
-            cecho("\n    <white>" .. k .. ': <grey>' .. os.date("%H:%M", v) .. " (" .. SPAM.disp_time(os.difftime(os.time(), v + 24 * 60 * 60)) .. ")")
+            cecho("\n    <white>" .. k .. ': <grey>' .. os.date("%H:%M", v) .. " (" .. SPAM.disp_time(os.difftime(os.time(), v + SPAM.glory_reset_time)) .. ")")
             return SPAM.print_pairs(array, i + 1)
         end
     end
@@ -706,7 +706,7 @@ function SPAM.show_glory_timer()
     if SPAM.config.get("glory") == false then
         return
     end
-    local one_day_ago = os.time() - 20 * 60 * 60
+    local one_day_ago = os.time() - SPAM.glory_reset_time
     local printed_title = false
     for key, value in pairs(SPAM.config.get("glory_timer")) do
         if value > one_day_ago then

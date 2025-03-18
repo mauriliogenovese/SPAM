@@ -465,3 +465,4 @@ SPAM.last_autocast = 0
 SPAM.last_command = ""
 SPAM.last_command_time = os.time()
 SPAM.chat_log = {}
+SPAM.glory_reset_time = 20 * 60 * 60
