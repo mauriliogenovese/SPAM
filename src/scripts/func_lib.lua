@@ -444,6 +444,9 @@ end
 --remove articles or other unnecessary names from followers
 
 function SPAM.beautify_name(name)
+    if SPAM.string.starts(string.lower(name), "lo zombie di ") then
+        name = string.gsub(string.lower(name), "lo zombie di ", "")
+    end
     if SPAM.string.starts(string.lower(name), "un enorme ") then
         name = string.gsub(string.lower(name), "un enorme ", "")
     elseif SPAM.string.starts(string.lower(name), "una ") then
