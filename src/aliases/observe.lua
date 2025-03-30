@@ -75,8 +75,8 @@ if #split > 1 then
       SPAM.config.set("custom_refresh", {})
     end
     local exp = SPAM.string.explode(SPAM.string.remove_first_word(matches[3]), "-")
-    if #exp == 2 then
-      exp[1] = SPAM.string.trim(exp[1])
+    exp[1] = SPAM.string.trim(exp[1])
+    if #exp == 2 or SPAM.config.get("custom_refresh")[exp[1]] ~= nil then
       if SPAM.config.get("custom_refresh")[exp[1]] ~= nil then
         echo("\nRimuovo custom refresh " .. exp[1] .. "\n")
         SPAM.config.get("custom_refresh")[exp[1]] = nil
