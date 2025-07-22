@@ -446,8 +446,7 @@ end
 function SPAM.beautify_name(name)
     if SPAM.string.starts(string.lower(name), "lo zombie di ") then
         name = string.gsub(string.lower(name), "lo zombie di ", "")
-    end
-    if SPAM.string.starts(string.lower(name), "il corpo animato di ") then
+    elseif SPAM.string.starts(string.lower(name), "il corpo animato di ") then
         name = string.gsub(string.lower(name), "il corpo animato di ", "")
     end
     if SPAM.string.starts(string.lower(name), "un enorme ") then
