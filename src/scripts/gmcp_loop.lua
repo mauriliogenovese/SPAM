@@ -165,7 +165,13 @@ function gmcp_loop()
                     if
                     v.razza == "efreet" or
                             v.razza == "gigante delle nuvole" or
-                            v.razza == "gigante delle tempeste"
+                            v.razza == "gigante delle tempeste" or
+                            this_name == "Vampiro" or
+                            this_name == "Pipistrello" or
+                            this_name == "Corvo" or
+                            this_name == "Aquila" or
+                            this_name == "Pterodattilo" or
+                            this_name == "Orsogufo"
                     then
                         active["volo"] = true
                     end
