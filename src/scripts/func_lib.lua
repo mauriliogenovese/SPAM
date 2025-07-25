@@ -508,6 +508,9 @@ function SPAM.play_sound(file)
     end
 end
 
+function SPAM.ding_sound()
+    SPAM.play_sound(SPAM.ding_file)
+end
 
 -- We need this function for sorting.
 local function greater(a, b)
