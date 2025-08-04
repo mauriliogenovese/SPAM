@@ -154,6 +154,13 @@ SPAM.config.globals["chat_log"] = {
     var_type = "bool",
     default = false
 }
+SPAM.config.globals["auto_alza"] = {
+    name = "Auto_alza",
+    desc = [[SPAM può far alzare in automatico il personaggio quando si prova a caricare o aggirare in combattimento da seduti.
+Per abilitare/disabilitare questa funzione usa il comando: <white>spam auto_alza on/off]],
+    var_type = "bool",
+    default = false
+}
 
 SPAM.config.characters = {}
 SPAM.config.characters["observe_list"] = {

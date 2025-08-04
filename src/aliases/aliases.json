@@ -41,5 +41,15 @@
     "name": "chat_log",
     "command": "",
     "regex": "^chat_log$"
+  },
+  {
+    "name": "aggira",
+    "command": "",
+    "regex": "^(aggira|aggir|aggi|agg) (.+)$"
+  },
+  {
+    "name": "carica",
+    "command": "",
+    "regex": "^(carica|caric|cari|car)( .+|)$"
   }
 ]
