@@ -167,6 +167,7 @@ function gmcp_loop()
                             v.razza == "gigante delle nuvole" or
                             v.razza == "gigante delle tempeste" or
                             this_name == "Vampiro" or
+                            this_name == "Wraith" or
                             this_name == "Pipistrello" or
                             this_name == "Corvo" or
                             this_name == "Aquila" or
