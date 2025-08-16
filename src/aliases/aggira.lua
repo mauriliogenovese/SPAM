@@ -1,6 +1,5 @@
 if SPAM.config.get("auto_alza") == true and
-    gmcp.Char.Vitals.tank ~= nil and
-    gmcp.Char.Vitals.tank ~= "Tu" and
+    SPAM.I_am_tank() and
     gmcp.Char.Vitals.stato == "Seduto" then
   send("alza")
 end

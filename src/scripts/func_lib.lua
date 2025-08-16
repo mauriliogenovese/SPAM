@@ -465,6 +465,8 @@ function SPAM.beautify_name(name)
         name = string.gsub(string.lower(name), "un ", "")
     elseif SPAM.string.starts(string.lower(name), "un'") then
         name = string.gsub(string.lower(name), "un'", "")
+    elseif SPAM.string.starts(string.lower(name), "il ") then
+        name = string.gsub(string.lower(name), "il ", "")
     end
     local words = {}
     words[1], words[2] = name:match("(%w+)(%W+)")
@@ -1417,4 +1419,12 @@ function SPAM.get_equip_slot(slot)
         end
     end
     return nil
+end
+
+function SPAM.I_am_tank()
+    if gmcp.Char.Vitals.tank ~= nil and gmcp.Char.Vitals.tank ~= "Tu" then
+        return true
+    else
+        return false
+    end
 end
