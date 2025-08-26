@@ -3,4 +3,4 @@ if SPAM.config.get("auto_alza") == true and
     gmcp.Char.Vitals.stato == "Seduto" then
   send("alza")
 end
-send("aggira "..matches[3])
+send("aggira "..matches[3], false)
