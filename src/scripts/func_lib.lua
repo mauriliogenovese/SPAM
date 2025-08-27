@@ -714,7 +714,7 @@ function SPAM.show_glory_timer()
     local one_day_ago = os.time() - SPAM.glory_reset_time
     local printed_title = false
     for key, value in pairs(SPAM.config.get("glory_timer")) do
-        if value > one_day_ago then
+        if value > one_day_ago or key == "today" or key =="today_total" then
             --print(key .. ": " .. os.date("%H:%M", value + 60 * 60))
         else
             if not printed_title then
@@ -733,6 +733,10 @@ function SPAM.show_glory_timer()
     SPAM.make_pairs(SPAM.config.get("glory_timer"), array)
     table.sort(array, greater)
     SPAM.print_pairs(array)
+    if SPAM.config.get("glory_timer")["today_total"] == nil then
+        SPAM.config.get("glory_timer")["today_total"]=0
+    end
+    cecho("\n<yellow>TOTALE GLORIA OGGI: "..SPAM.config.get("glory_timer")["today_total"])
     print("\n")
 end
 

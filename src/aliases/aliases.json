@@ -23,6 +23,11 @@
     "regex": "^(observe|ob)(.+|)$"
   },
   {
+    "name": "combo",
+    "command": "",
+    "regex": "^combo$"
+  },
+  {
     "name": "mem_helper",
     "isFolder": "yes",
     "children": [

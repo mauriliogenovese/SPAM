@@ -1,0 +1,1 @@
+SPAM.next_combo=string.lower(matches[3])

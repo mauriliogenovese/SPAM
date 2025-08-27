@@ -1,0 +1,1 @@
+SPAM.next_combo=nil

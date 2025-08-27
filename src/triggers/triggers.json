@@ -184,13 +184,62 @@
         "name": "got_glory",
         "patterns": [
           {
-            "pattern": "gloria per questa uccisione!",
+            "pattern": "^Hai ricevuto (.+) punt(o|i) gloria per questa uccisione!$",
+            "type": "regex"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "combo_monk",
+    "isFolder": "yes",
+    "children": [
+      {
+        "name": "combo_next",
+        "patterns": [
+          {
+            "pattern": "^(.+)ora ci vorrebbe una potente (.+)!$",
+            "type": "regex"
+          },
+          {
+            "pattern": "^(.+)ora di usare la tua famosa (.+)!$",
+            "type": "regex"
+          },
+          {
+            "pattern": "^(.+)ma puoi incalzare con una (.+)!$",
+            "type": "regex"
+          },
+          {
+            "pattern": "^(.+)per colpirlo con un (.+)!$",
+            "type": "regex"
+          },
+          {
+            "pattern": "^(.+)puoi colpirlo con un (.+)!$",
+            "type": "regex"
+          },
+          {
+            "pattern": "^(.+)vedi il petto scoperto... usa la (.+) degli Dei!$",
+            "type": "regex"
+          },
+          {
+            "pattern": "^(.+)verso di te... (.+) potrebbe essere la mossa piu' adatta!$",
+            "type": "regex"
+          }
+        ]
+      },
+      {
+        "name": "combo_stop",
+        "patterns": [
+          {
+            "pattern": "Purtroppo la tua serie di colpi si e' interrotta!",
             "type": "substring"
           }
         ]
       }
     ]
   },
+
   {
     "name": "clipboard_copy_block",
     "fireLength": "35",
