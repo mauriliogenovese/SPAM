@@ -198,6 +198,13 @@ SPAM.config.characters["glory_timer"] = {
     default = {},
     hidden = true
 }
+SPAM.config.characters["glory_today"] = {
+    name = "",
+    desc = [[]],
+    var_type = "list",
+    default = {},
+    hidden = true
+}
 SPAM.config.characters["gd_start"] = {
     name = "gdcolor_prefisso",
     desc = SPAM.config.globals["gdcolor"].desc,
