@@ -733,7 +733,7 @@ function SPAM.show_glory_timer()
     SPAM.make_pairs(SPAM.config.get("glory_timer"), array)
     table.sort(array, greater)
     SPAM.print_pairs(array)
-    if SPAM.config.get("glory_today")["date"] == nil or SPAM.config.get("glory_today")["today"] ~= os.date("%Y%m%d") then
+    if SPAM.config.get("glory_today")["date"] == nil or SPAM.config.get("glory_today")["date"] ~= os.date("%Y%m%d") then
         SPAM.config.get("glory_today")["date"]  = os.date("%Y%m%d")
         SPAM.config.get("glory_today")["total"]  = 0
     end
