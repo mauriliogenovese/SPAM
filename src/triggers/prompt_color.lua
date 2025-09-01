@@ -1,4 +1,4 @@
-if SPAM.config.get("prompt_color") == true then
+if SPAM.config.get("prompt_color") then
     local max=tonumber(matches[3])
     local current=tonumber(matches[2])
     selectString( matches[2], 1 )

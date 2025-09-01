@@ -161,6 +161,13 @@ Per abilitare/disabilitare questa funzione usa il comando: <white>spam auto_alza
     var_type = "bool",
     default = false
 }
+SPAM.config.globals["abbrevia_allineamento"] = {
+    name = "Abbrevia_allineamento",
+    desc = [[SPAM può abbreviare le stringhe degli allineamenti per accorciare il prompr, ad esempio Figlio dell'Equilibrio verrà mostrato come FdE.
+Per abilitare/disabilitare questa funzione usa il comando: <white>spam abbrevia_allineamento on/off]],
+    var_type = "bool",
+    default = false
+}
 
 SPAM.config.characters = {}
 SPAM.config.characters["observe_list"] = {
@@ -250,7 +257,7 @@ registerAnonymousEventHandler("sysDownloadDone", "SPAM.event_handler")
 registerAnonymousEventHandler("sysDownloadError", "SPAM.event_handler")
 SPAM.downloading = true
 local version_file = "https://raw.githubusercontent.com/mauriliogenovese/SPAM/main/version"
-if SPAM.config.get("dev") == true then
+if SPAM.config.get("dev") then
     version_file = "https://raw.githubusercontent.com/mauriliogenovese/SPAM/dev/version"
 end
 downloadFile(getMudletHomeDir() .. "/@PKGNAME@/version", version_file)
@@ -290,6 +297,16 @@ SPAM.colors =
     "ff3500",
     "FF0000",
   }
+SPAM.alignment = {}
+SPAM.alignment["Figlio dell'Ombra"] = "FdO"
+SPAM.alignment["Oscuro"] = "Osc"
+SPAM.alignment["Ombroso"] = "Omb"
+SPAM.alignment["Tendi all'Ombra"] = "TaO"
+SPAM.alignment["Figlio dell'Equilibrio"] = "FdE"
+SPAM.alignment["Tendi alla Luce"] = "TaL"
+SPAM.alignment["Lucente"] = "Luc"
+SPAM.alignment["Luminoso"] = "Lum"
+SPAM.alignment["Figlio della Luce"] = "FdL"
 -- Contenitore e mini-console per DdE Group
 SPAM.dde_group_container = SPAM.dde_group_container or Adjustable.Container:new({name = "DdE Group"})
 SPAM.dde_group_container.name = "DdE Group"

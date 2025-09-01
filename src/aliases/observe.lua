@@ -37,7 +37,7 @@ if #split == 1 then
     send("\n")
     return
   elseif SPAM.string.starts("autocast", string.lower(split[1])) then
-    if SPAM.config.get("autocast") == true then
+    if SPAM.config.get("autocast") then
       echo("\nAutocast disabilitato\n")
       SPAM.config.set("autocast", false)
     else
@@ -60,7 +60,7 @@ if #split > 1 then
       SPAM.config.get("optional_buff")[ally_name] = {}
     end
     local buff = SPAM.string.remove_first_two_words(matches[3])
-    if SPAM.config.get("optional_buff")[ally_name][buff] == true then
+    if SPAM.config.get("optional_buff")[ally_name][buff] then
       echo("\nRimuovo " .. buff .. " per " .. ally_name .. "\n")
       SPAM.config.get("optional_buff")[ally_name][buff] = nil
     else

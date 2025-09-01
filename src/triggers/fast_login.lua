@@ -1,3 +1,3 @@
-if SPAM.config.get("fast_login") == true then
+if SPAM.config.get("fast_login") then
     send("1")
 end

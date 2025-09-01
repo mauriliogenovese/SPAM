@@ -25,6 +25,47 @@
         ]
       },
       {
+        "name": "brief_alignement",
+        "patterns": [
+          {
+            "pattern": "Tendi alla Luce",
+            "type": "substring"
+          },
+          {
+            "pattern": "Tendi all'Ombra",
+            "type": "substring"
+          },
+          {
+            "pattern": "Figlio della Luce",
+            "type": "substring"
+          },
+          {
+            "pattern": "Figlio dell'Ombra",
+            "type": "substring"
+          },
+          {
+            "pattern": "Figlio dell'Equilibrio",
+            "type": "substring"
+          },
+          {
+            "pattern": "Luminoso",
+            "type": "substring"
+          },
+          {
+            "pattern": "Lucente",
+            "type": "substring"
+          },
+          {
+            "pattern": "Ombroso",
+            "type": "substring"
+          },
+          {
+            "pattern": "Oscuro",
+            "type": "substring"
+          }
+        ]
+      },
+      {
         "name": "item_color",
         "patterns": [
           {

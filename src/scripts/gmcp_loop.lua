@@ -31,7 +31,7 @@ function gmcp_loop()
         return
     end
     -- party observer
-    if SPAM.config.get("dde_group") == true then
+    if SPAM.config.get("dde_group") then
         clearWindow("DdE Group")
         local gruppo = {}
         SPAM.party_fight_check()
@@ -221,7 +221,7 @@ function gmcp_loop()
                             --check per autocast
                             if
                             this_name == SPAM.character_name and
-                                    SPAM.config.get("autocast") == true and
+                                    SPAM.config.get("autocast") and
                                     SPAM.config.get("custom_refresh")[b] == nil and
                                     SPAM.can_autocast(b) then
                                 SPAM.last_autocast = os.time()
@@ -247,7 +247,7 @@ function gmcp_loop()
                     end
                     if gmcp.Char.Magie.incantesimi ~= nil and this_name == SPAM.character_name then
                         for a, b in ipairs(gmcp.Char.Magie.incantesimi) do
-                            if active_observed[b.nome] == true and b.durata < 20 then
+                            if active_observed[b.nome] and b.durata < 20 then
                                 local color_tag = "<255,0,0>"
                                 if b.durata > 10 then
                                     color_tag = "<255,255,0>"

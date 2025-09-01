@@ -201,7 +201,7 @@ function SPAM.toggle_dde_group()
     end
     if SPAM.config.get("dde_group") == false then
         SPAM.dde_group_container:hide()
-    elseif SPAM.dde_group_container.hidden == true then
+    elseif SPAM.dde_group_container.hidden then
         SPAM.dde_group_container:show()
     end
 end
@@ -212,7 +212,7 @@ function SPAM.toggle_abbil_chat()
     end
     if SPAM.config.get("abbil_chat") == false then
         SPAM.abbil_chat_container:hide()
-    elseif SPAM.abbil_chat_container.hidden == true then
+    elseif SPAM.abbil_chat_container.hidden then
         SPAM.abbil_chat_container:show()
     end
 end
@@ -235,7 +235,7 @@ function SPAM.toggle_mem_helper()
 
     if SPAM.is_class("stregone") == false or SPAM.config.get("mem_helper") == false then
         SPAM.mem_container:hide()
-    elseif SPAM.mem_container.hidden == true then
+    elseif SPAM.mem_container.hidden then
         SPAM.mem_container:show()
     end
 end
@@ -366,7 +366,7 @@ end
 function SPAM.update()
     uninstallPackage("@PKGNAME@")
     local git_url = "https://raw.githubusercontent.com/mauriliogenovese/SPAM/main/build/SPAM.mpackage"
-    if SPAM.config.get("dev") == true then
+    if SPAM.config.get("dev") then
         git_url = "https://raw.githubusercontent.com/mauriliogenovese/SPAM/dev/build/SPAM.mpackage"
     end
     installPackage(git_url)
@@ -645,7 +645,7 @@ end
 
 function SPAM.ob_role(name, test_role, check_name)
     local roles = SPAM.role_list()
-    if check_name == true then
+    if check_name then
         allyName = SPAM.get_ally_name(name)
     else
         allyName = name
@@ -765,10 +765,10 @@ function SPAM.can_autocast(spell_name)
             gmcp.Char.Vitals.lag ~= 0 or
             gmcp.Char.Coda.numero ~= 0 or
             gmcp.Char.Vitals.tank ~= nil or
-            SPAM.party_in_fight == true or
+            SPAM.party_in_fight or
             os.time() < SPAM.last_autocast + 2 or
             os.time() > SPAM.last_command_time + 60*5 or
-            SPAM.ignore_autocast[spell_name] == true or
+            SPAM.ignore_autocast[spell_name] or
             gmcp.Char.Vitals.hp/gmcp.Char.Vitals.maxhp < 0.5 or
             SPAM.get_known_cast_mana(spell_name) > gmcp.Char.Vitals.mana then
         return false
@@ -1229,7 +1229,7 @@ function SPAM.parse_eval(eval_text)
 end
 
 function SPAM.debug(var)
-    if SPAM.config.get("debug") == true then
+    if SPAM.config.get("debug") then
         cecho("\n<red>DEBUG PRINT:\n")
         display(var)
     end
@@ -1299,12 +1299,12 @@ function SPAM.config.show_global(config_name)
     if SPAM.config.globals[config_name] ~= nil then
         row = "    " .. SPAM.config.globals[config_name].name ..": "
         if SPAM.config.globals[config_name].var_type == "bool" then
-            if SPAM.config.globals[config_name].hidden == true and SPAM.config.persistent_globals[config_name] == false then
+            if SPAM.config.globals[config_name].hidden and SPAM.config.persistent_globals[config_name] == false then
                 return
             end
             row = row .. SPAM.string.parse_bool(SPAM.config.persistent_globals[config_name])
         else
-            if SPAM.config.globals[config_name].hidden == true then
+            if SPAM.config.globals[config_name].hidden then
                 return
             end
             row = row .. SPAM.config.persistent_globals[config_name]

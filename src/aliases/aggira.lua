@@ -1,4 +1,4 @@
-if SPAM.config.get("auto_alza") == true and
+if SPAM.config.get("auto_alza") and
     SPAM.I_am_tank() and
     gmcp.Char.Vitals.stato == "Seduto" then
   send("alza")
