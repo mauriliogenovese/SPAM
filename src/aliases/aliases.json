@@ -12,6 +12,12 @@
   },
 
   {
+    "name": "xp_counter",
+    "command": "",
+    "regex": "^liv(|e|el|ello)$"
+  },
+
+  {
     "name": "gd",
     "command": "",
     "regex": "^(gd|GD|gt|GT) (.+)$"

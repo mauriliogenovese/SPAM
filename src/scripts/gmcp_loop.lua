@@ -15,6 +15,18 @@ function gmcp_loop()
         SPAM.observe_spell_list = nil
         SPAM.last_autocast = os.time()
         -- gmcp.Char.Classi.classi = nil
+
+        -- at character loading save exp for day counter
+        if SPAM.config.get("glory_today")["date"] == nil or
+         SPAM.config.get("glory_today")["date"] ~= os.date("%Y%m%d") or
+         SPAM.config.get("glory_today")["base_exp"]  == nil or
+         SPAM.config.get("glory_today")["total"]  == nil then
+            SPAM.config.get("glory_today")["date"]  = os.date("%Y%m%d")
+            SPAM.config.get("glory_today")["base_exp"]  = SPAM.current_exp()
+            SPAM.config.get("glory_today")["total"]  = 0
+            SPAM.config.save_characters()
+        end
+
         -- return NEEDED to refresh classes
         return
     end

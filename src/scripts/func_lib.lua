@@ -707,7 +707,7 @@ Ad esempio: <yellow>spam ddegroup <grey>oppure <yellow>spam gdcolor
 end
 
 function SPAM.show_glory_timer()
-    send("gloria")
+    send("gloria", false)
     if SPAM.config.get("glory") == false then
         return
     end
@@ -733,10 +733,6 @@ function SPAM.show_glory_timer()
     SPAM.make_pairs(SPAM.config.get("glory_timer"), array)
     table.sort(array, greater)
     SPAM.print_pairs(array)
-    if SPAM.config.get("glory_today")["date"] == nil or SPAM.config.get("glory_today")["date"] ~= os.date("%Y%m%d") then
-        SPAM.config.get("glory_today")["date"]  = os.date("%Y%m%d")
-        SPAM.config.get("glory_today")["total"]  = 0
-    end
     cecho("\n<yellow>TOTALE GLORIA OGGI: "..SPAM.config.get("glory_today")["total"])
     print("\n")
 end
@@ -1432,4 +1428,11 @@ function SPAM.I_am_tank()
     else
         return false
     end
+end
+
+function SPAM.current_exp()
+    if gmcp.Char.Vitals.exp_eroe ~= 0 then
+        return gmcp.Char.Vitals.exp_eroe
+    end
+    return gmcp.Char.Vitals.exp_totale
 end
