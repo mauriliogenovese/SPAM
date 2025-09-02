@@ -1235,6 +1235,18 @@ function SPAM.debug(var)
     end
 end
 
+function SPAM.config.load_path()
+    if SPAM.file_exists(SPAM.config.path_savelocation) then
+        local temp
+        table.load(SPAM.config.path_savelocation, temp)
+        if SPAM.file_exists(temp["path"]) then
+            SPAM.config.path = temp["path"]
+            return
+        end
+    end
+    SPAM.config.path = getMudletHomeDir()
+end
+
 function SPAM.config.save_globals()
     table.save(SPAM.config.globals_savelocation, SPAM.config.persistent_globals)
     SPAM.toggle_dde_group()
@@ -1327,6 +1339,12 @@ function SPAM.config.show_character(config_name)
 end
 
 function SPAM.config.show_all()
+    if SPAM.config.path == getMudletHomeDir()then
+        checho("\nLa configurazione è salvata nel path predefinito\n")
+    else
+        checho("\nLa configurazione è salvata in: <white>"..SPAM.config.path .."\n")
+    end
+    cecho("Per cambiare la cartella di configurazione usa: <yellow>spam configurazione path/per/la/cartella\n")
     checho("\nLa configurazione del profilo attuale è:\n")
     for k, v in pairs(SPAM.config.globals) do
         SPAM.config.show_global(k)
@@ -1382,6 +1400,10 @@ end
 
 function SPAM.config.set_by_name(config_name, value, report)
     report = report or true
+    if SPAM.string.starts("configurazione", string.lower(config_name)) then
+        SPAM.change_config_path(value)
+        return
+    end
     for k, v in pairs(SPAM.config.globals) do
         if SPAM.string.starts(string.lower(v.name), string.lower(config_name)) then
             if v.var_type == "bool" then
@@ -1401,6 +1423,34 @@ function SPAM.config.set_by_name(config_name, value, report)
         end
     end
     cecho("\nScelta non valida\n\n")
+end
+
+function SPAM.change_config_path(path)
+    if not SPAM.file_exists(path) then
+        cecho("\nIl percorso specificato non esiste: "..path.."\n")
+        return
+    end
+
+    local temp = {}
+    temp["path"] = path
+    table.save(SPAM.config.path_savelocation, temp)
+
+    SPAM.config.globals_savelocation = SPAM.config.path .. "/@PKGNAME@_globals.lua"
+    if SPAM.file_exists(SPAM.config.globals_savelocation) then
+        SPAM.load_globals()
+        cecho("\nConfigurazione importata da:<white>"..SPAM.config.globals_savelocation)
+    else
+        SPAM.config.save_globals()
+        cecho("\nConfigurazione salvata in:<white>"..SPAM.config.globals_savelocation)
+    end
+
+    SPAM.config.characters_savelocation = SPAM.config.path .. "/@PKGNAME@_characters.lua"
+    if SPAM.file_exists(SPAM.config.characters_savelocation) then
+        SPAM.load_characters()
+    else
+        SPAM.config.save_characters()
+    end
+
 end
 
 function SPAM.search_equip(name)

@@ -277,6 +277,15 @@
             "type": "substring"
           }
         ]
+      },
+      {
+        "name": "combo_coda_reset",
+        "patterns": [
+          {
+            "pattern": "Coda comandi reimpostata.",
+            "type": "substring"
+          }
+        ]
       }
     ]
   },

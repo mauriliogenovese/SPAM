@@ -2,8 +2,10 @@ SPAM = SPAM or {}
 SPAM.package_name = "@PKGNAME@"
 
 SPAM.config = SPAM.config or {}
-SPAM.config.globals_savelocation = getMudletHomeDir() .. "/@PKGNAME@_globals.lua"
-SPAM.config.characters_savelocation = getMudletHomeDir() .. "/@PKGNAME@_characters.lua"
+SPAM.config.path_savelocation = getMudletHomeDir() .. "/@PKGNAME@_file_path.lua"
+SPAM.config.load_path()
+SPAM.config.globals_savelocation = SPAM.config.path .. "/@PKGNAME@_globals.lua"
+SPAM.config.characters_savelocation = SPAM.config.path .. "/@PKGNAME@_characters.lua"
 SPAM.config.globals = {}
 SPAM.config.globals["dde_group"] = {
     name = "DdEgroup",
@@ -240,6 +242,7 @@ SPAM.config.characters["automem"] = {
     hidden = true
 }
 
+SPAM.config.load_file_path()
 SPAM.config.load_globals()
 SPAM.config.load_characters()
 
