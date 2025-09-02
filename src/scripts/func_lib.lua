@@ -1493,3 +1493,15 @@ function SPAM.current_exp()
     end
     return gmcp.Char.Vitals.exp_totale
 end
+
+function SPAM.formatNumber(n, sep)
+    sep = sep or "."  -- di default usa il punto
+    local str = tostring(n)
+    local k
+    -- Aggiunge il separatore ogni 3 cifre da destra
+    while true do
+        str, k = str:gsub("^(-?%d+)(%d%d%d)", "%1" .. sep .. "%2")
+        if k == 0 then break end
+    end
+    return str
+end
