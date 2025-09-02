@@ -242,7 +242,6 @@ SPAM.config.characters["automem"] = {
     hidden = true
 }
 
-SPAM.config.load_file_path()
 SPAM.config.load_globals()
 SPAM.config.load_characters()
 

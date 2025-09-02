@@ -1237,7 +1237,7 @@ end
 
 function SPAM.config.load_path()
     if SPAM.file_exists(SPAM.config.path_savelocation) then
-        local temp
+        local temp = {}
         table.load(SPAM.config.path_savelocation, temp)
         if SPAM.file_exists(temp["path"]) then
             SPAM.config.path = temp["path"]
@@ -1340,11 +1340,12 @@ end
 
 function SPAM.config.show_all()
     if SPAM.config.path == getMudletHomeDir()then
-        checho("\nLa configurazione è salvata nel path predefinito\n")
+        checho("\nLa configurazione è salvata nella cartella predefinita\n")
     else
-        checho("\nLa configurazione è salvata in: <white>"..SPAM.config.path .."\n")
+        checho("\nLa configurazione è salvata in: <yellow>"..SPAM.config.path .."\n")
     end
-    cecho("Per cambiare la cartella di configurazione usa: <yellow>spam configurazione path/per/la/cartella\n")
+    cecho("Per cambiare la cartella di configurazione usa: <yellow>spam config path/per/la/cartella\n")
+    cecho("Per tornate alla cartella predefinita usa: <yellow>spam config reset\n")
     checho("\nLa configurazione del profilo attuale è:\n")
     for k, v in pairs(SPAM.config.globals) do
         SPAM.config.show_global(k)
@@ -1426,6 +1427,11 @@ function SPAM.config.set_by_name(config_name, value, report)
 end
 
 function SPAM.change_config_path(path)
+
+    if path == "reset" then
+        path = getMudletHomeDir()
+    end
+
     if not SPAM.file_exists(path) then
         cecho("\nIl percorso specificato non esiste: "..path.."\n")
         return
@@ -1434,10 +1440,11 @@ function SPAM.change_config_path(path)
     local temp = {}
     temp["path"] = path
     table.save(SPAM.config.path_savelocation, temp)
+    SPAM.config.path = path
 
     SPAM.config.globals_savelocation = SPAM.config.path .. "/@PKGNAME@_globals.lua"
     if SPAM.file_exists(SPAM.config.globals_savelocation) then
-        SPAM.load_globals()
+        SPAM.config.load_globals()
         cecho("\nConfigurazione importata da:<white>"..SPAM.config.globals_savelocation)
     else
         SPAM.config.save_globals()
@@ -1446,7 +1453,7 @@ function SPAM.change_config_path(path)
 
     SPAM.config.characters_savelocation = SPAM.config.path .. "/@PKGNAME@_characters.lua"
     if SPAM.file_exists(SPAM.config.characters_savelocation) then
-        SPAM.load_characters()
+        SPAM.config.load_characters()
     else
         SPAM.config.save_characters()
     end
