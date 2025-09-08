@@ -27,6 +27,10 @@ function gmcp_loop()
             SPAM.config.save_characters()
         end
 
+        SPAM.init_dde_group()
+        SPAM.init_abbil_chat()
+        SPAM.init_mem_helper()
+
         -- return NEEDED to refresh classes
         return
     end
@@ -73,7 +77,7 @@ function gmcp_loop()
                 name_x = name_x + 1
             end
             party_names[this_name] = true
-            SPAM.dde_group_widget:decho("\n")
+            SPAM.dde_group_window:decho("\n")
             local ob_func_list = {}
             local ob_name_list = SPAM.role_list()
             table.foreach(
@@ -85,8 +89,8 @@ function gmcp_loop()
                         )
                     end
             )
-            SPAM.dde_group_widget:hechoPopup(this_name, ob_func_list, ob_name_list, true)
-            SPAM.dde_group_widget:decho("(")
+            SPAM.dde_group_window:hechoPopup(this_name, ob_func_list, ob_name_list, true)
+            SPAM.dde_group_window:decho("(")
             local this_hp = tonumber(v.hp)
             local row = "#" .. SPAM.get_pf_color(this_hp, 100) .. this_hp
             --if player can cast heal spells, add them as link
@@ -101,11 +105,11 @@ function gmcp_loop()
                             )
                         end
                 )
-                SPAM.dde_group_widget:hechoPopup(row, heal_func_list, SPAM.observe_spell_list.heal, true)
+                SPAM.dde_group_window:hechoPopup(row, heal_func_list, SPAM.observe_spell_list.heal, true)
             else
-                SPAM.dde_group_widget:hecho(row)
+                SPAM.dde_group_window:hecho(row)
             end
-            SPAM.dde_group_widget:decho("<200,200,200>")
+            SPAM.dde_group_window:decho("<200,200,200>")
             local this_move = tonumber(v.move)
             if this_move <= 20 then
                 row = ", <red>" .. this_move
@@ -120,12 +124,12 @@ function gmcp_loop()
                                 )
                             end
                     )
-                    SPAM.dde_group_widget:cechoPopup(row, move_func_list, SPAM.observe_spell_list.move, true)
+                    SPAM.dde_group_window:cechoPopup(row, move_func_list, SPAM.observe_spell_list.move, true)
                 else
-                    SPAM.dde_group_widget:cecho(row)
+                    SPAM.dde_group_window:cecho(row)
                 end
             end
-            SPAM.dde_group_widget:decho(")")
+            SPAM.dde_group_window:decho(")")
             --generate spell to check for the current group member
             if SPAM.config.get("observe_list")[this_name] ~= nil then
                 local observe_spell = {}
@@ -228,8 +232,8 @@ function gmcp_loop()
                                 send(SPAM.observe_spell_list.command .. " '" .. b .. "' " .. this_name)
 
                             end
-                            SPAM.dde_group_widget:decho(" - ")
-                            SPAM.dde_group_widget:dechoLink(
+                            SPAM.dde_group_window:decho(" - ")
+                            SPAM.dde_group_window:dechoLink(
                                     b,
                                     [[
                                       if SPAM.config.get("custom_refresh")["]] .. b .. [["] == nil then
@@ -253,26 +257,26 @@ function gmcp_loop()
                                     color_tag = "<255,255,0>"
                                 end
                                 if b.nome == "volo" or b.nome == "branchie" or b.nome == "levitazione" then
-                                    SPAM.dde_group_widget:dechoLink(
+                                    SPAM.dde_group_window:dechoLink(
                                             " - " .. color_tag .. b.nome .. "<200,200,200>",
                                             [[send(SPAM.observe_spell_list.command .. " ']] .. b.nome .. [[' ]] .. this_name .. [[")]],
                                             "Casta " .. b.nome,
                                             true
                                     )
                                 else
-                                    SPAM.dde_group_widget:decho(" - " .. color_tag .. b.nome .. "<200,200,200>")
+                                    SPAM.dde_group_window:decho(" - " .. color_tag .. b.nome .. "<200,200,200>")
                                 end
                             end
                         end
                     end
                 end
             end
-            SPAM.dde_group_widget:decho("\n")
+            SPAM.dde_group_window:decho("\n")
             observe_spell = nil
             active_observed = nil
         end
     end
-    if SPAM.mem_container.hidden == false then
+    if SPAM.is_class("stregone") and SPAM.config.get("mem_helper") then
         SPAM.print_mem()
     end
 end

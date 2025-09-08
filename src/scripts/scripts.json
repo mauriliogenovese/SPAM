@@ -18,5 +18,11 @@
     "eventHandlerList": [
       "gmcp.Comm.Channel.Text"
     ]
+  },
+  {
+    "name": "save_windows_layout",
+    "eventHandlerList": [
+      "sysUserWindowResizeEvent"
+    ]
   }
 ]

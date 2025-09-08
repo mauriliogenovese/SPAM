@@ -37,5 +37,5 @@ function gmcp_chat()
         table.remove(SPAM.chat_log, 1)
     end
 
-    SPAM.abbil_chat_widget:decho("<" .. c .. ">[" .. italic_open .. text.canale .. italic_close .. da_a .. "]: <160,160,160>" .. ansi2decho(text.testo) .. "\n")
+    SPAM.abbil_chat_window:decho("<" .. c .. ">[" .. italic_open .. text.canale .. italic_close .. da_a .. "]: <160,160,160>" .. ansi2decho(text.testo) .. "\n")
 end
