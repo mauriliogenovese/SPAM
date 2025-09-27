@@ -90,16 +90,16 @@ if #split > 1 then
     end
   elseif SPAM.string.starts("font", string.lower(split[1])) then
     if split[2] == "+" then
-      SPAM.dde_group_window:setFontSize(SPAM.dde_group_window:getFontSize()+1)
+      SPAM.dde_group_widget:setFontSize(SPAM.dde_group_widget:getFontSize()+1)
       echo("\nDimensione del testo aumentata\n")
     elseif split[2] == "-" then
-      SPAM.dde_group_window:setFontSize(SPAM.dde_group_window:getFontSize()-1)
+      SPAM.dde_group_widget:setFontSize(SPAM.dde_group_widget:getFontSize()-1)
       echo("\nDimensione del testo ridotta\n")
     else
       cecho("\n<red>Comando invalido:<white> " .. split[2])
       cecho("\nLa sintassi corretta è: <yellow>observe font +/-\n")
     end
-    SPAM.config.set("buff_font_size", SPAM.dde_group_window:getFontSize())
+    SPAM.config.set("buff_font_size", SPAM.dde_group_widget:getFontSize())
     return
   end
   if SPAM.ob_role(split[1], split[2], true) then

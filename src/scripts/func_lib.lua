@@ -194,64 +194,26 @@ function SPAM.table.get_keys(input_table)
     return keys
 end
 
-function SPAM.init_dde_group()
-    -- Contenitore e mini-console per DdE Group
-    SPAM.dde_group_window = SPAM.dde_group_window or Geyser.UserWindow:new({
-      name = "DdE Group",
-      titleText = "DdE Group",
-      autoDock = false,
-      restoreLayout = true,
-      autoWrap = true,
-      fontSize = SPAM.config.get("buff_font_size"),
-      docked = false
-    })
-    clearWindow("DdE Group")
-    SPAM.dde_group_window:echo("\n*** DdE Group Caricato.\n")
-    tempTimer(0.1,function()
-            SPAM.toggle_dde_group()
-        end)
-end
 
 function SPAM.toggle_dde_group()
-    if SPAM.dde_group_window == nil then
+    if SPAM.dde_group_container == nil then
         return
     end
     if SPAM.config.get("dde_group") == false then
-        hideWindow("DdE Group")
-    else
-        showWindow("DdE Group")
-        loadWindowLayout()
+        SPAM.dde_group_container:hide()
+    elseif SPAM.dde_group_container.hidden then
+        SPAM.dde_group_container:show()
     end
-end
-
-function SPAM.init_abbil_chat()
-    -- Contenitore e mini-console per Abbil Chat
-    SPAM.abbil_chat_window = SPAM.abbil_chat_window or Geyser.UserWindow:new({
-      name = "Abbil Chat",
-      titleText = "Abbil Chat",
-      docked = true,
-      autoDock = false,
-      restoreLayout = true,
-      autoWrap = true,
-      dockPosition = "top",
-      fontSize = SPAM.config.get("buff_font_size")
-    })
-    clearWindow("Abbil Chat")
-    SPAM.abbil_chat_window:echo("\n*** Abbil Chat Caricato.\n")
-    tempTimer(0.1,function()
-            SPAM.toggle_abbil_chat()
-        end)
 end
 
 function SPAM.toggle_abbil_chat()
-    if SPAM.abbil_chat_window == nil then
+    if SPAM.abbil_chat_container == nil then
         return
     end
     if SPAM.config.get("abbil_chat") == false then
-        hideWindow("Abbil Chat")
-    else
-        showWindow("Abbil Chat")
-        loadWindowLayout()
+        SPAM.abbil_chat_container:hide()
+    elseif SPAM.abbil_chat_container.hidden then
+        SPAM.abbil_chat_container:show()
     end
 end
 
@@ -266,36 +228,18 @@ function SPAM.is_class(class_name)
     return is_class
 end
 
-function SPAM.init_mem_helper()
-    -- Contenitore e mini-console per mem_helper
-    SPAM.mem_window = SPAM.mem_window or Geyser.UserWindow:new({
-      name = "MEM Helper",
-      titleText = "MEM Helper",
-      autoDock = false,
-      restoreLayout = true,
-      autoWrap = true,
-      fontSize = SPAM.config.get("buff_font_size"),
-      docked = false
-    })
-    clearWindow("MEM Helper")
-    SPAM.mem_window:echo("\n*** MEM Helper Caricato.\n")
-    tempTimer(0.1,function()
-            SPAM.toggle_mem_helper()
-        end)
-end
-
 function SPAM.toggle_mem_helper()
-    if SPAM.mem_window == nil then
+    if SPAM.mem_container == nil then
         return
     end
 
     if SPAM.is_class("stregone") == false or SPAM.config.get("mem_helper") == false then
-        hideWindow("MEM Helper")
-    else
-        showWindow("MEM Helper")
-        loadWindowLayout()
+        SPAM.mem_container:hide()
+    elseif SPAM.mem_container.hidden then
+        SPAM.mem_container:show()
     end
 end
+
 
 function SPAM.get_known_cast(cast_name)
     for _, v in ipairs(gmcp.Char.Skills) do
@@ -317,8 +261,8 @@ end
 
 function SPAM.print_mem()
     clearWindow("MEM Helper")
-    SPAM.mem_window:cecho("\n")
-    SPAM.mem_window:cecho ("\nHai <royal_blue>" .. gmcp.Char.Magie.memorizzare.in_memoria .. "<grey>/<cyan>" .. gmcp.Char.Magie.memorizzare.in_totale ..  "<grey> incantesimi memorizzati:\n")
+    SPAM.mem_widget:cecho("\n")
+    SPAM.mem_widget:cecho ("\nHai <royal_blue>" .. gmcp.Char.Magie.memorizzare.in_memoria .. "<grey>/<cyan>" .. gmcp.Char.Magie.memorizzare.in_totale ..  "<grey> incantesimi memorizzati:\n")
     for _, v in pairs(gmcp.Char.Magie.memorizzazioni) do
         row = SPAM.string.first_upper(v.nome)
         for i = 1, (30 - string.len(v.nome)) do
@@ -332,13 +276,13 @@ function SPAM.print_mem()
             row = row .. "  Automem: <royal_blue>" .. SPAM.config.get("automem")[v.nome] .."<grey>"
         end
         row = row .. "\n"
-        SPAM.mem_window:cecho(row)
+        SPAM.mem_widget:cecho(row)
     end
-    SPAM.mem_window:cecho("\n")
+    SPAM.mem_widget:cecho("\n")
     if gmcp.Char.Magie.memorizzare.in_studio == 0 then
-        SPAM.mem_window:cecho ("Non stai memorizzando alcun incantesimo. Puoi memorizzarne ancora <royal_blue>" .. (gmcp.Char.Magie.memorizzare.in_totale - gmcp.Char.Magie.memorizzare.in_memoria) .. "<grey>.")
+        SPAM.mem_widget:cecho ("Non stai memorizzando alcun incantesimo. Puoi memorizzarne ancora <royal_blue>" .. (gmcp.Char.Magie.memorizzare.in_totale - gmcp.Char.Magie.memorizzare.in_memoria) .. "<grey>.")
     else
-        SPAM.mem_window:cecho ("Stai memorizzando <royal_blue>" .. gmcp.Char.Magie.memorizzare.in_studio .. "<grey>/<cyan>" .. gmcp.Char.Magie.memorizzare.per_studio .. "<grey> incantesimi. Ne avrai memorizzati <royal_blue>" ..  (gmcp.Char.Magie.memorizzare.in_memoria + gmcp.Char.Magie.memorizzare.in_studio) .. "<grey>/<cyan>" .. gmcp.Char.Magie.memorizzare.in_totale .. "<grey> alla fine dei tuoi studi.")
+        SPAM.mem_widget:cecho ("Stai memorizzando <royal_blue>" .. gmcp.Char.Magie.memorizzare.in_studio .. "<grey>/<cyan>" .. gmcp.Char.Magie.memorizzare.per_studio .. "<grey> incantesimi. Ne avrai memorizzati <royal_blue>" ..  (gmcp.Char.Magie.memorizzare.in_memoria + gmcp.Char.Magie.memorizzare.in_studio) .. "<grey>/<cyan>" .. gmcp.Char.Magie.memorizzare.in_totale .. "<grey> alla fine dei tuoi studi.")
     end
 end
 
@@ -1085,6 +1029,7 @@ function SPAM.send_ident_to_db(data)
             'sysPostHttpDone',
             function(event, rurl, response)
                 if rurl == url then
+                    --display(response)
                     cecho("\n\n<yellow>Identificazione inviata con successo al NariaDB\n\n")
                 else
                     return true
@@ -1099,6 +1044,7 @@ function SPAM.send_ident_to_db(data)
             'sysPostHttpError',
             function(event, response, rurl)
                 if rurl == url then
+                    --display(response)
                     cecho("\n\n<red>ERRORE: invio identificazione al NariaDB\n\n")
                 else
                     return true

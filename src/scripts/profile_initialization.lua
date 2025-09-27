@@ -309,8 +309,77 @@ SPAM.alignment["Tendi alla Luce"] = "TaL"
 SPAM.alignment["Lucente"] = "Luc"
 SPAM.alignment["Luminoso"] = "Lum"
 SPAM.alignment["Figlio della Luce"] = "FdL"
-
--- Lista delle Classi
+-- Contenitore e mini-console per DdE Group
+SPAM.dde_group_container = SPAM.dde_group_container or Adjustable.Container:new({name = "DdE Group"})
+SPAM.dde_group_container.name = "DdE Group"
+SPAM.dde_group_container:unlockContainer()
+SPAM.dde_group_widget =
+  SPAM.dde_group_widget or
+  Geyser.MiniConsole:new(
+    {
+      name = "DdE Group",
+      x = 0,
+      y = 0,
+      autoWrap = true,
+      color = 'black',
+      scrollBar = false,
+      fontSize = SPAM.config.get("buff_font_size"),
+      width = "100%",
+      height = "100%",
+    },
+    SPAM.dde_group_container
+  )
+clearWindow("DdE Group")
+SPAM.dde_group_widget:echo("\n*** DdE Group Caricato.\n")
+SPAM.toggle_dde_group()
+-- Contenitore e mini-console per Abbil Chat
+SPAM.abbil_chat_container = SPAM.abbil_chat_container or Adjustable.Container:new({name = "Abbil Chat"})
+SPAM.abbil_chat_container.name = "Abbil Chat"
+SPAM.abbil_chat_container:unlockContainer()
+SPAM.abbil_chat_widget =
+  SPAM.abbil_chat_widget or
+  Geyser.MiniConsole:new(
+    {
+      name = "Abbil Chat",
+      x = 0,
+      y = 0,
+      autoWrap = true,
+      color = 'black',
+      scrollBar = false,
+      font = getFont(),
+      fontSize = getFontSize(),
+      width = "100%",
+      height = "100%",
+    },
+    SPAM.abbil_chat_container
+  )
+clearWindow("Abbil Chat")
+SPAM.abbil_chat_widget:echo("\n*** Abbil Chat Caricato.\n")
+SPAM.toggle_abbil_chat()
+-- Contenitore e mini-console per mem_helper
+SPAM.mem_container = SPAM.mem_container or Adjustable.Container:new({name = "MEM Helper"})
+SPAM.mem_container.name = "MEM Helper"
+SPAM.mem_container:unlockContainer()
+SPAM.mem_widget =
+  SPAM.mem_widget or
+  Geyser.MiniConsole:new(
+    {
+      name = "MEM Helper",
+      x = 0,
+      y = 0,
+      autoWrap = true,
+      color = 'black',
+      scrollBar = false,
+      font = getFont(),
+      fontSize = getFontSize(),
+      width = "100%",
+      height = "100%",
+    },
+    SPAM.mem_container
+  )
+clearWindow("MEM Helper")
+SPAM.mem_container:hide()
+SPAM.mem_widget:echo("\n*** MEM Helper Caricato.\n")
 SPAM.class_list = {}
 SPAM.class_list["Chierico"] = SPAM.new_class()
 SPAM.class_list["Chierico"].buff.dps = {"benedizione", "aiuto divino"}
