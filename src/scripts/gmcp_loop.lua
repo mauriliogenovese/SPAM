@@ -27,9 +27,10 @@ function gmcp_loop()
             SPAM.config.save_characters()
         end
 
-        SPAM.init_dde_group()
         SPAM.init_abbil_chat()
+        SPAM.init_dde_group()
         SPAM.init_mem_helper()
+        loadWindowLayout()
 
         -- return NEEDED to refresh classes
         return

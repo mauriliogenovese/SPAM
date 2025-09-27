@@ -229,12 +229,11 @@ function SPAM.init_abbil_chat()
     SPAM.abbil_chat_window = SPAM.abbil_chat_window or Geyser.UserWindow:new({
       name = "Abbil Chat",
       titleText = "Abbil Chat",
-      docked = true,
       autoDock = false,
       restoreLayout = true,
       autoWrap = true,
-      dockPosition = "top",
-      fontSize = SPAM.config.get("buff_font_size")
+      fontSize = SPAM.config.get("buff_font_size"),
+      docked = false
     })
     clearWindow("Abbil Chat")
     SPAM.abbil_chat_window:echo("\n*** Abbil Chat Caricato.\n")
