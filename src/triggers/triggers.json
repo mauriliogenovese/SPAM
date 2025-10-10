@@ -25,6 +25,31 @@
         ]
       },
       {
+        "name": "remove_weapon_elements",
+        "patterns": [
+          {
+            "pattern": "^Uno spruzzo di (\\w+) fuoriesce da .*$",
+            "type": "regex"
+          },
+          {
+            "pattern": "^Una lingua di (\\w+) fuoriesce da .*$",
+            "type": "regex"
+          },
+          {
+            "pattern": "^Un frammento di (\\w+) fuoriesce da .*$",
+            "type": "regex"
+          },
+          {
+            "pattern": "^Una scintilla di (\\w+)' fuoriesce da .*$",
+            "type": "regex"
+          },
+          {
+            "pattern": "^Un'onda di (\\w+) fuoriesce da .*$",
+            "type": "regex"
+          }
+        ]
+      },
+      {
         "name": "brief_alignement",
         "patterns": [
           {

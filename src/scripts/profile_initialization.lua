@@ -165,8 +165,15 @@ Per abilitare/disabilitare questa funzione usa il comando: <white>spam auto_alza
 }
 SPAM.config.globals["abbrevia_allineamento"] = {
     name = "Abbrevia_allineamento",
-    desc = [[SPAM può abbreviare le stringhe degli allineamenti per accorciare il prompr, ad esempio Figlio dell'Equilibrio verrà mostrato come FdE.
+    desc = [[SPAM può abbreviare le stringhe degli allineamenti per accorciare il prompt, ad esempio Figlio dell'Equilibrio verrà mostrato come FdE.
 Per abilitare/disabilitare questa funzione usa il comando: <white>spam abbrevia_allineamento on/off]],
+    var_type = "bool",
+    default = false
+}
+SPAM.config.globals["nascondi_armi_elementali"] = {
+    name = "nascondi_armi_elementali",
+    desc = [[SPAM può abbreviare le stringhe del danno elementale delle armi.
+Per abilitare/disabilitare questa funzione usa il comando: <white>spam nascondi_armi_elementali on/off]],
     var_type = "bool",
     default = false
 }
