@@ -15,6 +15,13 @@ Per controllare le ulteriori opzioni di DDEGroup usa il comando: <yellow>observe
     var_type = "bool",
     default = true
 }
+SPAM.config.globals["fight"] = {
+    name = "FightMonitor",
+    desc = [[FightMonitor è uno schermo per monitorare lo stato del tank e del target.
+Per abilitare/disabilitare FightMonitor usa il comando: <yellow>spam fightmonitor on/off<grey>]],
+    var_type = "bool",
+    default = true
+}
 SPAM.config.globals["sounds"] = {
     name = "Suoni",
     desc = [[Alcune funzioni di SPAM potrebbero riprodurre dei suoni.
@@ -332,6 +339,28 @@ SPAM.dde_group_widget =
 clearWindow("DdE Group")
 SPAM.dde_group_widget:echo("\n*** DdE Group Caricato.\n")
 SPAM.toggle_dde_group()
+
+-- Contenitore e mini-console per Fight monitor
+SPAM.fight_container = SPAM.fight_container or Adjustable.Container:new({name = "Fight"})
+SPAM.fight_container.name = "Fight"
+SPAM.fight_container:unlockContainer()
+SPAM.tank_label = Geyser.Label:new({
+  name = "tank_label",
+  x = 0, y = 0,
+  height = "100%",
+  width = "50%",
+  color = "green",
+}, SPAM.fight_container)
+SPAM.target_label = Geyser.Label:new({
+  name = "target_label",
+  x = "50%", y = 0,
+  height = "100%",
+  width = "50%",
+  color = "red",
+}, SPAM.fight_container)
+SPAM.fight_widget:echo("\n*** Fight monitor Caricato.\n")
+SPAM.toggle_fight()
+
 -- Contenitore e mini-console per Abbil Chat
 SPAM.abbil_chat_container = SPAM.abbil_chat_container or Adjustable.Container:new({name = "Abbil Chat"})
 SPAM.abbil_chat_container.name = "Abbil Chat"

@@ -206,6 +206,17 @@ function SPAM.toggle_dde_group()
     end
 end
 
+function SPAM.toggle_fight()
+    if SPAM.fight_container == nil then
+        return
+    end
+    if SPAM.config.get("fight") == false then
+        SPAM.fight_container:hide()
+    elseif SPAM.fight_container.hidden then
+        SPAM.fight_container:show()
+    end
+end
+
 function SPAM.toggle_abbil_chat()
     if SPAM.abbil_chat_container == nil then
         return
@@ -444,6 +455,9 @@ end
 --remove articles or other unnecessary names from followers
 
 function SPAM.beautify_name(name)
+    if name == nil then
+        return nil
+    end
     if SPAM.string.starts(string.lower(name), "lo zombie di ") then
         name = string.gsub(string.lower(name), "lo zombie di ", "")
     elseif SPAM.string.starts(string.lower(name), "il corpo animato di ") then
@@ -1251,6 +1265,7 @@ function SPAM.config.save_globals()
     table.save(SPAM.config.globals_savelocation, SPAM.config.persistent_globals)
     SPAM.toggle_dde_group()
     SPAM.toggle_abbil_chat()
+    SPAM.toggle_fight()
 end
 
 function SPAM.config.load_globals()
@@ -1504,4 +1519,34 @@ function SPAM.formatNumber(n, sep)
         if k == 0 then break end
     end
     return str
+end
+
+function SPAM.get_tank()
+    local tank = nil
+    local tank_life = 0
+    local target = nil
+    local target_life = 0
+    if gmcp.Char.Vitals.tank ~= nil  then
+        if gmcp.Char.Vitals.tank == "Tu" then
+          tank = SPAM.character_name
+        else
+          tank = gmcp.Char.Vitals.tank
+        end
+        tank_life = gmcp.Char.Vitals.tankpct
+        target = gmcp.Char.Vitals.target
+        target_life = gmcp.Char.Vitals.targetpct
+    elseif gmcp.Char.Gruppo ~= nil and gmcp.Char.Gruppo.gruppo ~= nil then
+        for i, v in ipairs(gmcp.Char.Gruppo.gruppo) do
+          if v.combatte ~= nil then
+            tank = v.nome
+            tank_life = v.hp
+            target = v.combatte
+            target_life = v.combatte_hp
+            break
+          end
+        end
+    end
+    tank = SPAM.beautify_name(tank)
+    target = SPAM.beautify_name(target)
+    return tank, tank_life, target, target_life
 end
