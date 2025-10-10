@@ -260,6 +260,14 @@
             "type": "regex"
           },
           {
+            "pattern": "^(.+)per colpirla con un (.+)!$",
+            "type": "regex"
+          },
+          {
+            "pattern": "^(.+)puoi colpirla con un (.+)!$",
+            "type": "regex"
+          },
+          {
             "pattern": "^(.+)vedi il petto scoperto... usa la (.+) degli Dei!$",
             "type": "regex"
           },
