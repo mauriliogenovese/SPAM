@@ -266,6 +266,10 @@
           {
             "pattern": "^(.+)verso di te... (.+) potrebbe essere la mossa piu' adatta!$",
             "type": "regex"
+          },
+          {
+            "pattern": "^E' il (.+)... vedi la posizione perfetta... usa lo (.+)!$",
+            "type": "regex"
           }
         ]
       },
