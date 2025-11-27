@@ -1348,7 +1348,7 @@ function SPAM.config.show_all()
         checho("\nLa configurazione è salvata in: <yellow>"..SPAM.config.path .."\n")
     end
     cecho("Per cambiare la cartella di configurazione usa: <yellow>spam config path/per/la/cartella\n")
-    cecho("Per tornate alla cartella predefinita usa: <yellow>spam config reset\n")
+    cecho("Per tornare alla cartella predefinita usa: <yellow>spam config reset\n")
     checho("\nLa configurazione del profilo attuale è:\n")
     for k, v in pairs(SPAM.config.globals) do
         SPAM.config.show_global(k)

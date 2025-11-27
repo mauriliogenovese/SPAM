@@ -113,7 +113,7 @@ SPAM.config.globals["debug"] = {
     hidden = true
 }
 SPAM.config.globals["gdcolor"] = {
-    name = "gdcolor",
+    name = "GDcolor",
     desc = [[SPAM ti permette di impostare un suffisso e un prefisso per personalizzare il comando gd
 Per impostare un prefisso usa il comando: <yellow>spam gdcolor_prefisso prefisso<grey>
 Per impostare un suffisso usa il comando: <yellow>spam gdcolor_suffisso suffisso<grey>
@@ -171,7 +171,7 @@ Per abilitare/disabilitare questa funzione usa il comando: <white>spam abbrevia_
     default = false
 }
 SPAM.config.globals["nascondi_armi_elementali"] = {
-    name = "nascondi_armi_elementali",
+    name = "Nascondi_armi_elementali",
     desc = [[SPAM può abbreviare le stringhe del danno elementale delle armi.
 Per abilitare/disabilitare questa funzione usa il comando: <white>spam nascondi_armi_elementali on/off]],
     var_type = "bool",
