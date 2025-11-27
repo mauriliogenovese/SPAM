@@ -251,6 +251,9 @@ function SPAM.get_known_cast(cast_name)
 end
 
 function SPAM.get_known_cast_mana(cast_name)
+    if cast_name == "distorsione" then
+        return 35
+    end
     for _, v in ipairs(gmcp.Char.Skills) do
         if v.tipo == "incantesimo" and SPAM.string.starts(v.nome, cast_name) then
             return v.mana
@@ -1462,7 +1465,7 @@ end
 
 function SPAM.search_equip(name)
     for k, v in pairs(gmcp.Char.Items.equip) do
-        if SPAM.string.starts(string.lower(v.oggetto), name) then
+        if SPAM.string.starts(string.lower(v.oggetto), string.lower(name) then
             return true
         end
     end
