@@ -1465,7 +1465,7 @@ end
 
 function SPAM.search_equip(name)
     for k, v in pairs(gmcp.Char.Items.equip) do
-        if SPAM.string.starts(string.lower(v.oggetto), string.lower(name) then
+        if SPAM.string.starts(string.lower(v.oggetto), string.lower(name)) then
             return true
         end
     end
