@@ -230,6 +230,15 @@
             "type": "regex"
           }
         ]
+      },
+      {
+        "name": "disarm",
+        "patterns": [
+          {
+            "pattern": "^(.+)ti DISARMA!$",
+            "type": "regex"
+          }
+        ]
       }
     ]
   },

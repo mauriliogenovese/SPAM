@@ -1,0 +1,7 @@
+selectString(matches[1], 1)
+bg("red")
+fg("black")
+resetFormat()
+send("pre tutto")
+SPAM.ding_sound()
+tempTimer(1, function() SPAM.ding_sound() end)
