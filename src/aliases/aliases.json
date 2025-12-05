@@ -62,5 +62,10 @@
     "name": "carica",
     "command": "",
     "regex": "^(carica|caric|cari|car)( .+|)$"
+  },
+  {
+    "name": "rimuovi_gloria",
+    "command": "",
+    "regex": "^gloriarimuovi (.+)$"
   }
 ]
