@@ -1,10 +1,14 @@
 [
   {
-    "name": "func_lib",
+    "name": "func_lib"
   },
 
   {
-    "name": "profile_initialization",
+    "name": "equip_lib"
+  },
+
+  {
+    "name": "profile_initialization"
   },
 
   {

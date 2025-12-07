@@ -185,6 +185,10 @@ Per abilitare/disabilitare questa funzione usa il comando: <white>spam nascondi_
     var_type = "bool",
     default = false
 }
+SPAM.config.globals["equip_table_sample"] = {
+    name = "Esempio_Tabella_Equip",
+    desc = SPAM.equip_table_help,
+}
 
 SPAM.config.characters = {}
 SPAM.config.characters["observe_list"] = {
