@@ -1482,6 +1482,22 @@ function SPAM.get_equip_slot(slot)
     return nil
 end
 
+function SPAM.search_inv(name)
+    for k, v in pairs(gmcp.Char.Items.inv) do
+        if SPAM.string.starts(string.lower(v.oggetto), string.lower(name)) then
+            return true
+        end
+        if v.contenuto ~= nil then
+          for k1, v1 in pairs(v.contenuto) do
+            if SPAM.string.starts(string.lower(v1.oggetto), string.lower(name)) then
+              return true
+            end
+          end
+        end
+    end
+    return false
+end
+
 function SPAM.I_am_tank()
     if gmcp.Char.Vitals.tank ~= nil and gmcp.Char.Vitals.tank ~= "Tu" then
         return true
