@@ -3,7 +3,15 @@ SPAM.package_name = "@PKGNAME@"
 
 SPAM.config = SPAM.config or {}
 SPAM.config.path_savelocation = getMudletHomeDir() .. "/@PKGNAME@_file_path.lua"
-SPAM.config.load_path()
+if SPAM.file_exists(SPAM.config.path_savelocation) then
+        local temp = {}
+        table.load(SPAM.config.path_savelocation, temp)
+        if SPAM.file_exists(temp["path"]) then
+            SPAM.config.path = temp["path"]
+            return
+        end
+    end
+SPAM.config.path = getMudletHomeDir()
 SPAM.config.globals_savelocation = SPAM.config.path .. "/@PKGNAME@_globals.lua"
 SPAM.config.characters_savelocation = SPAM.config.path .. "/@PKGNAME@_characters.lua"
 SPAM.config.globals = {}

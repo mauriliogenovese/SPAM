@@ -1238,18 +1238,6 @@ function SPAM.debug(var)
     end
 end
 
-function SPAM.config.load_path()
-    if SPAM.file_exists(SPAM.config.path_savelocation) then
-        local temp = {}
-        table.load(SPAM.config.path_savelocation, temp)
-        if SPAM.file_exists(temp["path"]) then
-            SPAM.config.path = temp["path"]
-            return
-        end
-    end
-    SPAM.config.path = getMudletHomeDir()
-end
-
 function SPAM.config.save_globals()
     table.save(SPAM.config.globals_savelocation, SPAM.config.persistent_globals)
     SPAM.toggle_dde_group()
