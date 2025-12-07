@@ -1347,9 +1347,14 @@ function SPAM.config.show_all()
             SPAM.config.show_character(k)
         end
     end
+    cecho("Per avere un esempio sulla gestione dei set equip usa: <yellow>spam tabella_equip\n")
 end
 
 function SPAM.config.show_desc(config_name)
+    if SPAM.string.starts("tabella_equip", string.lower(config_name)) then
+        echo(SPAM.equip_table_help)
+        return
+    end
     for k, v in pairs(SPAM.config.globals) do
         if k == config_name or SPAM.string.starts(string.lower(v.name), string.lower(config_name)) then
             cecho("\n" .. v.desc .. "\n\n")
