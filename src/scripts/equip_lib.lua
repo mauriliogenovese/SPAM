@@ -271,6 +271,28 @@ function SPAM.is_empty_name(x)
 end
 
 ------------------------------------------------
+-- Controllo generico: possiamo cambiare equip?
+-- Blocca se c'è lag o comandi in coda.
+-- Ritorna:
+--   true
+--   false, "messaggio"
+------------------------------------------------
+function SPAM.can_change_equip()
+  local vit  = gmcp.Char and gmcp.Char.Vitals or {}
+  local coda = gmcp.Char and gmcp.Char.Coda   or {}
+
+  if vit.lag ~= nil and vit.lag ~= 0 then
+    return false, "sei laggato."
+  end
+
+  if coda.numero ~= nil and coda.numero ~= 0 then
+    return false, "hai comandi in coda."
+  end
+
+  return true
+end
+
+------------------------------------------------
 -- Funzione generica: equip/unequip con DEPOSITO (banca),
 -- usando .items / .bySet / .equipCmdBySlot di un PG
 --
@@ -286,6 +308,13 @@ function SPAM.equip_from_bank(charname, setTag)
   local charTable = SPAM[charname]
   if not charTable or not charTable.items then
     cecho("\n<red>[" .. tostring(charname) .. "] Nessuna tabella items trovata. Hai caricato lo script _items.lua?\n")
+    return
+  end
+
+  -- BLOCCO LAG/CODA
+  local ok, reason = SPAM.can_change_equip()
+  if not ok then
+    cecho("\n<red>[" .. tostring(charname) .. "] Non puoi cambiare equip adesso (" .. reason .. ")\n")
     return
   end
 
@@ -375,6 +404,13 @@ function SPAM.switch_set_from_bag(charname, setTag)
   local charTable = SPAM[charname]
   if not charTable or not charTable.items then
     cecho("\n<red>[" .. tostring(charname) .. "] Nessuna tabella items trovata. Hai caricato lo script _items.lua?\n")
+    return
+  end
+
+  -- BLOCCO LAG/CODA
+  local ok, reason = SPAM.can_change_equip()
+  if not ok then
+    cecho("\n<red>[" .. tostring(charname) .. " " .. tostring(setTag) .. "] Non puoi cambiare set adesso (" .. reason .. ")\n")
     return
   end
 
@@ -470,6 +506,13 @@ local function switch_overlay(charname, arg, cfg)
   local charTable = SPAM[charname]
   if not charTable or not charTable.items then
     cecho("\n<red>[" .. tostring(charname) .. "] Nessuna tabella items per " .. cfg.labelLower .. ".\n")
+    return
+  end
+
+  -- BLOCCO LAG/CODA
+  local ok, reason = SPAM.can_change_equip()
+  if not ok then
+    cecho("\n<red>[" .. tostring(charname) .. "] Non puoi cambiare " .. cfg.labelLower .. " adesso (" .. reason .. ")\n")
     return
   end
 
@@ -724,6 +767,13 @@ function SPAM.equip(charname, what)
   local charTable = SPAM[charname]
   if not charTable or not charTable.items then
     cecho("\n<red>[" .. tostring(charname) .. "] Nessuna tabella items trovata.\n")
+    return
+  end
+
+  -- BLOCCO LAG/CODA
+  local ok, reason = SPAM.can_change_equip()
+  if not ok then
+    cecho("\n<red>[" .. tostring(charname) .. "] Non puoi cambiare " .. cfg.labelLower .. " adesso (" .. reason .. ")\n")
     return
   end
 
