@@ -737,17 +737,19 @@ function SPAM.equip(charname, what)
   local slayByType = charTable.slayByType or {}
   local bySet      = charTable.bySet or {}
 
+  ------------------------------------------------
   -- "off" → spegni resy e slay se attivi
+  ------------------------------------------------
   if what == "off" then
     local didSomething = false
 
-    local resyState = SPAM.RESY_STATE[charname]
+    local resyState = SPAM.RESY_STATE and SPAM.RESY_STATE[charname]
     if resyState and resyState.activeType and resyState.activeType ~= "" then
       SPAM.switch_resy(charname, "off")
       didSomething = true
     end
 
-    local slayState = SPAM.SLAY_STATE[charname]
+    local slayState = SPAM.SLAY_STATE and SPAM.SLAY_STATE[charname]
     if slayState and slayState.activeType and slayState.activeType ~= "" then
       SPAM.switch_slay(charname, "off")
       didSomething = true
@@ -760,6 +762,9 @@ function SPAM.equip(charname, what)
     return
   end
 
+  ------------------------------------------------
+  -- resy / slay
+  ------------------------------------------------
   -- Se esiste un tipo resy con questo nome → usa switch_resy
   if resyByType[what] and #resyByType[what] > 0 then
     return SPAM.switch_resy(charname, what)
@@ -770,12 +775,26 @@ function SPAM.equip(charname, what)
     return SPAM.switch_slay(charname, what)
   end
 
-  -- Se esiste un set “normale” (dps, tank, main, ecc.) → usa switch_set_from_bag
+  ------------------------------------------------
+  -- Set “normali” (dps, tank, ecc.)
+  -- Quando cambio set, *solo* lo stato resy/slay va azzerato,
+  -- senza toccare l’equip corrente di resy/slay.
+  ------------------------------------------------
   if bySet[what] and #bySet[what] > 0 then
+    -- azzera SOLO la variabile di stato, non l’equip
+    if SPAM.RESY_STATE and SPAM.RESY_STATE[charname] then
+      SPAM.RESY_STATE[charname].activeType = nil
+    end
+    if SPAM.SLAY_STATE and SPAM.SLAY_STATE[charname] then
+      SPAM.SLAY_STATE[charname].activeType = nil
+    end
+
     return SPAM.switch_set_from_bag(charname, what)
   end
 
+  ------------------------------------------------
   -- Niente trovato
+  ------------------------------------------------
   cecho("\n<red>[" .. tostring(charname) .. "] Nessun set o tipo resy/slay trovato per: " .. what .. "\n")
 end
 
