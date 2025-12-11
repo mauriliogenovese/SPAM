@@ -338,6 +338,50 @@ function SPAM.equip_from_bank(charname, setTag)
   local step    = 0.3
   local prefix  = "[" .. string.upper(charname) .. "] "
 
+  ------------------------------------------------
+  -- PRIMO PASSAGGIO: determina la modalità globale
+  -- Guardiamo SOLO quanti pezzi del set sono equipaggiati
+  ------------------------------------------------
+  local equippedCount = 0
+
+  for _, it in ipairs(equipSet) do
+    local obj  = it.name
+    local slot = it.slot
+    local key  = it.key
+
+    local current_raw = SPAM.get_equip_slot and SPAM.get_equip_slot(slot) or nil
+    local slotEmpty   = SPAM.is_empty_name(current_raw)
+    local current     = slotEmpty and nil or current_raw
+    local curKey      = current and itemkeyByName[current] or nil
+
+    local isTargetEquipped = false
+    if key then
+      if curKey and curKey == key then
+        isTargetEquipped = true
+      elseif current == key or current == obj then
+        isTargetEquipped = true
+      end
+    end
+
+    if isTargetEquipped then
+      equippedCount = equippedCount + 1
+    end
+  end
+
+  -- Se almeno un pezzo del set è equipaggiato → consideriamo il set "ON"
+  local mode
+  if equippedCount > 0 then
+    mode = "unequip"   -- voglio togliere il set e depositare
+  else
+    mode = "equip"     -- nessun pezzo del set addosso → provo a equipaggiarlo
+  end
+
+  cecho("\n<cyan>" .. prefix .. "Modalità equip_from_bank: " .. mode ..
+        " (pezzi equipaggiati: " .. tostring(equippedCount) .. ")\n")
+
+  ------------------------------------------------
+  -- SECONDO PASSAGGIO: esegue le azioni coerenti con la modalità scelta
+  ------------------------------------------------
   for _, it in ipairs(equipSet) do
     local obj  = it.name
     local slot = it.slot
@@ -358,34 +402,51 @@ function SPAM.equip_from_bank(charname, setTag)
         end
       end
 
-      if isTargetEquipped then
-        local token = curKey or key or tostring(current)
-        cecho("\n<cyan>" .. prefix .. "TOLGO & DEPOSITO: slot=" .. slot ..
-              " → " .. tostring(current) .. "\n")
-        send("rimuov " .. token)
-        if not heldKeys[token] then
-          send("deposit " .. token)
+      if mode == "unequip" then
+        ------------------------------------------------
+        -- MODALITÀ "unequip" → tolgo solo i pezzi del set
+        ------------------------------------------------
+        if isTargetEquipped then
+          local token = curKey or key or tostring(current)
+          cecho("\n<cyan>" .. prefix .. "TOLGO & DEPOSITO: slot=" .. slot ..
+                " → " .. tostring(current) .. "\n")
+          send("rimuov " .. token)
+          if not heldKeys[token] then
+            send("deposit " .. token)
+          end
+        else
+          cecho("\n<yellow>" .. prefix .. "SKIP (unequip): slot=" .. slot ..
+                " contiene '" .. tostring(current) .. "' (target: " .. tostring(obj) .. ")\n")
         end
-
-      elseif slotEmpty then
-        if not key then
-          cecho("\n<red>" .. prefix .. "WARN: key mancante per '" .. tostring(obj) .. "'\n")
-          return
-        end
-
-        local equipCmd = equipCmdBySlot[slot]
-                      or defaultEquipCmds[slot]
-                      or "indoss"
-
-        cecho("\n<cyan>" .. prefix .. "PRELEVO & INDOSSO (slot vuoto): slot=" ..
-              slot .. " → " .. obj .. "\n")
-        send("prelev " .. key)
-        send(equipCmd .. " " .. key)
 
       else
-        cecho("\n<yellow>" .. prefix .. "SKIP: slot=" .. slot ..
-              " contiene '" .. tostring(current) ..
-              "' ma era previsto '" .. tostring(obj) .. "'. Nessuna azione.\n")
+        ------------------------------------------------
+        -- MODALITÀ "equip" → provo a indossare il set
+        ------------------------------------------------
+        if slotEmpty then
+          if not key then
+            cecho("\n<red>" .. prefix .. "WARN: key mancante per '" .. tostring(obj) .. "'\n")
+            return
+          end
+
+          local equipCmd = equipCmdBySlot[slot]
+                        or defaultEquipCmds[slot]
+                        or "indoss"
+
+          cecho("\n<cyan>" .. prefix .. "PRELEVO & INDOSSO (slot vuoto): slot=" ..
+                slot .. " → " .. obj .. "\n")
+          send("prelev " .. key)
+          send(equipCmd .. " " .. key)
+
+        elseif isTargetEquipped then
+          cecho("\n<green>" .. prefix .. "OK (già equip): slot=" .. slot ..
+                " → " .. tostring(current) .. "\n")
+
+        else
+          cecho("\n<yellow>" .. prefix .. "SKIP (equip): slot=" .. slot ..
+                " contiene '" .. tostring(current) ..
+                "' (target: " .. tostring(obj) .. ")\n")
+        end
       end
     end)
 
