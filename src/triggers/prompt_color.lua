@@ -1,3 +1,7 @@
+if SPAM.hide_next_prompt == true then
+    deleteLine()
+    SPAM.hide_next_prompt = false
+end
 if SPAM.config.get("prompt_color") then
     local max=tonumber(matches[3])
     local current=tonumber(matches[2])
