@@ -1,8 +1,8 @@
 SPAM = SPAM or {}
-
--- string manipulation functions
+SPAM.config = SPAM.config or {}
 SPAM.string = SPAM.string or {}
 
+-- string manipulation functions
 function SPAM.string.trim(input_string)
   return (string.gsub(input_string, "^%s*(.-)%s*$", "%1"))
 end
