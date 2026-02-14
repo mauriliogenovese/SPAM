@@ -17,14 +17,14 @@ if SPAM.config.get("nascondi_armi_elementali") then
     local colore = colori[elemento] or "<white>"
 
     if linea:find("manchi") then
-      cecho(string.format("%s<<IMMUNE>><reset>\n", colore))
+      cecho(string.format("%s<<IMMUNE>><reset>", colore))
     else
       if linea:find("leggermente") then
-        cecho(string.format("%s<%s><reset>\n", colore, elemento))
+        cecho(string.format("%s<%s><reset>", colore, elemento))
       elseif linea:find("violentemente") then
-        cecho(string.format("%s<<<%s>>><reset>\n", colore, elemento))
+        cecho(string.format("%s<<<%s>>><reset>", colore, elemento))
       else
-        cecho(string.format("%s<<%s>><reset>\n", colore, elemento))
+        cecho(string.format("%s<<%s>><reset>", colore, elemento))
       end
 
     end
