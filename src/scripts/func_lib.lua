@@ -1529,3 +1529,50 @@ function SPAM.formatNumber(n, sep)
     end
     return str
 end
+
+SPAM.room_group = SPAM.room_group or {}
+
+function SPAM.room_group.get_members()
+    local result = {}
+
+    if gmcp == nil or gmcp.Char == nil or gmcp.Char.Gruppo == nil or gmcp.Char.Gruppo.gruppo == nil then
+        return result
+    end
+
+    for _, member in ipairs(gmcp.Char.Gruppo.gruppo) do
+        if member.nome ~= nil then
+            table.insert(result, SPAM.beautify_name(member.nome))
+        end
+    end
+
+    return result
+end
+
+function SPAM.room_group.remove_prefixes(line)
+    local clean_line = line or ""
+
+    while clean_line:match("^%s*%b()%s*") do
+        clean_line = clean_line:gsub("^%s*%b()%s*", "")
+    end
+
+    return SPAM.string.trim(clean_line)
+end
+
+function SPAM.room_group.match_member(line)
+    local clean_line = SPAM.room_group.remove_prefixes(line)
+    local lower_line = string.lower(clean_line)
+
+    for _, name in ipairs(SPAM.room_group.get_members()) do
+        local lower_name = string.lower(name)
+
+        if SPAM.string.starts(lower_line, lower_name) then
+            local next_char = string.sub(lower_line, string.len(lower_name) + 1, string.len(lower_name) + 1)
+
+            if next_char == "" or next_char == " " or next_char == "." or next_char == "," or next_char == "'" then
+                return name
+            end
+        end
+    end
+
+    return nil
+end

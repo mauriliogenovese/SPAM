@@ -177,6 +177,13 @@ Per abilitare/disabilitare questa funzione usa il comando: <white>spam nascondi_
     var_type = "bool",
     default = false
 }
+SPAM.config.globals["compact_room_group"] = {
+    name = "Gruppo_stanza",
+    desc = [[SPAM può compattare i membri del tuo gruppo presenti nella stanza in una sola riga.
+Per abilitare/disabilitare questa funzione usa il comando: <yellow>spam gruppo_stanza on/off]],
+    var_type = "bool",
+    default = false
+}
 
 SPAM.config.characters = {}
 SPAM.config.characters["observe_list"] = {
